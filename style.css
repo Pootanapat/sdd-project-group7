@@ -1,0 +1,434 @@
+/* ============================================
+   style.css — CSS ทั้งหมดของระบบ Auth
+   ============================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── CSS Variables (สีหลัก) ── */
+:root {
+  --bg:          #4a4a4a;
+  --card-bg:     #2e2e2e;
+  --card-border: #444;
+  --input-bg:    #3a3a3a;
+  --input-border:#555;
+  --input-focus: #f90;
+  --orange:      #f90;
+  --orange-dark: #e08800;
+  --text:        #fff;
+  --muted:       #aaa;
+  --radius:      12px;
+  --red:         #e53935;
+}
+
+/* ── Body ── */
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  font-family: 'Noto Sans Thai', 'Outfit', sans-serif;
+  padding: 24px;
+}
+
+/* ── Page containers ── */
+.page { display: none; width: 100%; max-width: 480px; }
+.page.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  animation: fadeUp .4s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Title ── */
+.title { text-align: center; line-height: 1.2; }
+.title .en {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 2.4rem;
+  color: var(--orange);
+}
+.title .th {
+  display: block;
+  font-weight: 700;
+  font-size: 1.9rem;
+  color: var(--text);
+}
+
+/* ── Card ── */
+.card {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Fields ── */
+.field { display: flex; flex-direction: column; gap: 10px; }
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.field-label svg { flex-shrink: 0; }
+.req { color: var(--red); margin-left: 2px; }
+
+.input-wrap { position: relative; }
+
+.input-wrap input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 0.97rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.input-wrap input::placeholder { color: var(--muted); }
+.input-wrap input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(255,153,0,.15);
+}
+.input-wrap input.error {
+  border-color: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(229,57,53,.15) !important;
+}
+
+/* ── Eye button (แสดง/ซ่อนรหัสผ่าน) ── */
+.eye-btn {
+  position: absolute;
+  right: 14px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  cursor: pointer; color: var(--muted);
+  display: flex; align-items: center; padding: 0;
+  transition: color .2s;
+}
+.eye-btn:hover { color: var(--orange); }
+.has-eye { padding-right: 44px; }
+
+/* ── Hint text ── */
+.hint { font-size: 0.78rem; color: var(--muted); margin-top: -4px; }
+.hint.ok  { color: #8f8; }
+.hint.err { color: #f88; }
+
+/* ── Buttons ── */
+.btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.btn {
+  padding: 14px 0;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  background: var(--orange);
+  color: #000;
+  transition: transform .15s, background .2s, box-shadow .2s;
+}
+.btn:hover  { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+.btn:active { transform: translateY(0); }
+.btn.full   { width: 100%; }
+
+/* ── Link row ── */
+.link-row {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.link-row a {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color .2s;
+}
+.link-row a:hover { color: var(--orange); }
+
+/* ── Navbar ── */
+.navbar {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: #111;
+  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+}
+.navbar.visible { display: flex; }
+.navbar-brand {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text);
+  letter-spacing: .12em;
+  padding: 14px 0 10px;
+  border-bottom: 1px solid #222;
+  width: 100%;
+  text-align: center;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+.nav-link {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background .2s;
+  background: none; border: none;
+  font-family: 'Noto Sans Thai', sans-serif;
+}
+.nav-link:hover { background: #222; }
+.nav-btn {
+  background: var(--orange);
+  color: #000;
+  font-weight: 700;
+  padding: 7px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 0.9rem;
+  transition: background .2s;
+}
+.nav-btn:hover { background: var(--orange-dark); }
+.nav-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--orange);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  font-family: 'Noto Sans Thai', sans-serif;
+  transition: background .2s;
+}
+.nav-profile:hover { background: #222; }
+.nav-spacer { flex: 1; }
+
+/* ── Profile page ── */
+#page-profile {
+  max-width: 100% !important;
+  padding-top: 110px;
+  padding-bottom: 40px;
+  width: 100%;
+  background: var(--bg);
+  min-height: 100vh;
+}
+#page-profile.active {
+  display: block;
+  animation: fadeUp .4s ease both;
+}
+.profile-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.profile-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 2.8rem;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 18px;
+}
+.profile-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+.profile-avatar {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: #888;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.profile-avatar svg { opacity: .5; }
+.profile-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.profile-field {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.profile-field svg { flex-shrink: 0; color: var(--text); }
+.profile-field-label {
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+  min-width: 110px;
+}
+.profile-field-input {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: 99px;
+  padding: 10px 18px;
+  color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.profile-field-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(255,153,0,.15);
+}
+.profile-field-input[readonly] {
+  color: var(--muted);
+  cursor: default;
+}
+
+/* ── Avatar upload overlay ── */
+.avatar-upload-wrap {
+  position: relative;
+  width: 90px; height: 90px;
+  cursor: pointer;
+}
+.avatar-upload-wrap:hover .avatar-overlay { opacity: 1; }
+.avatar-overlay {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: rgba(0,0,0,.55);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity .2s;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+#avatar-file-input { display: none; }
+
+/* ── History box ── */
+.history-title {
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.history-box {
+  background: #222;
+  border: 1px solid #383838;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100px;
+}
+.history-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif;
+  align-items: center;
+}
+.history-row .price { color: var(--orange); font-weight: 700; white-space: nowrap; }
+.history-row .date  { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+.history-empty { color: var(--muted); font-size: 0.88rem; text-align: center; padding: 20px 0; }
+
+/* ── Save / Logout buttons ── */
+.save-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--orange);
+  color: #000;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-weight: 700;
+  font-size: 0.97rem;
+  transition: background .2s, transform .15s;
+}
+.save-btn:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+.logout-btn {
+  width: 100%;
+  padding: 13px;
+  background: transparent;
+  border: 1.5px solid #c33;
+  color: #f88;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-weight: 700;
+  font-size: 0.97rem;
+  transition: background .2s, transform .15s;
+}
+.logout-btn:hover { background: rgba(200,50,50,.15); transform: translateY(-1px); }
+
+/* ── body offset เมื่อ navbar แสดง ── */
+body.has-navbar { align-items: flex-start; padding: 0; }
+
+/* ── Toast notification ── */
+#toast {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #1a1a1a;
+  color: var(--text);
+  padding: 12px 22px;
+  border-radius: 99px;
+  border: 1px solid var(--card-border);
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 999;
+}
+#toast.show    { opacity: 1; transform: translateX(-50%) translateY(0); }
+#toast.success { border-color: #3c3; color: #8f8; }
+#toast.error   { border-color: #c33; color: #f88; }
