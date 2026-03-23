@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+    body{
+      background:#4a4a4a;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      padding:20px;
+    }
+    .wrap{
+      width:100%;
+      max-width:700px;
+      text-align:center;
+    }
+    .title-top{
+      color:#ff9900;
+      font-size:30px;
+      font-weight:800;
+    }
+    .title-main{
+      font-size:52px;
+      font-weight:800;
+      margin-bottom:18px;
+    }
+    .card{
+      width:100%;
+      max-width:320px;
+      margin:0 auto;
+      background:linear-gradient(90deg,#171717,#1f1f1f);
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:16px;
+      padding:26px 24px 14px;
+      text-align:left;
+    }
+    .label{
+      font-size:18px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .field{
+      margin-bottom:24px;
+    }
+    .input-wrap{
+      position:relative;
+    }
+    input{
+      width:100%;
+      height:32px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.5);
+      background:#4d4d4d;
+      color:#fff;
+      padding:0 12px;
+      outline:none;
+    }
+    .eye{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:14px;
+    }
+    .btn-row{
+      display:flex;
+      gap:10px;
+      margin-top:8px;
+      margin-bottom:20px;
+    }
+    .btn{
+      flex:1;
+      height:40px;
+      border:none;
+      border-radius:10px;
+      background:#ff9900;
+      color:#111;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .bottom{
+      text-align:center;
+      font-size:14px;
+    }
+    .bottom a{
+      color:#fff;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title-top">Sign In</div>
+    <div class="title-main">ลงชื่อเข้าใช้</div>
+
+    <div class="card">
+      <div class="field">
+        <div class="label">Username</div>
+        <div class="input-wrap">
+          <input type="text" id="username" placeholder="อีเมลล์ / เบอร์โทรศัพท์">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label">Password</div>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="รหัสผ่าน">
+          <span class="eye" onclick="togglePassword('password')">👁</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" onclick="signIn()">เข้าสู่ระบบ</button>
+        <button class="btn" onclick="alert('ฟังก์ชันลืมรหัสผ่าน')">ลืมรหัสผ่าน</button>
+      </div>
+
+      <div class="bottom">
+        หากไม่มีบัญชี? <a href="signup.html">สมัครสมาชิก</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword(id){
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function signIn(){
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if(!username || !password){
+        alert('กรุณากรอกข้อมูลให้ครบ');
+        return;
+      }
+
+      localStorage.setItem('loggedInUser', username);
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
