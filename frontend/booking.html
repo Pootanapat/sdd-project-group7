@@ -452,6 +452,98 @@
         font-size:20px;
       }
     }
+    /* --- NEW CSS for Payment UI, Modal, Status --- */
+    .hidden { display: none !important; }
+    
+    .status-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(90deg,#161616,#1f1f1f);
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: 16px;
+      padding: 40px 20px;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255, 162, 0, 0.2);
+      border-left-color: #ffa200;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .status-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .status-title.success { color: #1aa332; }
+    .status-message { color: #d3d3d3; font-size: 15px; margin-bottom: 20px; }
+
+    /* Modal Popup */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999; padding: 20px;
+    }
+
+    .modal-content {
+      background: #1f1f1f;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%; max-width: 420px;
+      position: relative;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .close-btn {
+      position: absolute; top: 15px; right: 20px;
+      font-size: 24px; color: #888; cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
+
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,.4);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+      cursor: pointer;
+      min-height: 220px; display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      margin-bottom: 24px; margin-top: 10px;
+      transition: .3s; position: relative; overflow: hidden;
+    }
+
+    .upload-area:hover { border-color: #ffa200; background: rgba(255, 162, 0, 0.05); }
+
+    .image-preview {
+      width: 100%; height: 100%; object-fit: contain;
+      position: absolute; top: 0; left: 0;
+    }
+
+    .modal-actions { display: flex; gap: 10px; }
+    .btn-outline { background: transparent; border: 1px solid #555; color: #ccc; flex: 1; border-radius: 8px; cursor:pointer;}
+    .btn-outline:hover { background: rgba(255,255,255,.05); color: #fff; }
+    .btn-primary { background: #ffa200; color: #111; border: none; flex: 1; font-weight:800; border-radius: 8px; cursor:pointer;}
+    .btn-primary:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(255,162,0,.3); transform: translateY(-1px); }
+    .btn-primary:disabled { background: #444; color: #888; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -550,8 +642,8 @@
                 <div class="fake-qr"></div>
                 <div class="qr-info">
                   สแกน QR เพื่อโอนเข้าบัญชี<br>
-                  ชื่อ: นาย ธนชาติ พรรณเลิศ<br>
-                  เลขอ้างอิง: 00499104962187
+                  ชื่อ: ร้านตัดผม Barber Flow<br>
+                  (จำลองระบบ Payment)
                 </div>
               </div>
             </div>
@@ -559,17 +651,21 @@
 
           <div class="divider"></div>
 
-          <div class="upload-wrap">
-            <label for="slipInput" class="upload-btn">อัปโหลด สลิป</label>
-            <input type="file" id="slipInput" accept="image/*">
-
-            <div class="slip-preview">
-              <img id="slipImage" alt="slip preview">
-              <div class="slip-placeholder" id="slipPlaceholder">ยังไม่ได้อัปโหลดสลิป</div>
-            </div>
-
-            <button class="action-btn confirm-small" onclick="confirmPayment()">ยืนยัน</button>
+          <div class="upload-wrap" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+            <p style="color:#cfcfcf; margin-bottom: 15px;">โอนเงินเรียบร้อยแล้วใช่ไหม?</p>
+            <button class="action-btn" style="max-width:300px; margin: 0 auto; display:block; width:100%;" onclick="openUploadPopup()">อัปโหลดสลิปโอนเงิน</button>
+            <button class="back-btn" style="max-width:300px; margin: 15px auto 0; display:block; width:100%;" onclick="backToStep4()">ย้อนกลับ</button>
           </div>
+        </div>
+      </div>
+
+      <div class="panel" id="statusPanel">
+        <div class="status-container">
+          <div id="statusIcon">
+            <div class="spinner"></div>
+          </div>
+          <h2 class="status-title" id="statusTitle">กำลังรอการตรวจสอบ</h2>
+          <p class="status-message" id="statusMessage">ระบบกำลังตรวจสอบสลิปการโอนเงินของคุณ<br>โปรดรอสักครู่...</p>
         </div>
       </div>
 
@@ -580,6 +676,29 @@
     </div>
 
     <a class="back-home" href="index.html">← กลับหน้าแรก</a>
+  </div>
+
+  <!-- UPLOAD SLIP MODAL -->
+  <div id="uploadModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeUploadPopup()">&times;</span>
+        <h2 style="font-size:22px; color:#ffa200; font-weight:800;">อัปโหลดสลิปหลักฐาน</h2>
+        <p style="color:#d3d3d3; font-size:14px; margin-top:5px;">อัปโหลดรูปภาพสลิปใบเสร็จเพื่อยืนยันบัญชี</p>
+        
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('slipInputModal').click()">
+            <input type="file" id="slipInputModal" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+            <div id="uploadPlaceholder" style="text-align:center;">
+                <div style="font-size: 40px; color:#888; margin-bottom:10px;">+</div>
+                <p style="color:#fff; font-weight:600;">แตะเพื่อเลือกรูปภาพ</p>
+            </div>
+            <img id="imagePreview" class="image-preview hidden">
+        </div>
+
+        <div class="modal-actions">
+            <button class="choice-btn btn-outline" style="height:45px;" onclick="closeUploadPopup()">ยกเลิก</button>
+            <button class="action-btn btn-primary" style="height:45px;" id="confirmUploadBtn" onclick="submitSlipPayment()" disabled>ยืนยันสลิป</button>
+        </div>
+    </div>
   </div>
 
   <script>
@@ -625,19 +744,111 @@
       });
     });
 
-    slipInput.addEventListener("change", function () {
-      const file = this.files[0];
-      if (!file) return;
+    let mySelectedFile = null;
 
-      uploadedSlip = true;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        slipImage.src = e.target.result;
-        slipImage.style.display = "block";
-        slipPlaceholder.style.display = "none";
-      };
-      reader.readAsDataURL(file);
-    });
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        mySelectedFile = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('imagePreview');
+          const placeholder = document.getElementById('uploadPlaceholder');
+          const confirmBtn = document.getElementById('confirmUploadBtn');
+
+          preview.src = e.target.result;
+          preview.classList.remove('hidden');
+          placeholder.style.display = 'none';
+          
+          confirmBtn.disabled = false;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function openUploadPopup() {
+      document.getElementById('uploadModal').classList.remove('hidden');
+    }
+
+    function closeUploadPopup() {
+      document.getElementById('uploadModal').classList.add('hidden');
+    }
+
+    function submitSlipPayment() {
+      if (!mySelectedFile) return;
+
+      closeUploadPopup();
+      
+      // Navigate to Status Page
+      showPanel('statusPanel');
+      document.getElementById('statusIcon').innerHTML = '<div class="spinner"></div>';
+      document.getElementById('statusTitle').innerText = 'กำลังรอการตรวจสอบ';
+      document.getElementById('statusTitle').classList.remove('success');
+      document.getElementById('statusMessage').innerHTML = 'ระบบกำลังตรวจสอบสลิปการโอนเงินของคุณ<br>โปรดรอสักครู่...';
+
+      // Submit to backend
+      const formData = new FormData();
+      formData.append('slip', mySelectedFile);
+
+      fetch('http://localhost:3000/api/upload-slip', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if(data.success) {
+            showSuccessAndReceipt();
+          } else {
+            alert('Upload failed: ' + (data.error || 'Unknown error'));
+            showPanel('paymentPanel');
+          }
+      })
+      .catch(error => {
+          console.error('Backend error, using mock fallback', error);
+          // Mock fallback if DB is not connected
+          setTimeout(() => {
+            showSuccessAndReceipt();
+          }, 2500);
+      });
+    }
+
+    function backToStep4() {
+      showPanel('step4');
+      setStepUI(4);
+    }
+
+    function showSuccessAndReceipt() {
+      // Show success briefly
+      document.getElementById('statusIcon').innerHTML = '<div style="font-size: 60px; color: #1aa332; margin-bottom: 20px;">✓</div>';
+      document.getElementById('statusTitle').innerText = 'จองสำเร็จแล้ว!';
+      document.getElementById('statusTitle').classList.add('success');
+      document.getElementById('statusMessage').innerText = 'เราได้รับยอดเงินของคุณเรียบร้อยแล้ว กำลังออกใบเสร็จ...';
+
+      // After 2 seconds, transition to detailPanel (final receipt)
+      setTimeout(() => {
+        const bookingDate = document.getElementById("bookingDate").value;
+        const fullName = document.getElementById("fullName").value.trim();
+        const phoneNumber = document.getElementById("phoneNumber").value.trim();
+
+        document.getElementById("bookingDetailsCard").innerHTML = `
+          <div class="head" style="color:#ffa200;font-weight:800;font-size:24px;">ใบเสร็จการชำระเงิน / ยืนยันการจอง</div>
+          <div class="line" style="width:100%;"></div>
+          <div><strong style="color:#fff;">บริการ :</strong> ${selectedService}</div>
+          <div><strong style="color:#fff;">ช่าง :</strong> ${selectedBarber}</div>
+          <div><strong style="color:#fff;">วันเวลา :</strong> ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
+          <div class="line" style="width:100%;"></div>
+          <div><strong style="color:#fff;">ชื่อ-นามสกุล :</strong> ${fullName}</div>
+          <div><strong style="color:#fff;">เบอร์โทรศัพท์ :</strong> ${phoneNumber}</div>
+          <div class="line" style="width:100%;"></div>
+          <div><strong style="color:#1aa332;">สถานะ :</strong> ชำระเงินสำเร็จ ✅</div>
+          <div><strong style="color:#1aa332;">สถานะคิว :</strong> ยืนยันแล้ว</div>
+        `;
+
+        saveBookingHistory(fullName, bookingDate);
+        showPanel("detailPanel");
+        setAllDone();
+      }, 1500);
+    }
 
     function showPanel(id){
       document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
@@ -781,32 +992,7 @@
       setStepUI(4);
     }
 
-    function confirmPayment() {
-      if (!uploadedSlip) {
-        alert("กรุณาอัปโหลดสลิปก่อน");
-        return;
-      }
-
-      const bookingDate = document.getElementById("bookingDate").value;
-      const fullName = document.getElementById("fullName").value.trim();
-      const phoneNumber = document.getElementById("phoneNumber").value.trim();
-
-      document.getElementById("bookingDetailsCard").innerHTML = `
-        <div class="head">รายละเอียดการจอง</div>
-        <div>บริการ : ${selectedService}</div>
-        <div>ช่าง : ${selectedBarber}</div>
-        <div>วันเวลา : ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
-        <div class="line"></div>
-        <div>ชื่อ-นามสกุล : ${fullName}</div>
-        <div>เบอร์โทรศัพท์ : ${phoneNumber}</div>
-        <div>สถานะการชำระเงิน : ชำระเงินแล้ว</div>
-        <div>สถานะการจอง : ยืนยันการจองแล้ว</div>
-      `;
-
-      saveBookingHistory(fullName, bookingDate);
-      showPanel("detailPanel");
-      setAllDone();
-    }
+    // Replaced confirmPayment with submitSlipPayment above
 
     function finishAll() {
       window.location.href = "index.html";
