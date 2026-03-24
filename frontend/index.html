@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BARBERSHOP</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:#080808;
+      color:#fff;
+      overflow-x:hidden;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    .container{
+      width:min(1200px, calc(100% - 48px));
+      margin:0 auto;
+    }
+
+    .navbar{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      z-index:1000;
+      transition:all .3s ease;
+      background:rgba(0,0,0,.9);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .navbar.scrolled{
+      background:rgba(0,0,0,.97);
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+    }
+
+    .nav-inner{
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      padding:10px 0;
+    }
+
+    .logo{
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:.5px;
+      white-space:nowrap;
+    }
+
+    .menu{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .menu span{
+      cursor:pointer;
+      padding:10px 16px;
+      border-radius:12px;
+      transition:all .25s ease;
+      font-size:18px;
+    }
+
+    .menu span:hover,
+    .menu span.active{
+      background:#ffa200;
+      color:#111;
+      transform:translateY(-2px) scale(1.05);
+      box-shadow:0 10px 22px rgba(255,162,0,.28);
+    }
+
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .nav-btn{
+      border:none;
+      padding:11px 20px;
+      border-radius:10px;
+      background:#ffa200;
+      color:#111;
+      font-weight:700;
+      font-size:16px;
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .nav-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(255,162,0,.25);
+    }
+
+    .profile-link{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      overflow:hidden;
+      border:2px solid #ffa200;
+      cursor:pointer;
+      flex-shrink:0;
+      box-shadow:0 8px 18px rgba(255,162,0,.18);
+      transition:.25s ease;
+      background:#222;
+    }
+
+    .profile-link:hover{
+      transform:translateY(-2px) scale(1.05);
+    }
+
+    .profile-link img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .hero{
+      min-height:100vh;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding-top:78px;
+      background:
+        linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.68)),
+        url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1600&q=80')
+        center center/cover no-repeat;
+    }
+
+    .hero-content{
+      width:min(980px, calc(100% - 48px));
+      animation:fadeUp 1s ease;
+    }
+
+    .eyebrow{
+      color:#ffa200;
+      font-size:20px;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    .hero h1{
+      font-size:clamp(42px, 7vw, 78px);
+      line-height:1.08;
+      margin-bottom:14px;
+      font-weight:800;
+      text-shadow:0 4px 16px rgba(0,0,0,.3);
+    }
+
+    .hero p{
+      max-width:900px;
+      margin:0 auto;
+      font-size:clamp(16px, 2vw, 22px);
+      color:#e7e7e7;
+      line-height:1.5;
+    }
+
+    .hero-buttons{
+      margin-top:28px;
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      min-width:180px;
+      padding:16px 28px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.5);
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .btn-primary{
+      background:#ffa200;
+      border-color:#ffa200;
+      color:#111;
+    }
+
+    .btn-secondary{
+      background:rgba(0,0,0,.32);
+      color:#fff;
+    }
+
+    .btn:hover{
+      transform:translateY(-3px) scale(1.02);
+      box-shadow:0 12px 24px rgba(0,0,0,.18);
+    }
+
+    .section{
+      padding:100px 0;
+    }
+
+    .section.reveal{
+      opacity:0;
+      transform:translateY(45px);
+      transition:all .8s ease;
+    }
+
+    .section.reveal.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .section-top{
+      text-align:center;
+      margin-bottom:44px;
+    }
+
+    .section-top .eyebrow{
+      margin-bottom:8px;
+    }
+
+    .section-top h2{
+      font-size:clamp(34px, 5vw, 58px);
+      font-weight:800;
+    }
+
+    #services{
+      background:#000;
+    }
+    .logo{
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:.5px;
+      white-space:nowrap;
+      text-decoration:none;
+      color:#fff;
+      cursor:pointer;
+    }
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:28px;
+    }
+
+    .card{
+      background:linear-gradient(135deg, #171717, #1f1f1f);
+      border:1px solid rgba(255,255,255,.45);
+      border-radius:10px;
+      padding:28px 26px;
+      text-align:left;
+      transition:.25s ease;
+      min-height:185px;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 30px rgba(255,162,0,.14);
+      border-color:#ffa200;
+    }
+
+    .card-icon{
+      font-size:34px;
+      color:#ffa200;
+      margin-bottom:16px;
+    }
+
+    .card h3{
+      font-size:21px;
+      margin-bottom:10px;
+      font-weight:800;
+    }
+
+    .card p{
+      color:#cfcfcf;
+      line-height:1.6;
+      font-size:15px;
+    }
+
+    .price{
+      margin-top:20px;
+      color:#ffa200;
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .price small{
+      color:#fff;
+      font-weight:500;
+      font-size:14px;
+    }
+
+    #experts{
+      background:#111;
+    }
+
+    .experts-section-top{
+      text-align:left;
+      margin-bottom:44px;
+    }
+
+    .experts-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:44px;
+      align-items:start;
+    }
+
+    .expert{
+      text-align:center;
+    }
+
+    .expert-img-wrap{
+      border-radius:18px;
+      overflow:hidden;
+      background:#222;
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+      transition:.28s ease;
+    }
+
+    .expert-img-wrap:hover{
+      transform:translateY(-6px) scale(1.01);
+      box-shadow:0 16px 34px rgba(255,162,0,.12);
+    }
+
+    .expert img{
+      width:100%;
+      aspect-ratio:3/4;
+      object-fit:cover;
+    }
+
+    .expert-name{
+      margin-top:14px;
+      color:#ffa200;
+      font-weight:800;
+      font-size:18px;
+    }
+
+    .footer{
+      background:linear-gradient(90deg,#171717,#1f1f1f);
+      padding:72px 0;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.4fr 1fr 1fr;
+      gap:42px;
+      align-items:start;
+    }
+
+    .footer h3{
+      font-size:24px;
+      margin-bottom:18px;
+      font-weight:800;
+    }
+
+    .footer p{
+      color:#d7d7d7;
+      line-height:1.7;
+      font-size:16px;
+      margin-bottom:10px;
+    }
+
+    .social-item,
+    .contact-item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .icon-box{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:#ffa200;
+      border:1px solid rgba(255,162,0,.6);
+      font-size:16px;
+      flex-shrink:0;
+    }
+
+    .hours-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+      color:#d7d7d7;
+      font-size:16px;
+    }
+
+    .hours-row strong{
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .top-btn{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      width:48px;
+      height:48px;
+      border-radius:50%;
+      border:none;
+      background:#ffa200;
+      color:#111;
+      font-size:22px;
+      font-weight:800;
+      cursor:pointer;
+      display:none;
+      z-index:999;
+      box-shadow:0 10px 24px rgba(255,162,0,.25);
+      transition:.25s ease;
+    }
+
+    .top-btn:hover{
+      transform:translateY(-3px) scale(1.05);
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(30px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media (max-width: 1024px){
+      .nav-inner{
+        justify-content:center;
+      }
+
+      .hero{
+        padding-top:120px;
+      }
+
+      .cards{
+        grid-template-columns:1fr;
+      }
+
+      .experts-grid{
+        gap:22px;
+      }
+
+      .footer-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 768px){
+      .container{
+        width:min(100% - 28px, 1200px);
+      }
+
+      .menu{
+        gap:8px;
+      }
+
+      .menu span{
+        font-size:15px;
+        padding:8px 12px;
+      }
+
+      .nav-btn{
+        font-size:14px;
+        padding:9px 16px;
+      }
+
+      .hero{
+        min-height:92vh;
+      }
+
+      .hero-buttons{
+        flex-direction:column;
+        align-items:center;
+      }
+
+      .btn{
+        width:100%;
+        max-width:320px;
+      }
+
+      .section{
+        padding:76px 0;
+      }
+
+      .experts-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hours-row{
+        flex-direction:column;
+        gap:2px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">BARBERSHOP</a>
+
+      <nav class="menu">
+        <span onclick="goSection('services')">บริการ</span>
+        <span onclick="goSection('experts')">ช่างของเรา</span>
+        <span onclick="goBooking()">จองคิว</span>
+        <span onclick="goSection('footer')">ติดต่อเรา</span>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="nav-btn" onclick="window.location.href='signin.html'">Sign in</button>
+        <button class="nav-btn" onclick="window.location.href='signup.html'">Signup</button>
+
+        <div class="profile-link" onclick="window.location.href='profile.html'">
+          <img id="navProfileImage" src="" alt="Profile">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="eyebrow">PREMIUM GROOMING EXPERIENCE</div>
+      <h1>ยกระดับสไตล์ของคุณ<br>ด้วยมืออาชีพ</h1>
+      <p>
+        สัมผัสประสบการณ์การตัดผมที่มากกว่าคำว่าตัดผม
+        เรามอบความมั่นใจและสไตล์ที่บ่งบอกความเป็นตัวคุณ
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="goBooking()">จองคิวออนไลน์</button>
+        <button class="btn btn-secondary" onclick="goSection('services')">ดูบริการของเรา</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="services">
+    <div class="container">
+      <div class="section-top">
+        <div class="eyebrow">SERVICES</div>
+        <h2>บริการระดับพรีเมียม</h2>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">✂</div>
+          <h3>ตัดผมชาย (Classic)</h3>
+          <p>ตัดผมทรงคลาสสิก พร้อมเซ็ตและจัดแต่งทรงผม</p>
+          <div class="price">฿200 <small>/ครั้ง</small></div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <h3>ตัดผม + กันหนวด (Full Set)</h3>
+          <p>แพ็กเกจสุดคุ้มสำหรับการดูแลทั้งทรงผมและหนวดเครา</p>
+          <div class="price">฿350 <small>/ครั้ง</small></div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">👤</div>
+          <h3>กันจอนและโกนหนวด</h3>
+          <p>โกนหนวดอย่างประณีตและเก็บรายละเอียดให้ดูสะอาดเรียบร้อย</p>
+          <div class="price">฿150 <small>/ครั้ง</small></div>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">〰</div>
+          <h3>สระ-ไดร์ และจัดแต่งทรง</h3>
+          <p>ล้างทำความสะอาดหนังศีรษะและจัดทรงผมให้พร้อมออกงาน</p>
+          <div class="price">฿100 <small>/ครั้ง</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="experts">
+    <div class="container">
+      <div class="experts-section-top">
+        <div class="eyebrow">EXPERTS</div>
+        <h2>พบกับทีมช่างของเรา</h2>
+      </div>
+
+      <div class="experts-grid">
+        <div class="expert">
+          <div class="expert-img-wrap">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80" alt="ช่างซัน">
+          </div>
+          <div class="expert-name">ช่างซัน</div>
+        </div>
+
+        <div class="expert">
+          <div class="expert-img-wrap">
+            <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=700&q=80" alt="ช่างกัน">
+          </div>
+          <div class="expert-name">ช่างกัน</div>
+        </div>
+
+        <div class="expert">
+          <div class="expert-img-wrap">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=80" alt="ช่างเวียร์">
+          </div>
+          <div class="expert-name">ช่างเวียร์</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="footer">
+    <div class="container footer-grid">
+      <div>
+        <h3>BARBERSHOP</h3>
+        <p>
+          ร้านตัดผมชายระดับพรีเมียมใจกลางเมือง
+          พร้อมประสบการณ์สุดพิเศษ ให้คุณดูดีด้วยทีมช่างมืออาชีพ
+          และบรรยากาศที่เป็นกันเอง
+        </p>
+
+        <div class="social-item">
+          <span class="icon-box">◎</span>
+          <span>BARBERSHOP</span>
+        </div>
+
+        <div class="social-item">
+          <span class="icon-box">✕</span>
+          <span>BARBERSHOP</span>
+        </div>
+      </div>
+
+      <div>
+        <h3>ติดต่อเรา</h3>
+
+        <div class="contact-item">
+          <span class="icon-box">☎</span>
+          <span>01234567</span>
+        </div>
+
+        <div class="contact-item">
+          <span class="icon-box">✉</span>
+          <span>Barbershop@gmail.com</span>
+        </div>
+      </div>
+
+      <div>
+        <h3>เวลาเปิดทำการ</h3>
+
+        <div class="hours-row">
+          <span>จันทร์ - ศุกร์:</span>
+          <strong>10:00 - 20:00</strong>
+        </div>
+
+        <div class="hours-row">
+          <span>เสาร์ - อาทิตย์:</span>
+          <strong>09:00 - 21:00</strong>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="top-btn" id="topBtn" onclick="goSection('hero')">↑</button>
+
+  <script>
+    function goSection(id){
+      const target = document.getElementById(id);
+      if(target){
+        target.scrollIntoView({ behavior:'smooth' });
+      }
+    }
+
+    function goBooking(){
+      window.location.href = 'booking.html';
+    }
+
+    function loadNavProfile(){
+      const navProfileImage = document.getElementById('navProfileImage');
+      const savedAvatar = localStorage.getItem('profileImage');
+
+      if(savedAvatar){
+        navProfileImage.src = savedAvatar;
+      }else{
+        navProfileImage.src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+      }
+    }
+
+    const navbar = document.getElementById('navbar');
+    const topBtn = document.getElementById('topBtn');
+    const reveals = document.querySelectorAll('.reveal');
+    const menuItems = document.querySelectorAll('.menu span');
+
+    function updateOnScroll(){
+      if(window.scrollY > 30){
+        navbar.classList.add('scrolled');
+        topBtn.style.display = 'block';
+      }else{
+        navbar.classList.remove('scrolled');
+        topBtn.style.display = 'none';
+      }
+
+      reveals.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if(rect.top < window.innerHeight - 100){
+          section.classList.add('show');
+        }
+      });
+
+      const sections = [
+        { id:'services', menuIndex:0 },
+        { id:'experts', menuIndex:1 },
+        { id:'footer', menuIndex:3 }
+      ];
+
+      menuItems.forEach(item => item.classList.remove('active'));
+
+      sections.forEach((item) => {
+        const section = document.getElementById(item.id);
+        if(!section) return;
+
+        const offsetTop = section.offsetTop - 180;
+        const offsetBottom = offsetTop + section.offsetHeight;
+
+        if(window.scrollY >= offsetTop && window.scrollY < offsetBottom){
+          menuItems[item.menuIndex].classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateOnScroll);
+    window.addEventListener('load', () => {
+      updateOnScroll();
+      loadNavProfile();
+    });
+  </script>
+</body>
+</html>

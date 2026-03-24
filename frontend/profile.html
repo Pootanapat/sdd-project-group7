@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI',sans-serif;
+    }
+
+    body{
+      background:#4a4a4a;
+      color:#fff;
+    }
+
+    .navbar{
+      background:#000;
+      padding:14px 24px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    .logo{
+      font-size:18px;
+      font-weight:800;
+    }
+
+    .menu{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .menu span,
+    .menu button{
+      color:#fff;
+      cursor:pointer;
+      background:none;
+      border:none;
+      font-size:16px;
+    }
+
+    .menu .nav-btn{
+      background:#ff9900;
+      color:#111;
+      padding:8px 16px;
+      border-radius:8px;
+      font-weight:700;
+    }
+
+    .page{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px;
+      text-align:center;
+    }
+
+    .title{
+      font-size:54px;
+      font-weight:800;
+      margin-top:6px;
+      margin-bottom:8px;
+    }
+
+    .avatar-wrap{
+      width:110px;
+      height:110px;
+      margin:0 auto 18px;
+      position:relative;
+    }
+
+    .avatar{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid #ddd;
+      background:#ccc;
+    }
+
+    .change-btn{
+      margin-top:10px;
+      background:#ff9900;
+      color:#111;
+      border:none;
+      padding:10px 18px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    input[type="file"]{
+      display:none;
+    }
+
+    .card{
+      margin-top:18px;
+      background:linear-gradient(90deg,#171717,#1f1f1f);
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:16px;
+      padding:26px 18px 10px;
+      text-align:left;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:120px 1fr;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .label{
+      font-size:18px;
+      font-weight:700;
+    }
+
+    .input{
+      width:100%;
+      height:32px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.5);
+      background:#4d4d4d;
+      color:#fff;
+      padding:0 12px;
+      outline:none;
+    }
+    .logo{
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:.5px;
+  white-space:nowrap;
+  text-decoration:none;
+  color:#fff;
+  cursor:pointer;
+    }
+    
+    .history-title{
+      font-size:18px;
+      font-weight:800;
+      margin-top:8px;
+      margin-bottom:8px;
+    }
+
+    .history-box{
+      min-height:130px;
+      background:#000;
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:14px;
+      padding:14px 16px;
+    }
+
+    .history-item{
+      display:grid;
+      grid-template-columns:1.5fr 1fr 1.5fr;
+      gap:12px;
+      margin-bottom:10px;
+      color:#f0f0f0;
+    }
+
+    @media (max-width:768px){
+      .title{
+        font-size:42px;
+      }
+      .row{
+        grid-template-columns:1fr;
+      }
+      .history-item{
+        grid-template-columns:1fr;
+        border-bottom:1px solid rgba(255,255,255,.1);
+        padding-bottom:10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="index.html" class="logo">BARBERSHOP</a>
+
+    <div class="menu">
+      <span onclick="window.location.href='index.html#services'">บริการ</span>
+      <span onclick="window.location.href='index.html#experts'">ช่างของเรา</span>
+      <span onclick="window.location.href='booking.html'">จองคิว</span>
+      <span onclick="window.location.href='index.html#footer'">ติดต่อเรา</span>
+      <button class="nav-btn" onclick="window.location.href='signin.html'">Sign in</button>
+      <button class="nav-btn" onclick="window.location.href='signup.html'">Signup</button>
+      <span>Profile</span>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="title">Profile</div>
+
+    <div class="avatar-wrap">
+      <img id="profileImage" class="avatar" src="" alt="profile">
+    </div>
+
+    <label class="change-btn" for="imageUpload">เปลี่ยนรูปโปรไฟล์</label>
+    <input type="file" id="imageUpload" accept="image/*">
+
+    <div class="card">
+      <div class="row">
+        <div class="label">ชื่อ-นามสกุล</div>
+        <input class="input" id="profileName" type="text" placeholder="ชื่อ-นามสกุล">
+      </div>
+
+      <div class="row">
+        <div class="label">เบอร์โทร</div>
+        <input class="input" id="profilePhone" type="text" placeholder="0812345678">
+      </div>
+
+      <div class="row">
+        <div class="label">อีเมลล์</div>
+        <input class="input" id="profileEmail" type="email" placeholder="email@gmail.com">
+      </div>
+
+      <div class="history-title">ประวัติการจอง</div>
+      <div class="history-box" id="bookingHistory"></div>
+    </div>
+  </div>
+
+  <script>
+    const defaultAvatar = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+
+    function loadProfile(){
+      const savedImage = localStorage.getItem('profileImage');
+      const savedName = localStorage.getItem('profileName') || '';
+      const savedPhone = localStorage.getItem('profilePhone') || '0812345678';
+      const savedEmail = localStorage.getItem('profileEmail') || 'BarberShop@gmail.com';
+
+      document.getElementById('profileImage').src = savedImage || defaultAvatar;
+      document.getElementById('profileName').value = savedName;
+      document.getElementById('profilePhone').value = savedPhone;
+      document.getElementById('profileEmail').value = savedEmail;
+
+      let history = JSON.parse(localStorage.getItem('bookingHistory') || '[]');
+
+      if(history.length === 0){
+        history = [
+          { service:'บริการตัดผม ทรงTwo block', price:'ราคา 250 บาท', date:'เมื่อวันที่ 30 กุมภาพันธ์ พ.ศ. 2568' },
+          { service:'บริการโกนหนวด', price:'ราคา 100 บาท', date:'เมื่อวันที่ 28 กรกฎาคม พ.ศ. 2568' }
+        ];
+        localStorage.setItem('bookingHistory', JSON.stringify(history));
+      }
+
+      const historyBox = document.getElementById('bookingHistory');
+      historyBox.innerHTML = '';
+
+      history.forEach(item => {
+        historyBox.innerHTML += `
+          <div class="history-item">
+            <div>${item.service}</div>
+            <div>${item.price}</div>
+            <div>${item.date}</div>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('imageUpload').addEventListener('change', function(){
+      const file = this.files[0];
+      if(!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e){
+        localStorage.setItem('profileImage', e.target.result);
+        document.getElementById('profileImage').src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('profileName').addEventListener('input', function(){
+      localStorage.setItem('profileName', this.value);
+    });
+
+    document.getElementById('profilePhone').addEventListener('input', function(){
+      localStorage.setItem('profilePhone', this.value);
+    });
+
+    document.getElementById('profileEmail').addEventListener('input', function(){
+      localStorage.setItem('profileEmail', this.value);
+    });
+
+    window.addEventListener('load', loadProfile);
+  </script>
+</body>
+</html>
