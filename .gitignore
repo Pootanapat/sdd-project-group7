@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Firebase Service Account Key (CRITICAL: ห้ามเอาขึ้น Git เด็ดขาด!)
+*serviceAccountKey.json
+backend/serviceAccountKey.json
+
+# User Uploaded Images/Slips
+backend/uploads/
+uploads/
+
+# Environment Variables
+.env
+.env.local
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
