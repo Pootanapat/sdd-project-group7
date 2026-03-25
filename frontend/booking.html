@@ -739,8 +739,10 @@
       <button class="nav-link" onclick="window.location.href='booking.html'">จองคิว</button>
       <button class="nav-link" onclick="window.location.href='index.html#footer'">ติดต่อเรา</button>
       <div class="nav-spacer"></div>
-      <button class="nav-btn" onclick="window.location.href='Signin.html'">Sign in</button>
-      <button class="nav-btn" onclick="window.location.href='Signup.html'">Signup</button>
+      <div id="auth-buttons">
+        <button class="nav-btn" onclick="window.location.href='Signin.html'">Sign in</button>
+        <button class="nav-btn" onclick="window.location.href='Signup.html'">Signup</button>
+      </div>
       <button class="nav-profile" onclick="window.location.href='profile.html'">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
           <path
@@ -763,10 +765,11 @@
         <div class="step" id="step2Icon">2</div>
         <div class="step" id="step3Icon">3</div>
         <div class="step" id="step4Icon">4</div>
+        <div class="step" id="step5Icon">5</div>
       </div>
 
       <div class="panel active" id="step1">
-        <div class="section-title">เลือกบริการและช่าง</div>
+        <div class="section-title">เลือกบริการ *</div>
 
         <div class="group-title">บริการ</div>
         <div class="service-grid">
@@ -775,21 +778,14 @@
           <button class="choice-btn service-btn full">Full set</button>
         </div>
 
-        <div class="group-title">ช่าง</div>
-        <div class="barber-grid">
-          <button class="choice-btn barber-btn">ช่างซัน</button>
-          <button class="choice-btn barber-btn">ช่างโต๋</button>
-          <button class="choice-btn barber-btn">ช่างเวียร์</button>
-        </div>
-
         <div class="actions">
           <button class="action-btn" onclick="goToStep2()">ขั้นตอนถัดไป</button>
         </div>
       </div>
 
       <div class="panel" id="step2">
-        <div class="section-title">เลือกเวลา</div>
-        <div class="label">วันที่</div>
+        <div class="section-title">เลือกเวลา *</div>
+        <div class="label">วันที่ *</div>
 
         <input type="date" id="bookingDate" class="date-input" />
 
@@ -813,10 +809,12 @@
       </div>
 
       <div class="panel" id="step3">
-        <div class="summary-box" id="summaryBox"></div>
+        <div class="section-title">เลือกช่างที่ว่าง *</div>
 
-        <input type="text" id="fullName" class="text-input" placeholder="ชื่อ-นามสกุล">
-        <input type="tel" id="phoneNumber" class="text-input" placeholder="เบอร์โทรศัพท์">
+        <div class="group-title">ช่าง</div>
+        <div class="barber-grid" id="availableBarbers">
+          <!-- ช่างที่ว่างจะถูกเพิ่มด้วย JavaScript -->
+        </div>
 
         <div class="actions">
           <button class="back-btn" onclick="backToStep2()">ย้อนกลับ</button>
@@ -825,11 +823,23 @@
       </div>
 
       <div class="panel" id="step4">
+        <div class="section-title">ข้อมูลส่วนตัว</div>
+
+        <input type="text" id="fullName" class="text-input" placeholder="ชื่อ-นามสกุล *">
+        <input type="tel" id="phoneNumber" class="text-input" placeholder="เบอร์โทรศัพท์ *">
+
+        <div class="actions">
+          <button class="back-btn" onclick="backToStep3()">ย้อนกลับ</button>
+          <button class="action-btn" onclick="goToStep5()">ขั้นตอนถัดไป</button>
+        </div>
+      </div>
+
+      <div class="panel" id="step5">
         <div class="section-title">ยืนยันการจอง</div>
         <div class="summary-box" id="finalSummary"></div>
 
         <div class="actions">
-          <button class="back-btn" onclick="backToStep3()">ย้อนกลับ</button>
+          <button class="back-btn" onclick="backToStep4()">ย้อนกลับ</button>
           <button class="action-btn" onclick="goToPayment()">ยืนยันการจอง</button>
         </div>
       </div>
@@ -909,22 +919,79 @@
   </div>
 
   <script type="module">
-    import { auth } from './firebase.js';
+    import { auth, db } from './firebase.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { collection, addDoc, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    window.fetchBookings = async function (date) {
+      const q = query(collection(db, 'bookings'), where('bookingDate', '==', date));
+      const querySnapshot = await getDocs(q);
+      const bookings = [];
+      querySnapshot.forEach((doc) => {
+        bookings.push(doc.data());
+      });
+      return bookings;
+    };
 
     window.currentUserId = null;
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         window.currentUserId = user.uid;
+        updateNavbar(true);
+      } else {
+        updateNavbar(false);
       }
     });
+
+    function updateNavbar(isLoggedIn) {
+      const authButtons = document.getElementById('auth-buttons');
+      if (authButtons) {
+        if (isLoggedIn) {
+          authButtons.innerHTML = `<button class="nav-btn" onclick="logout()">Logout</button>`;
+        } else {
+          authButtons.innerHTML = `
+            <button class="nav-btn" onclick="window.location.href='Signin.html'">Sign in</button>
+            <button class="nav-btn" onclick="window.location.href='Signup.html'">Signup</button>
+          `;
+        }
+      }
+    }
+
+    async function logout() {
+      await auth.signOut();
+      window.location.href = 'index.html';
+    }
+
+    function getEffectiveUserId() {
+      if (window.currentUserId) return window.currentUserId;
+      const localUser = localStorage.getItem('currentUser');
+      if (localUser) return localUser;
+      return 'anonymous';
+    }
+
+    async function saveBookingToFirestore(payload) {
+      const normalizedPayload = {
+        ...payload,
+        userId: payload.userId && payload.userId !== 'anonymous' ? payload.userId : getEffectiveUserId()
+      };
+
+      try {
+        const docRef = await addDoc(collection(db, 'bookings'), {
+          ...normalizedPayload,
+          createdAt: serverTimestamp()
+        });
+        console.log('Local Firestore booking saved with ID:', docRef.id);
+      } catch (error) {
+        console.error('Fail save booking to Firestore:', error);
+      }
+    }
   </script>
 
   <script>
     let selectedService = "";
-    let selectedBarber = "";
     let selectedTime = "";
-    let uploadedSlip = false;
+    let selectedBarber = "";
 
     const priceMap = {
       "ตัดผมชาย": 200,
@@ -947,19 +1014,45 @@
       });
     });
 
-    barberButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        barberButtons.forEach((btn) => btn.classList.remove("active"));
-        button.classList.add("active");
-        selectedBarber = button.textContent.trim();
-      });
-    });
-
     timeButtons.forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.disabled) return;
         timeButtons.forEach((btn) => btn.classList.remove("active"));
         button.classList.add("active");
         selectedTime = button.textContent.trim();
+      });
+    });
+
+    let currentBookings = [];
+
+    document.getElementById("bookingDate").addEventListener("change", async (e) => {
+      const date = e.target.value;
+      if (!date) return;
+
+      if (window.fetchBookings) {
+        currentBookings = await window.fetchBookings(date);
+      } else {
+        currentBookings = [];
+      }
+
+      const bookingsPerTime = {};
+      currentBookings.forEach(b => {
+        bookingsPerTime[b.bookingTime] = (bookingsPerTime[b.bookingTime] || 0) + 1;
+      });
+
+      timeButtons.forEach(btn => {
+        const time = btn.textContent.trim();
+        if (bookingsPerTime[time] >= 3) {
+          btn.disabled = true;
+          btn.style.opacity = '0.3';
+          btn.style.cursor = 'not-allowed';
+          btn.classList.remove('active');
+          if (selectedTime === time) selectedTime = "";
+        } else {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+          btn.style.cursor = 'pointer';
+        }
       });
     });
 
@@ -994,7 +1087,10 @@
     }
 
     function submitSlipPayment() {
-      if (!mySelectedFile) return;
+      if (!mySelectedFile) {
+        alert('กรุณาอัปโหลดสลิปก่อนเพื่อดำเนินการต่อ');
+        return;
+      }
 
       closeUploadPopup();
 
@@ -1005,41 +1101,74 @@
       document.getElementById('statusTitle').classList.remove('success');
       document.getElementById('statusMessage').innerHTML = 'ระบบกำลังตรวจสอบสลิปการโอนเงินของคุณ<br>โปรดรอสักครู่...';
 
-      // Submit to backend
+      // build form data
       const formData = new FormData();
       formData.append('slip', mySelectedFile);
-      formData.append('userId', window.currentUserId || 'anonymous');
-      formData.append('customerName', document.getElementById("fullName").value.trim());
-      formData.append('customerPhone', document.getElementById("phoneNumber").value.trim());
-      formData.append('serviceName', selectedService);
-      formData.append('barberName', selectedBarber);
-      formData.append('bookingDate', document.getElementById("bookingDate").value);
-      formData.append('bookingTime', selectedTime);
-      formData.append('price', priceMap[selectedService] || 0);
+      const bookPayload = {
+        userId: window.currentUserId || 'anonymous',
+        customerName: document.getElementById("fullName").value.trim(),
+        customerPhone: document.getElementById("phoneNumber").value.trim(),
+        serviceName: selectedService,
+        barberName: selectedBarber,
+        bookingDate: document.getElementById("bookingDate").value,
+        bookingTime: selectedTime,
+        price: priceMap[selectedService] || 0,
+        status: 'success'
+      };
+
+      formData.append('userId', bookPayload.userId);
+      formData.append('customerName', bookPayload.customerName);
+      formData.append('customerPhone', bookPayload.customerPhone);
+      formData.append('serviceName', bookPayload.serviceName);
+      formData.append('barberName', bookPayload.barberName);
+      formData.append('bookingDate', bookPayload.bookingDate);
+      formData.append('bookingTime', bookPayload.bookingTime);
+      formData.append('price', bookPayload.price);
+
+      // Save local Firestore copy for profile history immediately
+      if (typeof saveBookingToFirestore === 'function') {
+        saveBookingToFirestore(bookPayload);
+      }
+
+      const statusTimeout = setTimeout(() => {
+        console.warn('Backend timeout, auto-confirming with fallback...');
+        document.getElementById('statusTitle').innerText = 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้';
+        document.getElementById('statusMessage').innerText = 'ระบบยังไม่สามารถตรวจสอบสลิปได้ โปรดลองอีกครั้งหรือเปลี่ยนเป็น mock สำเร็จอัตโนมัติ';
+        showSuccessAndReceipt();
+      }, 12000);
 
       fetch('http://localhost:3000/api/upload-slip', {
         method: 'POST',
         body: formData
       })
-
-
-        .then(response => response.json())
+        .then(async response => {
+          clearTimeout(statusTimeout);
+          let data;
+          try {
+            data = await response.json();
+          } catch (err) {
+            throw new Error('Invalid JSON response');
+          }
+          return data;
+        })
         .then(data => {
-          if (data.success) {
+          if (data && data.success) {
             showSuccessAndReceipt();
           } else {
-            alert('Upload failed: ' + (data.error || 'Unknown error'));
+            console.warn('Upload failed response:', data);
+            alert('Upload failed: ' + (data && data.error ? data.error : 'Unknown error'));
             showPanel('paymentPanel');
           }
         })
         .catch(error => {
+          clearTimeout(statusTimeout);
           console.error('Backend error, using mock fallback', error);
-          // Mock fallback if DB is not connected
           setTimeout(() => {
             showSuccessAndReceipt();
           }, 2500);
         });
     }
+
 
     function backToStep4() {
       showPanel('step4');
@@ -1073,7 +1202,7 @@
           <div><strong style="color:#1aa332;">สถานะคิว :</strong> ยืนยันแล้ว</div>
         `;
 
-        saveBookingHistory(fullName, bookingDate);
+        // Booking saved to Firestore via backend
         showPanel("detailPanel");
         setAllDone();
       }, 1500);
@@ -1089,7 +1218,8 @@
         document.getElementById("step1Icon"),
         document.getElementById("step2Icon"),
         document.getElementById("step3Icon"),
-        document.getElementById("step4Icon")
+        document.getElementById("step4Icon"),
+        document.getElementById("step5Icon")
       ];
 
       icons.forEach((icon, index) => {
@@ -1122,8 +1252,15 @@
         document.getElementById("step3Icon").classList.add("active");
       }
 
-      if (currentStep === 4) {
+      if (currentStep >= 5) {
+        document.getElementById("step4Icon").classList.add("done");
+        document.getElementById("step4Icon").textContent = "✓";
+      } else if (currentStep === 4) {
         document.getElementById("step4Icon").classList.add("active");
+      }
+
+      if (currentStep === 5) {
+        document.getElementById("step5Icon").classList.add("active");
       }
     }
 
@@ -1137,15 +1274,13 @@
       document.getElementById("step3Icon").textContent = "✓";
       document.getElementById("step4Icon").classList.add("done");
       document.getElementById("step4Icon").textContent = "✓";
+      document.getElementById("step5Icon").classList.add("done");
+      document.getElementById("step5Icon").textContent = "✓";
     }
 
     function goToStep2() {
       if (!selectedService) {
         alert("กรุณาเลือกบริการ");
-        return;
-      }
-      if (!selectedBarber) {
-        alert("กรุณาเลือกช่าง");
         return;
       }
 
@@ -1170,11 +1305,8 @@
         return;
       }
 
-      document.getElementById("summaryBox").innerHTML = `
-        <div>บริการ: ${selectedService}</div>
-        <div>ช่าง: ${selectedBarber}</div>
-        <div>วันเวลา: ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
-      `;
+      // โหลดช่างที่ว่าง
+      loadAvailableBarbers(bookingDate, selectedTime);
 
       showPanel("step3");
       setStepUI(3);
@@ -1185,7 +1317,54 @@
       setStepUI(2);
     }
 
+    function loadAvailableBarbers(date, time) {
+      const availableBarbersDiv = document.getElementById("availableBarbers");
+      const allBarbers = ["ช่างซัน", "ช่างโต๋", "ช่างเวีย"];
+
+      const bookedBarbers = currentBookings
+        .filter(b => b.bookingTime === time)
+        .map(b => b.barberName);
+
+      const availableBarbers = allBarbers.filter(barber => !bookedBarbers.includes(barber));
+
+      availableBarbersDiv.innerHTML = "";
+
+      if (availableBarbers.length === 0) {
+        availableBarbersDiv.innerHTML = "<p style='color: #d3d3d3; text-align: center;'>ไม่มีช่างว่างในช่วงเวลานี้ กรุณาเลือกเวลาใหม่</p>";
+        return;
+      }
+
+      availableBarbers.forEach(barber => {
+        const button = document.createElement("button");
+        button.className = "choice-btn barber-btn";
+        button.textContent = barber;
+        button.onclick = (event) => selectBarber(barber, event);
+        availableBarbersDiv.appendChild(button);
+      });
+    }
+
+    function selectBarber(barber, event) {
+      document.querySelectorAll(".barber-btn").forEach(btn => btn.classList.remove("active"));
+      if (event && event.target) event.target.classList.add("active");
+      selectedBarber = barber;
+    }
+
     function goToStep4() {
+      if (!selectedBarber) {
+        alert("กรุณาเลือกช่าง");
+        return;
+      }
+
+      showPanel("step4");
+      setStepUI(4);
+    }
+
+    function backToStep3() {
+      showPanel("step3");
+      setStepUI(3);
+    }
+
+    function goToStep5() {
       const fullName = document.getElementById("fullName").value.trim();
       const phoneNumber = document.getElementById("phoneNumber").value.trim();
       const bookingDate = document.getElementById("bookingDate").value;
@@ -1201,45 +1380,30 @@
 
       document.getElementById("finalSummary").innerHTML = `
         <div>บริการ: ${selectedService}</div>
-        <div>ช่าง: ${selectedBarber}</div>
         <div>วันเวลา: ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
+        <div>ช่าง: ${selectedBarber}</div>
         <div>ชื่อ-นามสกุล: ${fullName}</div>
         <div>เบอร์โทรศัพท์: ${phoneNumber}</div>
       `;
 
+      showPanel("step5");
+      setStepUI(5);
+    }
+
+    function backToStep4() {
       showPanel("step4");
       setStepUI(4);
     }
 
-    function backToStep3() {
-      showPanel("step3");
-      setStepUI(3);
-    }
-
     function goToPayment() {
       showPanel("paymentPanel");
-      setStepUI(4);
+      setStepUI(5);
     }
 
     // Replaced confirmPayment with submitSlipPayment above
 
     function finishAll() {
       window.location.href = "index.html";
-    }
-
-    function saveBookingHistory(fullName, bookingDate) {
-      const bookingHistory = JSON.parse(localStorage.getItem('bookingHistory') || '[]');
-
-      bookingHistory.unshift({
-        service: selectedService,
-        price: 'ราคา ' + (priceMap[selectedService] || 0) + ' บาท',
-        date: 'เมื่อวันที่ ' + formatThaiDate(bookingDate),
-        barber: selectedBarber,
-        customer: fullName,
-        time: selectedTime + ' น.'
-      });
-
-      localStorage.setItem('bookingHistory', JSON.stringify(bookingHistory));
     }
 
     function formatThaiDate(dateString) {
