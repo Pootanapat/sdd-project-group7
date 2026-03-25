@@ -344,10 +344,14 @@ if (avatarInput) {
 const saveProfileBtn = document.getElementById('save-profile-btn');
 if (saveProfileBtn) {
     saveProfileBtn.addEventListener('click', async () => {
+      const user = auth.currentUser;
       const nameInp  = document.getElementById('pf-name');
       const phoneInp = document.getElementById('pf-phone');
       
-      if (!nameInp || !phoneInp || !currentUID) return;
+      if (!user) {
+        showToast('⚠️ กรุณาเข้าสู่ระบบก่อน', 'error');
+        return;
+      }
 
       const name = nameInp.value.trim();
       const phone = phoneInp.value.trim();
@@ -359,13 +363,20 @@ if (saveProfileBtn) {
       }
 
       try {
-        await updateDoc(doc(db, 'users', currentUID), {
+        // เปลี่ยนจาก updateDoc เป็น setDoc แบบ merge: true
+        // เพื่อให้สร้างข้อมูลใหม่ได้หากยังไม่มี และอัปเดตเฉพาะฟิลด์หากมีอยู่แล้ว
+        await setDoc(doc(db, 'users', user.uid), {
           displayName: name,
-          phone:       phone
-        });
+          phone: phone,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+
         showToast('✅ บันทึกข้อมูลเรียบร้อยแล้ว!', 'success');
+        nameInp.classList.remove('error');
       } catch (e) {
-        showToast('❌ บันทึกไม่สำเร็จ กรุณาลองใหม่', 'error');
+        console.error("Save Error:", e);
+        // แสดงข้อความ Error ที่ละเอียดขึ้นเพื่อช่วยวิเคราะห์
+        showToast('❌ บันทึกไม่สำเร็จ: ' + e.message, 'error');
       }
     });
 }
