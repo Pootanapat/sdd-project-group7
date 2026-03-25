@@ -16,7 +16,7 @@
       background:#4c4c4c;
       color:#fff;
       min-height:100vh;
-      padding:24px 18px 40px;
+      padding:100px 18px 40px;
     }
 
     .booking-page{
@@ -544,9 +544,104 @@
     .btn-primary { background: #ffa200; color: #111; border: none; flex: 1; font-weight:800; border-radius: 8px; cursor:pointer;}
     .btn-primary:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(255,162,0,.3); transform: translateY(-1px); }
     .btn-primary:disabled { background: #444; color: #888; cursor: not-allowed; }
+
+    /* ── Navbar ── */
+    .navbar {
+      display: flex;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(0,0,0,.9);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .navbar-brand {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: #fff;
+      letter-spacing: .12em;
+      padding: 0;
+      border-bottom: none;
+      width: auto;
+      text-align: left;
+    }
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      width: auto;
+    }
+    .nav-link {
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background .2s;
+      background: none; border: none;
+      font-family: 'Noto Sans Thai', sans-serif;
+    }
+    .nav-link:hover { background: #222; }
+    .nav-btn {
+      background: #f90;
+      color: #000;
+      font-weight: 700;
+      padding: 7px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 0.9rem;
+      transition: background .2s;
+    }
+    .nav-btn:hover { background: #e08800; }
+    .nav-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      color: #f90;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+      font-family: 'Noto Sans Thai', sans-serif;
+      transition: background .2s;
+    }
+    .nav-profile:hover { background: #222; }
+    .nav-spacer { flex: 1; }
   </style>
 </head>
 <body>
+
+  <nav class="navbar" id="navbar">
+    <div class="navbar-brand" style="cursor:pointer;" onclick="window.location.href='index.html'">BARBERSHOP</div>
+    <div class="navbar-links">
+      <button class="nav-link" onclick="window.location.href='index.html#services'">บริการ</button>
+      <button class="nav-link" onclick="window.location.href='index.html#experts'">ช่างของเรา</button>
+      <button class="nav-link" onclick="window.location.href='booking.html'">จองคิว</button>
+      <button class="nav-link" onclick="window.location.href='index.html#footer'">ติดต่อเรา</button>
+      <div class="nav-spacer"></div>
+      <button class="nav-btn" onclick="window.location.href='Signin.html'">Sign in</button>
+      <button class="nav-btn" onclick="window.location.href='Signup.html'">Signup</button>
+      <button class="nav-profile" onclick="window.location.href='profile.html'">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        Profile
+      </button>
+    </div>
+  </nav>
   <div class="booking-page">
     <div class="top-title">
       <div class="small">APPOINTMENT</div>
