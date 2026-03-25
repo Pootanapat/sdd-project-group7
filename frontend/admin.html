@@ -632,6 +632,99 @@
         min-width:1100px;
       }
     }
+
+    /* --- DASHBOARD WIDGETS NEW CSS --- */
+    .dashboard-main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      gap: 24px;
+      margin-top: 12px;
+    }
+    .chart-card.wide-card {
+      margin: 0;
+      max-width: 100%;
+      background: linear-gradient(135deg,#161616,#1c1c1c);
+      padding: 20px;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-svg {
+      height: 240px;
+      margin-top: auto;
+    }
+    .dashboard-side {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .dashboard-widget {
+      background: linear-gradient(135deg,#161616,#1c1c1c);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px;
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .widget-head {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .widget-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 14px;
+    }
+    .widget-item:last-child {
+      border-bottom: none;
+    }
+    .widget-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .widget-title {
+      font-weight: 700;
+      color: #ededed;
+    }
+    .widget-sub {
+      color: #888;
+      font-size: 11px;
+    }
+    .widget-val {
+      font-weight: 800;
+      color: #ff9d00;
+      font-size: 15px;
+    }
+    .widget-badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255,157,0,.15);
+      color: #ff9d00;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-block;
+    }
+    /* Stat Cards Revamp */
+    .stat-card {
+      background: linear-gradient(135deg,#161616,#1f1f1f);
+      border-color: rgba(255,255,255,.15);
+    }
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 100%;
+      margin-bottom: 24px;
+    }
   </style>
 </head>
 <body>
@@ -723,46 +816,50 @@
             </div>
           </div>
 
-          <div class="chart-card">
-            <div class="chart-head">Booking Trends</div>
-            <div class="chart-sub">Weekly overview of bookings and revenue performance</div>
-            <svg class="chart-svg" viewBox="0 0 500 165">
-              <line x1="40" y1="140" x2="470" y2="140" stroke="#666" />
-              <line x1="40" y1="20" x2="40" y2="140" stroke="#666" />
-              <line x1="140" y1="20" x2="140" y2="140" stroke="#222" />
-              <line x1="240" y1="20" x2="240" y2="140" stroke="#222" />
-              <line x1="340" y1="20" x2="340" y2="140" stroke="#222" />
-              <line x1="440" y1="20" x2="440" y2="140" stroke="#222" />
+          <div class="dashboard-main-grid">
+            <div class="chart-card wide-card">
+              <div class="chart-head">Booking Trends</div>
+              <div class="chart-sub">Weekly overview of bookings and revenue performance</div>
+              <svg class="chart-svg" viewBox="0 0 500 165" preserveAspectRatio="none">
+                <line x1="40" y1="140" x2="470" y2="140" stroke="#666" />
+                <line x1="40" y1="20" x2="40" y2="140" stroke="#666" />
+                <line x1="140" y1="20" x2="140" y2="140" stroke="#222" />
+                <line x1="240" y1="20" x2="240" y2="140" stroke="#222" />
+                <line x1="340" y1="20" x2="340" y2="140" stroke="#222" />
+                <line x1="440" y1="20" x2="440" y2="140" stroke="#222" />
 
-              <polyline fill="none" stroke="#f36b2d" stroke-width="2.5"
-                points="50,95 110,72 170,84 240,57 310,42 380,28 450,78"/>
-              <polyline fill="none" stroke="#53d465" stroke-width="2.5"
-                points="50,90 110,68 170,80 240,50 310,35 380,20 450,74"/>
+                <g id="dynamicChartGroup"></g>
+                <text x="45" y="155" fill="#aaa" font-size="10">Mon</text>
+                <text x="105" y="155" fill="#aaa" font-size="10">Tue</text>
+                <text x="165" y="155" fill="#aaa" font-size="10">Wed</text>
+                <text x="235" y="155" fill="#aaa" font-size="10">Thu</text>
+                <text x="305" y="155" fill="#aaa" font-size="10">Fri</text>
+                <text x="375" y="155" fill="#aaa" font-size="10">Sat</text>
+                <text x="445" y="155" fill="#aaa" font-size="10">Sun</text>
+              </svg>
+            </div>
 
-              <circle cx="50" cy="95" r="4" fill="#f36b2d"/>
-              <circle cx="110" cy="72" r="4" fill="#f36b2d"/>
-              <circle cx="170" cy="84" r="4" fill="#f36b2d"/>
-              <circle cx="240" cy="57" r="4" fill="#f36b2d"/>
-              <circle cx="310" cy="42" r="4" fill="#f36b2d"/>
-              <circle cx="380" cy="28" r="4" fill="#f36b2d"/>
-              <circle cx="450" cy="78" r="4" fill="#f36b2d"/>
-
-              <circle cx="50" cy="90" r="4" fill="#53d465"/>
-              <circle cx="110" cy="68" r="4" fill="#53d465"/>
-              <circle cx="170" cy="80" r="4" fill="#53d465"/>
-              <circle cx="240" cy="50" r="4" fill="#53d465"/>
-              <circle cx="310" cy="35" r="4" fill="#53d465"/>
-              <circle cx="380" cy="20" r="4" fill="#53d465"/>
-              <circle cx="450" cy="74" r="4" fill="#53d465"/>
-
-              <text x="45" y="155" fill="#aaa" font-size="10">Mon</text>
-              <text x="105" y="155" fill="#aaa" font-size="10">Tue</text>
-              <text x="165" y="155" fill="#aaa" font-size="10">Wed</text>
-              <text x="235" y="155" fill="#aaa" font-size="10">Thu</text>
-              <text x="305" y="155" fill="#aaa" font-size="10">Fri</text>
-              <text x="375" y="155" fill="#aaa" font-size="10">Sat</text>
-              <text x="445" y="155" fill="#aaa" font-size="10">Sun</text>
-            </svg>
+            <div class="dashboard-side">
+              <div class="dashboard-widget">
+                <div class="widget-head">
+                  Top Barbers
+                  <span style="font-size:12px;color:#888;font-weight:500;">By bookings</span>
+                </div>
+                <div id="barberStatsContainer" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                  <div style="color:#666;text-align:center;font-size:13px;">Loading data...</div>
+                </div>
+              </div>
+              
+              <div class="dashboard-widget">
+                <div class="widget-head">
+                  Recent Transactions
+                  <span style="font-size:12px;color:#888;font-weight:500;">Live</span>
+                </div>
+                <div id="recentTransactionsContainer">
+                   <div style="color:#666;text-align:center;font-size:13px;padding:20px 0;">Loading data...</div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -777,7 +874,9 @@
                 <tr>
                   <th>Customer Name</th>
                   <th>Service</th>
-                  <th>Date</th>
+                  <th>Barber</th>
+                  <th>Reserved Time</th>
+                  <th>Upload Date</th>
                   <th>Amount</th>
                   <th>Actions</th>
                   <th style="text-align:center;">Status</th>
@@ -843,7 +942,9 @@
       <div class="modal-body">
         <div class="detail-row"><span>Customer Name</span><span id="modalCustomerName"></span></div>
         <div class="detail-row"><span>Service</span><span id="modalService"></span></div>
-        <div class="detail-row"><span>Date</span><span id="modalDate"></span></div>
+        <div class="detail-row"><span>Barber</span><span id="modalBarber"></span></div>
+        <div class="detail-row"><span>Reserved Time</span><span id="modalReservedTime"></span></div>
+        <div class="detail-row"><span>Upload Date</span><span id="modalDate"></span></div>
         <div class="detail-row"><span>Payment Method</span><span>QR Code</span></div>
         <div class="detail-row"><span>ID</span><span id="modalTxnId"></span></div>
 
@@ -943,9 +1044,100 @@
         document.getElementById("monthlyRevenueStat").textContent = formatMoney(data.monthlyRevenue);
         document.getElementById("newMembersStat").textContent = data.totalMembers;
         document.getElementById("totalCustomersStat").textContent = Number(data.totalMembers).toLocaleString();
+        
+        renderChart(data.chartData);
+        renderBarberStats(data.barberStats);
+        renderRecentTransactions(data.recentTransactions);
       } catch (err) {
         console.error("loadDashboardStats error:", err);
       }
+    }
+
+    function renderBarberStats(barberData) {
+      const container = document.getElementById("barberStatsContainer");
+      if (!barberData || Object.keys(barberData).length === 0) {
+        container.innerHTML = '<div style="color:#666;text-align:center;font-size:13px;">ไม่มีข้อมูลช่างตัดผม</div>';
+        return;
+      }
+      
+      const sortedBarbers = Object.entries(barberData).sort((a,b) => b[1] - a[1]).slice(0, 3);
+      let html = '';
+      
+      sortedBarbers.forEach(([name, count]) => {
+         html += `
+           <div class="widget-item">
+             <div class="widget-left">
+               <div class="widget-title">${name}</div>
+               <div class="widget-sub">Staff Member</div>
+             </div>
+             <div class="widget-badge">${count} Bookings</div>
+           </div>
+         `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderRecentTransactions(transactions) {
+      const container = document.getElementById("recentTransactionsContainer");
+      if (!transactions || transactions.length === 0) {
+        container.innerHTML = '<div style="color:#666;text-align:center;font-size:13px;padding:20px 0;">ไม่มีประวัติการทำรายการ</div>';
+        return;
+      }
+
+      let html = '';
+      transactions.forEach(txn => {
+         const colorInfo = txn.status === 'approved' ? '#50d96d' : (txn.status === 'rejected' ? '#f4534b' : '#ff9d00');
+         const statText = txn.status.charAt(0).toUpperCase() + txn.status.slice(1);
+         html += `
+           <div class="widget-item">
+             <div class="widget-left">
+               <div class="widget-title">${txn.customer}</div>
+               <div class="widget-sub">${txn.time}</div>
+             </div>
+             <div style="text-align:right;">
+               <div class="widget-val">${Number(txn.amount).toLocaleString()} ฿</div>
+               <div class="widget-sub" style="color:${colorInfo}; font-weight:700;">${statText}</div>
+             </div>
+           </div>
+         `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderChart(chartData) {
+      if (!chartData) return;
+      const { bookings, revenue } = chartData;
+      const xCoords = [50, 110, 170, 240, 310, 380, 450];
+      
+      const maxBooking = Math.max(...bookings, 1);
+      const maxRevenue = Math.max(...revenue, 1);
+
+      const mapY = (val, max) => 140 - (val / max * 120);
+
+      let revPoints = [];
+      let bookPoints = [];
+      let circlesHtml = '';
+
+      for (let i = 0; i < 7; i++) {
+         const cx = xCoords[i];
+         const rY = mapY(revenue[i], maxRevenue);
+         const bY = mapY(bookings[i], maxBooking);
+         
+         revPoints.push(`${cx},${rY}`);
+         bookPoints.push(`${cx},${bY}`);
+         
+         circlesHtml += `<circle cx="${cx}" cy="${rY}" r="4" fill="#f36b2d"/>`;
+         circlesHtml += `<circle cx="${cx}" cy="${bY}" r="4" fill="#53d465"/>`;
+      }
+
+      const svgHtml = `
+        <polyline fill="none" stroke="#f36b2d" stroke-width="2.5" points="${revPoints.join(' ')}"/>
+        <polyline fill="none" stroke="#53d465" stroke-width="2.5" points="${bookPoints.join(' ')}"/>
+        ${circlesHtml}
+      `;
+      
+      const group = document.getElementById("dynamicChartGroup");
+      if (group) group.innerHTML = svgHtml;
     }
 
     async function loadPayments() {
@@ -1028,6 +1220,8 @@
         tr.innerHTML = `
           <td><strong>${payment.customer || "-"}</strong></td>
           <td>${payment.service || "-"}</td>
+          <td>${payment.barber || "-"}</td>
+          <td>${payment.reservedDate || "-"} ${payment.reservedTime !== "-" ? payment.reservedTime : ""}</td>
           <td>${payment.date || "-"}</td>
           <td>${Number(payment.amount || 0).toLocaleString()}.00฿</td>
           <td><button class="action-pill" onclick="openPaymentModal('${payment.id}')">👁 View</button></td>
@@ -1089,6 +1283,8 @@
       document.getElementById("paymentTransactionId").textContent = "Transaction ID: " + payment.id;
       document.getElementById("modalCustomerName").textContent = payment.customer || "-";
       document.getElementById("modalService").textContent = payment.service || "-";
+      document.getElementById("modalBarber").textContent = payment.barber || "-";
+      document.getElementById("modalReservedTime").textContent = (payment.reservedDate || "-") + " " + (payment.reservedTime && payment.reservedTime !== "-" ? payment.reservedTime : "");
       document.getElementById("modalDate").textContent = payment.date || "-";
       document.getElementById("modalTxnId").textContent = payment.id;
       document.getElementById("modalAmount").textContent = Number(payment.amount || 0).toFixed(2) + "฿";

@@ -789,12 +789,16 @@
       // Submit to backend
       const fullName = document.getElementById("fullName").value.trim();
       const amount = priceMap[selectedService] || 0;
+      const bookingDate = document.getElementById("bookingDate").value;
 
       const formData = new FormData();
       formData.append('slip', mySelectedFile);
       formData.append('amount', amount);
       formData.append('customer', fullName);
       formData.append('service', selectedService);
+      formData.append('barber', selectedBarber);
+      formData.append('reservedDate', bookingDate);
+      formData.append('reservedTime', selectedTime);
 
       fetch('http://localhost:3000/api/upload-slip', {
           method: 'POST',

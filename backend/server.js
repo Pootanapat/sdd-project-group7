@@ -66,6 +66,9 @@ app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
             amount: Number(req.body.amount) ,
             customer: req.body.customer || "Unknown",
             service: req.body.service || "Haircut",
+            barber: req.body.barber || "-",
+            reservedDate: req.body.reservedDate || "-",
+            reservedTime: req.body.reservedTime || "-",
             date: new Date().toLocaleDateString(),
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         };
@@ -215,18 +218,65 @@ app.get('/api/dashboard/stats', async (req, res) => {
 
     let totalRevenue = 0;
     let totalBookings = paymentsSnap.size;
+    
+    // Array to hold aggregated data for Mon (0) to Sun (6)
+    let bookingByDay = [0, 0, 0, 0, 0, 0, 0];
+    let revenueByDay = [0, 0, 0, 0, 0, 0, 0];
+    
+    let allPayments = [];
+    let barberCounts = {};
 
     paymentsSnap.forEach(doc => {
       const data = doc.data();
-      if (data.status === "approved" || data.status === "success")  {
-        totalRevenue += Number(data.amount || 0);
+      const amt = Number(data.amount || 0);
+
+      data.id = doc.id;
+      allPayments.push(data);
+
+      if (data.barber && data.barber !== "-") {
+        barberCounts[data.barber] = (barberCounts[data.barber] || 0) + 1;
       }
+
+      // We aggregate by the date it was created
+      let d = new Date();
+      if (data.createdAt && typeof data.createdAt.toDate === 'function') {
+         d = data.createdAt.toDate();
+      }
+      
+      let day = d.getDay(); // 0 is Sun, 1 is Mon... 6 is Sat
+      let index = day === 0 ? 6 : day - 1; // Map so 0=Mon, 6=Sun
+
+      if (data.status === "approved" || data.status === "success")  {
+        totalRevenue += amt;
+        revenueByDay[index] += amt;
+      }
+      bookingByDay[index] += 1;
     });
+
+    allPayments.sort((a,b) => {
+       const da = (a.createdAt && typeof a.createdAt.toDate === 'function') ? a.createdAt.toDate().getTime() : 0;
+       const db = (b.createdAt && typeof b.createdAt.toDate === 'function') ? b.createdAt.toDate().getTime() : 0;
+       return db - da; // Descending
+    });
+    
+    const recentTransactions = allPayments.slice(0, 5).map(p => ({
+        id: p.id,
+        customer: p.customer || "-",
+        amount: p.amount || 0,
+        status: p.status || "pending",
+        time: (p.reservedDate || "-") + " " + (p.reservedTime && p.reservedTime !== "-" ? p.reservedTime : "")
+    }));
 
     res.json({
       dailyBookings: totalBookings,
       monthlyRevenue: totalRevenue,
-      totalMembers: usersSnap.size
+      totalMembers: usersSnap.size,
+      chartData: {
+        bookings: bookingByDay,
+        revenue: revenueByDay
+      },
+      recentTransactions,
+      barberStats: barberCounts
     });
 
   } catch (err) {
