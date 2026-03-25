@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard | BarberShop</title>
   <style>
+<<<<<<< HEAD
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
@@ -166,6 +167,728 @@
     .edit-save:hover { background: #e68a00; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 157, 0, 0.4); }
     
     @media (max-width: 1000px){ body{ overflow:auto; } .app{ min-width:1100px; } }
+=======
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body{
+      background:#000;
+      color:#fff;
+      overflow:hidden;
+    }
+
+    button,input{
+      font:inherit;
+    }
+
+    .app{
+      display:flex;
+      height:100vh;
+      width:100%;
+    }
+
+    .sidebar{
+      width:230px;
+      background:#000;
+      border-right:1px solid rgba(255,255,255,.45);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .sidebar-top{
+      padding:18px 0 0;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 18px 24px;
+      border-bottom:1px solid rgba(255,255,255,.45);
+    }
+
+    .brand-box{
+      width:40px;
+      height:40px;
+      border-radius:10px;
+      background:#ff9d00;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      font-weight:800;
+    }
+
+    .brand-title{
+      font-size:19px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .brand-sub{
+      color:#ff9d00;
+      font-size:14px;
+      margin-top:2px;
+    }
+
+    .nav{
+      padding:12px 8px 0;
+    }
+
+    .nav-item{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      width:100%;
+      border:none;
+      background:transparent;
+      color:#fff;
+      padding:13px 16px;
+      border-radius:3px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      margin-bottom:8px;
+      transition:.2s;
+      text-align:left;
+    }
+
+    .nav-item:hover{
+      background:rgba(255,157,0,.18);
+    }
+
+    .nav-item.active{
+      background:#ff9d00;
+      color:#111;
+    }
+
+    .nav-icon{
+      width:22px;
+      text-align:center;
+      font-size:20px;
+    }
+
+    .sidebar-bottom{
+      border-top:1px solid rgba(255,255,255,.45);
+      min-height:84px;
+    }
+
+    .main{
+      flex:1;
+      overflow:auto;
+      background:#000;
+    }
+
+    .topbar{
+      border-bottom:1px solid rgba(255,255,255,.45);
+      padding:16px 26px 8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+    }
+
+    .topbar-title{
+      font-size:22px;
+      font-weight:800;
+    }
+
+    .topbar-sub{
+      color:#ff9d00;
+      margin-top:4px;
+      font-size:14px;
+    }
+
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:20px;
+    }
+
+    .bell{
+      position:relative;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:#2c2c2c;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+    }
+
+    .bell::after{
+      content:'1';
+      position:absolute;
+      top:-4px;
+      right:-4px;
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background:#ff5a4f;
+      color:#fff;
+      font-size:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .admin-box{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      border-left:1px solid rgba(255,255,255,.25);
+      padding-left:18px;
+    }
+
+    .avatar{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:#ff9d00;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:20px;
+    }
+
+    .admin-name{
+      font-size:16px;
+      font-weight:700;
+      line-height:1.2;
+      margin-top:3px;
+    }
+
+    .admin-role{
+      font-size:12px;
+      color:#d0d0d0;
+      margin-top:2px;
+    }
+
+    .content{
+      padding:22px 26px 30px;
+    }
+
+    .page{
+      display:none;
+    }
+
+    .page.active{
+      display:block;
+    }
+
+    .page-title{
+      font-size:30px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .page-sub{
+      color:#ff9d00;
+      font-size:14px;
+      margin-bottom:30px;
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(240px, 1fr));
+      gap:42px 70px;
+      max-width:560px;
+      margin:0 auto 14px;
+    }
+
+    .stat-card{
+      background:linear-gradient(90deg,#1a1a1a,#232323);
+      border:1px solid rgba(255,255,255,.55);
+      border-radius:6px;
+      padding:18px 16px 14px;
+      min-height:170px;
+      position:relative;
+    }
+
+    .stat-growth{
+      position:absolute;
+      top:12px;
+      right:10px;
+      color:#39e246;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .stat-icon{
+      width:52px;
+      height:52px;
+      border-radius:12px;
+      background:#a95e38;
+      color:#ff7f3a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      margin-bottom:10px;
+    }
+
+    .stat-label{
+      font-size:20px;
+      font-weight:700;
+      line-height:1.25;
+      margin-bottom:8px;
+    }
+
+    .stat-value{
+      color:#ff9d00;
+      font-size:42px;
+      font-weight:800;
+      text-align:center;
+      margin-top:4px;
+    }
+
+    .chart-card{
+      margin:12px auto 0;
+      max-width:500px;
+      background:linear-gradient(90deg,#1a1a1a,#232323);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:6px;
+      padding:14px 14px 8px;
+    }
+
+    .chart-head{
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:2px;
+    }
+
+    .chart-sub{
+      color:#999;
+      font-size:10px;
+      margin-bottom:8px;
+    }
+
+    .chart-svg{
+      width:100%;
+      height:165px;
+      display:block;
+      background:rgba(255,255,255,.02);
+      border-radius:4px;
+    }
+
+    .table-card{
+      background:linear-gradient(90deg,#1a1a1a,#232323);
+      border:1px solid rgba(255,255,255,.55);
+      border-radius:22px;
+      overflow:hidden;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th,td{
+      padding:16px 14px;
+      text-align:left;
+      border-bottom:1px solid rgba(255,255,255,.45);
+      font-size:14px;
+      vertical-align:middle;
+    }
+
+    th{
+      color:#bdbdbd;
+      font-weight:700;
+      background:rgba(255,255,255,.02);
+    }
+
+    tr:last-child td{
+      border-bottom:none;
+    }
+
+    .action-pill{
+      border:none;
+      border-radius:20px;
+      padding:6px 14px;
+      background:#9d9d9d;
+      color:#fff;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .status-icon{
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      font-weight:800;
+      color:#fff;
+      margin:auto;
+    }
+
+    .status-approved{
+      background:#50d96d;
+    }
+
+    .status-rejected{
+      background:#f4534b;
+    }
+
+    .danger-big{
+      width:56px;
+      height:56px;
+      font-size:28px;
+    }
+
+    .member-badge{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      background:#ff9d00;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      margin-right:12px;
+      vertical-align:middle;
+    }
+
+    .action-inline{
+      display:flex;
+      gap:12px;
+    }
+
+    .icon-btn{
+      width:30px;
+      height:30px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      background:#8e8e8e;
+      color:#fff;
+    }
+
+    .icon-btn.delete{
+      background:#f4534b;
+    }
+
+    .logs-name{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+    }
+
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.58);
+      backdrop-filter:blur(4px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:999;
+    }
+
+    .modal-backdrop.show{
+      display:flex;
+    }
+
+    .modal{
+      width:min(100%, 460px);
+      background:#666;
+      border-radius:20px;
+      color:#fff;
+      box-shadow:0 20px 50px rgba(0,0,0,.4);
+      overflow:hidden;
+    }
+
+    .modal-head{
+      padding:22px 18px 10px;
+      position:relative;
+    }
+
+    .modal-title{
+      font-size:28px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .modal-sub{
+      color:#ff9d00;
+      margin-top:6px;
+      font-size:14px;
+    }
+
+    .close-btn{
+      position:absolute;
+      right:18px;
+      top:18px;
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:6px;
+      background:#8c8c8c;
+      color:#ff5b21;
+      font-size:18px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .modal-body{
+      padding:0 18px 18px;
+      border-top:1px solid rgba(255,255,255,.45);
+    }
+
+    .detail-row{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      padding:16px 0 12px;
+      border-bottom:1px solid rgba(255,255,255,.22);
+      font-size:14px;
+    }
+
+    .detail-row span:first-child{
+      font-weight:700;
+    }
+
+    .amount-box{
+      margin:22px 0 14px;
+      background:#aaa;
+      border-radius:12px;
+      padding:10px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:18px;
+      font-weight:800;
+      color:#fff;
+    }
+
+    .amount-box .amount{
+      color:#ff8f00;
+      font-size:22px;
+    }
+
+    .modal-bottom{
+      display:grid;
+      grid-template-columns:170px 1fr;
+      gap:16px;
+      align-items:start;
+      margin-top:8px;
+    }
+
+    .slip-box{
+      width:170px;
+      height:190px;
+      background:#d7d7d7;
+      border-radius:8px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#444;
+      font-size:14px;
+      text-align:center;
+    }
+
+    .slip-box img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .status-wrap{
+      padding-top:8px;
+    }
+
+    .status-line{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#ff9d00;
+      font-size:20px;
+      font-weight:800;
+      margin-bottom:16px;
+    }
+
+    .status-line .mini{
+      width:28px;
+      height:28px;
+      font-size:18px;
+    }
+
+    .modal-actions{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .approve-btn,
+    .reject-btn{
+      border:none;
+      border-radius:20px;
+      height:30px;
+      padding:0 14px;
+      cursor:pointer;
+      font-weight:700;
+      width:fit-content;
+    }
+
+    .approve-btn{
+      background:#ff9d00;
+      color:#fff;
+    }
+
+    .reject-btn{
+      background:transparent;
+      color:#ff5b21;
+      border:1px solid #ff5b21;
+    }
+
+    .edit-form{
+      display:grid;
+      gap:12px;
+    }
+
+    .edit-form input{
+      width:100%;
+      height:42px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.35);
+      background:#4d4d4d;
+      color:#fff;
+      padding:0 12px;
+      outline:none;
+    }
+
+    .edit-save{
+      margin-top:8px;
+      width:100%;
+      height:42px;
+      border:none;
+      border-radius:12px;
+      background:#ff9d00;
+      color:#111;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    @media (max-width: 1000px){
+      body{
+        overflow:auto;
+      }
+
+      .app{
+        min-width:1100px;
+      }
+    }
+
+    /* --- DASHBOARD WIDGETS NEW CSS --- */
+    .dashboard-main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      gap: 24px;
+      margin-top: 12px;
+    }
+    .chart-card.wide-card {
+      margin: 0;
+      max-width: 100%;
+      background: linear-gradient(135deg,#161616,#1c1c1c);
+      padding: 20px;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-svg {
+      height: 240px;
+      margin-top: auto;
+    }
+    .dashboard-side {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .dashboard-widget {
+      background: linear-gradient(135deg,#161616,#1c1c1c);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px;
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .widget-head {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .widget-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      font-size: 14px;
+    }
+    .widget-item:last-child {
+      border-bottom: none;
+    }
+    .widget-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .widget-title {
+      font-weight: 700;
+      color: #ededed;
+    }
+    .widget-sub {
+      color: #888;
+      font-size: 11px;
+    }
+    .widget-val {
+      font-weight: 800;
+      color: #ff9d00;
+      font-size: 15px;
+    }
+    .widget-badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255,157,0,.15);
+      color: #ff9d00;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-block;
+    }
+    /* Stat Cards Revamp */
+    .stat-card {
+      background: linear-gradient(135deg,#161616,#1f1f1f);
+      border-color: rgba(255,255,255,.15);
+    }
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 100%;
+      margin-bottom: 24px;
+    }
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
   </style>
 </head>
 <body>
@@ -287,6 +1010,7 @@
 
           <div class="dashboard-main-grid">
             <div class="chart-card wide-card">
+<<<<<<< HEAD
               <div class="chart-head">Growth Trends</div>
               <div class="chart-sub">Weekly overview of bookings and revenue</div>
               <svg class="chart-svg" viewBox="0 0 500 165" preserveAspectRatio="none">
@@ -308,14 +1032,39 @@
                 <text x="312" y="155" fill="#aaa" font-size="10">Fri</text>
                 <text x="380" y="155" fill="#aaa" font-size="10">Sat</text>
                 <text x="448" y="155" fill="#aaa" font-size="10">Sun</text>
+=======
+              <div class="chart-head">Booking Trends</div>
+              <div class="chart-sub">Weekly overview of bookings and revenue performance</div>
+              <svg class="chart-svg" viewBox="0 0 500 165" preserveAspectRatio="none">
+                <line x1="40" y1="140" x2="470" y2="140" stroke="#666" />
+                <line x1="40" y1="20" x2="40" y2="140" stroke="#666" />
+                <line x1="140" y1="20" x2="140" y2="140" stroke="#222" />
+                <line x1="240" y1="20" x2="240" y2="140" stroke="#222" />
+                <line x1="340" y1="20" x2="340" y2="140" stroke="#222" />
+                <line x1="440" y1="20" x2="440" y2="140" stroke="#222" />
+
+                <g id="dynamicChartGroup"></g>
+                <text x="45" y="155" fill="#aaa" font-size="10">Mon</text>
+                <text x="105" y="155" fill="#aaa" font-size="10">Tue</text>
+                <text x="165" y="155" fill="#aaa" font-size="10">Wed</text>
+                <text x="235" y="155" fill="#aaa" font-size="10">Thu</text>
+                <text x="305" y="155" fill="#aaa" font-size="10">Fri</text>
+                <text x="375" y="155" fill="#aaa" font-size="10">Sat</text>
+                <text x="445" y="155" fill="#aaa" font-size="10">Sun</text>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
               </svg>
             </div>
 
             <div class="dashboard-side">
               <div class="dashboard-widget">
                 <div class="widget-head">
+<<<<<<< HEAD
                   Top Performers
                   <span style="font-size:12px;color:#888;font-weight:500;">By number of bookings</span>
+=======
+                  Top Barbers
+                  <span style="font-size:12px;color:#888;font-weight:500;">By bookings</span>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
                 </div>
                 <div id="barberStatsContainer" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
                   <div style="color:#666;text-align:center;font-size:13px;">Loading data...</div>
@@ -325,7 +1074,11 @@
               <div class="dashboard-widget">
                 <div class="widget-head">
                   Recent Transactions
+<<<<<<< HEAD
                   <span style="font-size:12px;color:#888;font-weight:500;">Live Updates</span>
+=======
+                  <span style="font-size:12px;color:#888;font-weight:500;">Live</span>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
                 </div>
                 <div id="recentTransactionsContainer">
                    <div style="color:#666;text-align:center;font-size:13px;padding:20px 0;">Loading data...</div>
@@ -348,7 +1101,11 @@
                   <th>Service</th>
                   <th>Barber</th>
                   <th>Reserved Time</th>
+<<<<<<< HEAD
                   <th>Transaction Date</th>
+=======
+                  <th>Upload Date</th>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
                   <th>Amount</th>
                   <th>Actions</th>
                   <th style="text-align:center;">Status</th>
@@ -401,8 +1158,13 @@
 
         <!-- APPOINTMENTS -->
         <section class="page" id="appointments-page">
+<<<<<<< HEAD
           <div class="page-title">Active Appointments</div>
           <div class="page-sub">Manage queues, bookings, and monitor today's status</div>
+=======
+          <div class="page-title">Bookings & Appointments</div>
+          <div class="page-sub">Manage queue, add/edit/cancel bookings, and monitor today's status</div>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <div class="table-card">
             <div style="display:flex;justify-content:space-between;margin-bottom:15px">
               <h3 style="color:#fff;" id="appointmentsDateTitle">Active Queue</h3>
@@ -440,8 +1202,13 @@
 
         <!-- STAFF -->
         <section class="page" id="staff-page">
+<<<<<<< HEAD
           <div class="page-title">Staff Management</div>
           <div class="page-sub">Manage schedules, working hours, and staff availability</div>
+=======
+          <div class="page-title">Staff & Barbers</div>
+          <div class="page-sub">Manage barber schedules, availability, and working hours</div>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <div class="dashboard-stats-row" id="staffCardsContainer">
             <div style="color:#888;">Loading Staff...</div>
           </div>
@@ -449,7 +1216,11 @@
 
         <!-- PROMOTIONS -->
         <section class="page" id="promotions-page">
+<<<<<<< HEAD
           <div class="page-title">Promotions & Campaigns</div>
+=======
+          <div class="page-title">Promotions & Discounts</div>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <div class="page-sub">Manage coupon codes, seasonal discounts, and loyalty programs</div>
           <div class="table-card">
             <div style="display:flex;justify-content:space-between;margin-bottom:15px">
@@ -467,6 +1238,7 @@
 
         <!-- REPORTS -->
         <section class="page" id="reports-page">
+<<<<<<< HEAD
           <div class="page-title">Analytics & Reports</div>
           <div class="page-sub">In-depth breakdown of transactions, revenue trends, and system metrics</div>
           
@@ -515,10 +1287,25 @@
                   <text x="312" y="155" fill="#aaa" font-size="10">Fri</text>
                   <text x="380" y="155" fill="#aaa" font-size="10">Sat</text>
                   <text x="448" y="155" fill="#aaa" font-size="10">Sun</text>
+=======
+          <div class="page-title">Advanced Reports & Analytics</div>
+          <div class="page-sub">In-depth breakdown of transactions, revenue trends, and customer retention</div>
+          <div class="dashboard-main-grid">
+            <div class="dashboard-widget" style="flex:2">
+              <div class="widget-head">Monthly Revenue Chart</div>
+              <div class="chart-container" style="height:200px;position:relative;margin-top:20px;">
+                <svg viewBox="0 0 500 150" style="width:100%; height:100%;" preserveAspectRatio="none">
+                  <!-- Grid Lines -->
+                  <line x1="40" y1="20" x2="480" y2="20" stroke="#333" stroke-width="1" />
+                  <line x1="40" y1="60" x2="480" y2="60" stroke="#333" stroke-width="1" />
+                  <line x1="40" y1="100" x2="480" y2="100" stroke="#333" stroke-width="1" />
+                  <line x1="40" y1="140" x2="480" y2="140" stroke="#333" stroke-width="1" />
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
                   <g id="reportsChartGroup"></g>
                 </svg>
               </div>
             </div>
+<<<<<<< HEAD
             
             <div class="dashboard-side">
               <div class="dashboard-widget">
@@ -532,6 +1319,14 @@
                    <div style="margin-top:6px;">Queries: <span id="reportsQueriesStat" style="color:#ff9d00;font-weight:700;">...</span> / sec</div>
                  </div>
               </div>
+=======
+            <div class="dashboard-widget">
+               <div class="widget-head">System Status</div>
+               <div style="color:#888;text-align:center;padding:40px 0;">
+                 <div style="font-size:36px;color:#50d96d;margin-bottom:10px;">Operational</div>
+                 <div>Total Queries: <span id="reportsQueriesStat">...</span></div>
+               </div>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
             </div>
           </div>
         </section>
@@ -539,7 +1334,11 @@
         <!-- SETTINGS -->
         <section class="page" id="settings-page">
           <div class="page-title">System Settings</div>
+<<<<<<< HEAD
           <div class="page-sub">Configure organizational details, contacts, and privileges</div>
+=======
+          <div class="page-sub">Configure shop details, logos, and admin privileges</div>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <div class="table-card" style="max-width:600px;">
              <form class="edit-form" style="display:flex; flex-direction:column; gap:15px;">
                 <div>
@@ -564,7 +1363,11 @@
         <!-- ALERTS -->
         <section class="page" id="alerts-page">
           <div class="page-title">Notifications & Alerts</div>
+<<<<<<< HEAD
           <div class="page-sub">System generated alerts for appointments and operations</div>
+=======
+          <div class="page-sub">System generated alerts for appointments and staff duties</div>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <div class="dashboard-side" style="max-width:800px;">
              <div class="dashboard-widget" id="alertsContainer">
                 <div style="color:#888;text-align:center;">Loading alerts...</div>
@@ -638,7 +1441,11 @@
 <script>
 
 
+<<<<<<< HEAD
     const API_URL = 'http://localhost:3000'; // server.js URL
+=======
+    const API_URL = 'http://localhost:3000'; // URL ของ server.js
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
 
     // State
     let payments = [];
@@ -665,6 +1472,7 @@
         pages.forEach(page => page.classList.remove("active"));
         document.getElementById(target + "-page").classList.add("active");
 
+<<<<<<< HEAD
         // Reload data periodically when swapping
         if (target === "payment" || target === "appointments") loadPayments();
         if (target === "members")   loadMembers();
@@ -674,6 +1482,13 @@
         if (target === "staff")     loadStaff();
         if (target === "promotions") loadPromotions();
         if (target === "settings")  loadSettings();
+=======
+        // โหลดข้อมูลใหม่ทุกครั้งที่สลับหน้า
+        if (target === "payment")   loadPayments();
+        if (target === "members")   loadMembers();
+        if (target === "logs")      loadLogs();
+        if (target === "dashboard") loadDashboardStats();
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       });
     });
 
@@ -684,6 +1499,7 @@
     }
 
  
+<<<<<<< HEAD
     // Fetch Data from API
 
     async function loadPayments() {
@@ -709,17 +1525,162 @@
           membersTableBody.innerHTML = `
             <tr>
               <td colspan="4" style="text-align:center;">No registered members found.</td>
+=======
+    // โหลดข้อมูลจาก API
+
+    async function loadDashboardStats() {
+      try {
+        const res = await fetch(`${API_URL}/api/dashboard/stats`);
+        const data = await res.json();
+        document.getElementById("dailyBookingsStat").textContent = data.dailyBookings;
+        document.getElementById("monthlyRevenueStat").textContent = formatMoney(data.monthlyRevenue);
+        document.getElementById("newMembersStat").textContent = data.totalMembers;
+        document.getElementById("totalCustomersStat").textContent = Number(data.totalMembers).toLocaleString();
+        
+        renderChart(data.chartData);
+        renderBarberStats(data.barberStats);
+        renderRecentTransactions(data.recentTransactions);
+      } catch (err) {
+        console.error("loadDashboardStats error:", err);
+      }
+    }
+
+    function renderBarberStats(barberData) {
+      const container = document.getElementById("barberStatsContainer");
+      if (!barberData || Object.keys(barberData).length === 0) {
+        container.innerHTML = '<div style="color:#666;text-align:center;font-size:13px;">ไม่มีข้อมูลช่างตัดผม</div>';
+        return;
+      }
+      
+      const sortedBarbers = Object.entries(barberData).sort((a,b) => b[1] - a[1]).slice(0, 3);
+      let html = '';
+      
+      sortedBarbers.forEach(([name, count]) => {
+         html += `
+           <div class="widget-item">
+             <div class="widget-left">
+               <div class="widget-title">${name}</div>
+               <div class="widget-sub">Staff Member</div>
+             </div>
+             <div class="widget-badge">${count} Bookings</div>
+           </div>
+         `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderRecentTransactions(transactions) {
+      const container = document.getElementById("recentTransactionsContainer");
+      if (!transactions || transactions.length === 0) {
+        container.innerHTML = '<div style="color:#666;text-align:center;font-size:13px;padding:20px 0;">ไม่มีประวัติการทำรายการ</div>';
+        return;
+      }
+
+      let html = '';
+      transactions.forEach(txn => {
+         const colorInfo = txn.status === 'approved' ? '#50d96d' : (txn.status === 'rejected' ? '#f4534b' : '#ff9d00');
+         const statText = txn.status.charAt(0).toUpperCase() + txn.status.slice(1);
+         html += `
+           <div class="widget-item">
+             <div class="widget-left">
+               <div class="widget-title">${txn.customer}</div>
+               <div class="widget-sub">${txn.time}</div>
+             </div>
+             <div style="text-align:right;">
+               <div class="widget-val">${Number(txn.amount).toLocaleString()} ฿</div>
+               <div class="widget-sub" style="color:${colorInfo}; font-weight:700;">${statText}</div>
+             </div>
+           </div>
+         `;
+      });
+      container.innerHTML = html;
+    }
+
+    function renderChart(chartData) {
+      if (!chartData) return;
+      const { bookings, revenue } = chartData;
+      const xCoords = [50, 110, 170, 240, 310, 380, 450];
+      
+      const maxBooking = Math.max(...bookings, 1);
+      const maxRevenue = Math.max(...revenue, 1);
+
+      const mapY = (val, max) => 140 - (val / max * 120);
+
+      let revPoints = [];
+      let bookPoints = [];
+      let circlesHtml = '';
+
+      for (let i = 0; i < 7; i++) {
+         const cx = xCoords[i];
+         const rY = mapY(revenue[i], maxRevenue);
+         const bY = mapY(bookings[i], maxBooking);
+         
+         revPoints.push(`${cx},${rY}`);
+         bookPoints.push(`${cx},${bY}`);
+         
+         circlesHtml += `<circle cx="${cx}" cy="${rY}" r="4" fill="#f36b2d"/>`;
+         circlesHtml += `<circle cx="${cx}" cy="${bY}" r="4" fill="#53d465"/>`;
+      }
+
+      const svgHtml = `
+        <polyline fill="none" stroke="#f36b2d" stroke-width="2.5" points="${revPoints.join(' ')}"/>
+        <polyline fill="none" stroke="#53d465" stroke-width="2.5" points="${bookPoints.join(' ')}"/>
+        ${circlesHtml}
+      `;
+      
+      const group1 = document.getElementById("dynamicChartGroup");
+      const group2 = document.getElementById("reportsChartGroup");
+      if (group1) group1.innerHTML = svgHtml;
+      if (group2) group2.innerHTML = svgHtml;
+      
+      const reportsQueries = document.getElementById("reportsQueriesStat");
+      if(reportsQueries) reportsQueries.textContent = (Object.keys(chartData.bookings).length * 12) + " / sec";
+    }
+
+    async function loadPayments() {
+      try {
+        const res = await fetch(`${API_URL}/api/payments`);
+        payments = await res.json();
+        
+        renderPayments();
+        renderAppointments();
+      } catch (err) {
+        console.error("loadPayments error:", err);
+      }
+    }
+
+    async function loadMembers() {
+      try {
+        const res = await fetch(`${API_URL}/api/members`);
+        members = await res.json();  // <-- เก็บลง global state
+
+        membersTableBody.innerHTML = "";
+
+        if (members.length === 0) {
+          membersTableBody.innerHTML = `
+            <tr>
+              <td colspan="4" style="text-align:center;">ไม่มีข้อมูล</td>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
             </tr>
           `;
           return;
         }
 
+<<<<<<< HEAD
         renderMembers(); 
       } catch (err) {
         console.error("Database connection error", err);
         membersTableBody.innerHTML = `
           <tr>
             <td colspan="4" style="text-align:center;color:red;">Error fetching member data</td>
+=======
+        renderMembers(); // ใช้ global members
+      } catch (err) {
+        console.error("โหลดสมาชิกไม่ได้", err);
+        membersTableBody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align:center;color:red;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           </tr>
         `;
       }
@@ -730,10 +1691,18 @@
         const res = await fetch(`${API_URL}/api/logs`);
         logs = await res.json();
 
+<<<<<<< HEAD
         logs.sort((a, b) => {
           const dateA = parseLogTime(a.time);
           const dateB = parseLogTime(b.time);
           return dateB - dateA; 
+=======
+        // แปลง log.time เป็น Date ก่อน sort
+        logs.sort((a, b) => {
+          const dateA = parseLogTime(a.time);
+          const dateB = parseLogTime(b.time);
+          return dateB - dateA; // ล่าสุดขึ้นบน
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         });
 
         renderLogs();
@@ -742,22 +1711,39 @@
       }
     }
 
+<<<<<<< HEAD
     function parseLogTime(timeStr) {
       if (!timeStr) return new Date();
       if (!timeStr.includes('/')) return new Date(timeStr);
       const [datePart, timePart] = timeStr.split(' ');
       const [day, month, year] = datePart.split('/').map(Number);
       const [hour, minute] = timePart ? timePart.split(':').map(Number) : [0,0];
+=======
+    // ฟังก์ชันช่วยแปลง log.time เป็น Date object
+    function parseLogTime(timeStr) {
+      // ถ้าเป็นรูปแบบ "DD/MM/YYYY HH:mm"
+      const [datePart, timePart] = timeStr.split(' ');
+      const [day, month, year] = datePart.split('/').map(Number);
+      const [hour, minute] = timePart.split(':').map(Number);
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       return new Date(year, month - 1, day, hour, minute);
     }
 
    
+<<<<<<< HEAD
     // Render Variables
+=======
+    // Render
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
 
     function renderPayments() {
       paymentTableBody.innerHTML = "";
       if (payments.length === 0) {
+<<<<<<< HEAD
         paymentTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;">No financial records found</td></tr>';
+=======
+        paymentTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>';
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         return;
       }
       payments.forEach(payment => {
@@ -771,7 +1757,11 @@
           <td>${payment.reservedDate || "-"} ${payment.reservedTime !== "-" ? payment.reservedTime : ""}</td>
           <td>${payment.date || "-"}</td>
           <td>${Number(payment.amount || 0).toLocaleString()}.00฿</td>
+<<<<<<< HEAD
           <td><button class="action-pill" onclick="openPaymentModal('${payment.id}')">👁 View Full</button></td>
+=======
+          <td><button class="action-pill" onclick="openPaymentModal('${payment.id}')">👁 View</button></td>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <td style="text-align:center;">
             <div class="status-icon ${statusClass}">${statusIcon}</div>
           </td>`;
@@ -800,7 +1790,11 @@
       title.textContent = `Active Appointments Queue (${queue.length})`;
 
       if (queue.length === 0) {
+<<<<<<< HEAD
         appointmentsTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No appointments scheduled</td></tr>';
+=======
+        appointmentsTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">ไม่มีคิวจอง</td></tr>';
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         return;
       }
       
@@ -817,7 +1811,11 @@
            <td>${q.barber || "-"}</td>
            <td><span class="widget-badge" style="background:${bg};color:${color};">${statText}</span></td>
            <td>
+<<<<<<< HEAD
               <button class="action-pill" onclick="openPaymentModal('${q.id}')">Review</button> 
+=======
+              <button class="action-pill" onclick="openPaymentModal('${q.id}')">View</button> 
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
               <button class="action-pill delete" onclick="cancelBooking('${q.id}')" style="color:#f4534b">Cancel</button> 
            </td>
          `;
@@ -829,7 +1827,11 @@
       membersTableBody.innerHTML = "";
 
       if (!members || members.length === 0) {
+<<<<<<< HEAD
         membersTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#888;">No index data available</td></tr>`;
+=======
+        membersTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>`;
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         return;
       }
 
@@ -851,6 +1853,7 @@
     }
 
     // --- NEW CRM RENDERS ---
+<<<<<<< HEAD
 
     async function loadDashboardStats() {
       try {
@@ -988,6 +1991,31 @@
       } catch(err) { console.error(err); }
     }
 
+=======
+    
+    async function loadServices() {
+      try {
+        const res = await fetch(`${API_URL}/api/services`);
+        const services = await res.json();
+        const tbody = document.getElementById("servicesTableBody");
+        tbody.innerHTML = "";
+        
+        if(services.length === 0) {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888;">ไม่มีบริการในระบบ</td></tr>';
+           return;
+        }
+        services.forEach(s => {
+           tbody.innerHTML += `<tr>
+             <td><strong>${s.name || "-"}</strong></td>
+             <td>${s.duration || "-"} Mins</td>
+             <td>${s.price || "-"} THB</td>
+             <td><button class="action-pill" onclick="editService('${s.id}', '${s.name||''}', '${s.duration||''}', '${s.price||''}')">Edit</button> <button class="action-pill delete" onclick="deleteService('${s.id}')">Delete</button></td>
+           </tr>`;
+        });
+      } catch(err) { console.error(err); }
+    }
+
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
     async function loadStaff() {
       try {
         const res = await fetch(`${API_URL}/api/staff`);
@@ -998,11 +2026,19 @@
         staff.forEach(s => {
            container.innerHTML += `
             <div class="dashboard-widget" style="align-items:center;">
+<<<<<<< HEAD
               <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">${s.icon || "👨🦱"}</div>
               <h3 style="color:#fff;margin:0">${s.name || "-"}</h3>
               <p style="color:#888;font-size:12px;margin:5px 0">${s.hours || "09:00 - 18:00"}</p>
               <button class="action-pill" onclick="editStaff('${s.id}', '${s.name||''}', '${s.hours||''}', '${s.icon||''}')">Edit Schedule</button>
               <button class="action-pill delete" onclick="deleteStaff('${s.id}')" style="margin-top:5px;background:#333;color:#f4534b">Dismiss</button>
+=======
+              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">${s.icon || "👨‍🦱"}</div>
+              <h3 style="color:#fff;margin:0">${s.name || "-"}</h3>
+              <p style="color:#888;font-size:12px;margin:5px 0">${s.hours || "09:00 - 18:00"}</p>
+              <button class="action-pill" onclick="editStaff('${s.id}', '${s.name||''}', '${s.hours||''}', '${s.icon||''}')">Edit Schedule</button>
+              <button class="action-pill delete" onclick="deleteStaff('${s.id}')" style="margin-top:5px;background:#333;color:#f4534b">Delete</button>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
             </div>`;
         });
         
@@ -1021,7 +2057,11 @@
         tbody.innerHTML = "";
         
         if(promos.length === 0) {
+<<<<<<< HEAD
            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No active campaigns found</td></tr>';
+=======
+           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">ไม่มีโปรโมชั่น</td></tr>';
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
            return;
         }
         promos.forEach(p => {
@@ -1031,7 +2071,11 @@
              <td>${p.usageLimit || "-"}</td>
              <td>${p.validUntil || "-"}</td>
              <td><span class="widget-badge" style="background:rgba(80,217,109,0.2);color:#50d96d;">Active</span></td>
+<<<<<<< HEAD
              <td><button class="action-pill delete" onclick="deletePromotion('${p.id}')">Delete Code</button></td>
+=======
+             <td><button class="action-pill delete" onclick="deletePromotion('${p.id}')">Delete</button></td>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
            </tr>`;
         });
       } catch(err) { console.error(err); }
@@ -1041,7 +2085,11 @@
       try {
         const res = await fetch(`${API_URL}/api/settings`);
         const settings = await res.json();
+<<<<<<< HEAD
         document.getElementById("settingShopName").value = settings.shopName || "Admin Executive Group";
+=======
+        document.getElementById("settingShopName").value = settings.shopName || "BarberShop Admin";
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         document.getElementById("settingShopPhone").value = settings.contactPhone || "-";
         document.getElementById("settingShopAddress").value = settings.address || "-";
       } catch(err) { console.error(err); }
@@ -1049,7 +2097,10 @@
 
     // Initialize New Data
     setTimeout(() => {
+<<<<<<< HEAD
        loadDashboardStats();
+=======
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
        loadServices();
        loadStaff();
        loadPromotions();
@@ -1059,10 +2110,17 @@
     // --- NEW CRM POST ACTIONS ---
     
     async function addService() {
+<<<<<<< HEAD
       const name = prompt("Please enter the service name (e.g., Haircut):");
       if(!name) return;
       const duration = prompt("Please enter the estimated duration in minutes:");
       const price = prompt("Please enter the standard price (THB):");
+=======
+      const name = prompt("Enter Service Name (e.g., Haircut):");
+      if(!name) return;
+      const duration = prompt("Enter Duration in minutes:");
+      const price = prompt("Enter Price (THB):");
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       
       try {
         await fetch(`${API_URL}/api/services`, {
@@ -1071,6 +2129,7 @@
           body: JSON.stringify({name, duration, price})
         });
         loadServices();
+<<<<<<< HEAD
       } catch(err) { alert("Error: Failed to connect to the network. Please try again."); }
     }
 
@@ -1079,11 +2138,22 @@
       if(!name) return;
       const hours = prompt("Please set their working shift (e.g., 10:00 - 19:00):");
       const icon = prompt("Assign an emoji icon (e.g., 🧔) :");
+=======
+      } catch(err) { alert("Error adding service."); }
+    }
+
+    async function addStaff() {
+      const name = prompt("Enter Staff Name:");
+      if(!name) return;
+      const hours = prompt("Enter Working Hours (e.g., 09:00 - 18:00):");
+      const icon = prompt("Enter Emoji Icon (e.g., 🧔) optional:");
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       
       try {
         await fetch(`${API_URL}/api/staff`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
+<<<<<<< HEAD
           body: JSON.stringify({name, hours: hours || "-", icon: icon || "👨🦱"})
         });
         loadStaff();
@@ -1096,6 +2166,20 @@
       const discount = prompt("Define the discount scope (e.g., 15% or 150 THB):");
       const usageLimit = prompt("Define usage limits per account:");
       const validUntil = prompt("Specify expiry date (e.g., 30 Nov 2026):");
+=======
+          body: JSON.stringify({name, hours: hours || "-", icon: icon || "👨‍🦱"})
+        });
+        loadStaff();
+      } catch(err) { alert("Error adding staff."); }
+    }
+
+    async function addPromotion() {
+      const code = prompt("Enter Promotion Code (e.g., SUMMER2026):");
+      if(!code) return;
+      const discount = prompt("Enter Discount (e.g., 10% Off or 100 THB):");
+      const usageLimit = prompt("Enter Usage Limit (e.g., 50 times):");
+      const validUntil = prompt("Enter Valid Until date (e.g., 30 Jun 2026):");
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       
       try {
         await fetch(`${API_URL}/api/promotions`, {
@@ -1104,7 +2188,11 @@
           body: JSON.stringify({code, discount: discount||"-", usageLimit: usageLimit||"-", validUntil: validUntil||"-"})
         });
         loadPromotions();
+<<<<<<< HEAD
       } catch(err) { alert("Error: Failed to connect to the network. Please try again."); }
+=======
+      } catch(err) { alert("Error adding promotion."); }
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
     }
 
     async function saveSettings() {
@@ -1118,18 +2206,31 @@
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({shopName, contactPhone, address})
         });
+<<<<<<< HEAD
         alert("Success - Organizational data has been updated to the latest version.");
       } catch(err) { alert("Error: Organizational configurations could not be updated."); }
+=======
+        alert("Settings saved successfully!");
+      } catch(err) { alert("Error saving settings."); }
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
     }
 
     // --- NEW CRM PUT/DELETE ACTIONS ---
 
     async function deleteItem(collection, id, callback) {
+<<<<<<< HEAD
       if(!confirm("Warning: Data will be permanently deleted. Are you sure you wish to proceed?")) return;
       try {
          await fetch(`${API_URL}/api/${collection}/${id}`, { method: 'DELETE' });
          callback();
       } catch(e) { alert("Action Failed: Deletion unverified."); }
+=======
+      if(!confirm("Are you sure you want to delete this?")) return;
+      try {
+         await fetch(`${API_URL}/api/${collection}/${id}`, { method: 'DELETE' });
+         callback();
+      } catch(e) { alert("Error deleting."); }
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
     }
 
     function deleteService(id) { deleteItem('services', id, loadServices); }
@@ -1137,16 +2238,24 @@
     function deletePromotion(id) { deleteItem('promotions', id, loadPromotions); }
 
     async function editService(id, oldN, oldD, oldP) {
+<<<<<<< HEAD
       const name = prompt("Update service name:", oldN);
       if(name===null) return;
       const duration = prompt("Update duration timeframe:", oldD);
       const price = prompt("Update standard rate:", oldP);
+=======
+      const name = prompt("Edit Service Name:", oldN);
+      if(name===null) return;
+      const duration = prompt("Edit Duration (Mins):", oldD);
+      const price = prompt("Edit Price:", oldP);
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       try {
          await fetch(`${API_URL}/api/services/${id}`, {
             method: 'PUT', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({name, duration, price})
          });
          loadServices();
+<<<<<<< HEAD
       } catch(e) { alert("Action Failed: Data overwrite failed."); }
     }
 
@@ -1155,37 +2264,67 @@
       if(name===null) return;
       const hours = prompt("Change working schedule:", oldH);
       const icon = prompt("Update profile icon:", oldI);
+=======
+      } catch(e) { alert("Error updating."); }
+    }
+
+    async function editStaff(id, oldN, oldH, oldI) {
+      const name = prompt("Edit Staff Name:", oldN);
+      if(name===null) return;
+      const hours = prompt("Edit Working Hours:", oldH);
+      const icon = prompt("Edit Emoji Icon:", oldI);
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       try {
          await fetch(`${API_URL}/api/staff/${id}`, {
             method: 'PUT', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({name, hours, icon})
          });
          loadStaff();
+<<<<<<< HEAD
       } catch(e) { alert("Action Failed: Data overwrite failed."); }
     }
 
     async function cancelBooking(id) {
       if(!confirm("Review Request: Do you wish to revoke this client's booking? This process may affect queuing workflows.")) return;
+=======
+      } catch(e) { alert("Error updating."); }
+    }
+
+    async function cancelBooking(id) {
+      if(!confirm("Cancel this booking? This action cannot be undone.")) return;
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       try {
          await fetch(`${API_URL}/api/payments/${id}`, {
             method: 'PUT', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({status: "rejected"})
          });
          loadPayments(); // Refresh queue
+<<<<<<< HEAD
       } catch(e) { alert("Action Failed: Network Error."); }
+=======
+      } catch(e) { alert("Error cancelling."); }
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
     }
 
     function renderLogs() {
       logsTableBody.innerHTML = "";
       if (logs.length === 0) {
+<<<<<<< HEAD
         logsTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">No system reports generated</td></tr>';
+=======
+        logsTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>';
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         renderAlerts();
         return;
       }
       logs.forEach(log => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
+<<<<<<< HEAD
           <td><div class="logs-name"><span class="member-badge">AD</span><span>${log.admin}</span></div></td>
+=======
+          <td><div class="logs-name"><span class="member-badge">A</span><span>${log.admin}</span></div></td>
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
           <td>${log.action}</td>
           <td>${log.time}</td>`;
         logsTableBody.appendChild(tr);
@@ -1198,19 +2337,32 @@
       if(!alertsContainer) return;
       
       if(logs.length === 0) {
+<<<<<<< HEAD
         alertsContainer.innerHTML = '<div style="color:#888;text-align:center;">Analyzing incoming notifications...</div>';
+=======
+        alertsContainer.innerHTML = '<div style="color:#888;text-align:center;">No alerts at this time.</div>';
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
         return;
       }
       
       let html = '';
       logs.slice(0, 10).forEach(log => {
          let icon = "🔔";
+<<<<<<< HEAD
          let title = "Network Security Log";
          let color = "#888";
          
          if(log.action.toLowerCase().includes("delete") || log.action.toLowerCase().includes("reject")) {
            icon = "⚠️"; color = "#f4534b"; title = "Critical Alert";
          } else if(log.action.toLowerCase().includes("add") || log.action.toLowerCase().includes("approve") || log.action.toLowerCase().includes("updated")) {
+=======
+         let title = "System Notification";
+         let color = "#888";
+         
+         if(log.action.toLowerCase().includes("delete") || log.action.toLowerCase().includes("reject")) {
+           icon = "⚠️"; color = "#f4534b"; title = "System Alert";
+         } else if(log.action.toLowerCase().includes("add") || log.action.toLowerCase().includes("approve")) {
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
            icon = "✅"; color = "#50d96d"; title = "Action Success";
          }
          
@@ -1234,7 +2386,11 @@
       const payment = payments.find(p => p.id === id);
       if (!payment) return;
 
+<<<<<<< HEAD
       document.getElementById("paymentTransactionId").textContent = "Reference ID: " + payment.id;
+=======
+      document.getElementById("paymentTransactionId").textContent = "Transaction ID: " + payment.id;
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       document.getElementById("modalCustomerName").textContent = payment.customer || "-";
       document.getElementById("modalService").textContent = payment.service || "-";
       document.getElementById("modalBarber").textContent = payment.barber || "-";
@@ -1244,7 +2400,11 @@
       document.getElementById("modalAmount").textContent = Number(payment.amount || 0).toFixed(2) + "฿";
 
       const slipBox = document.getElementById("modalSlipBox");
+<<<<<<< HEAD
       slipBox.innerHTML = payment.slip ? `<img src="${payment.slip}" alt="slip">` : "Document not found";
+=======
+      slipBox.innerHTML = payment.slip ? `<img src="${payment.slip}" alt="slip">` : "ไม่มีสลิป";
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
 
       const statusIcon = document.getElementById("modalStatusIcon");
       statusIcon.className = "status-icon mini " + (payment.status === "approved" ? "status-approved" : "status-rejected");
@@ -1253,11 +2413,19 @@
       const modalActionButtons = document.getElementById("modalActionButtons");
       modalActionButtons.innerHTML = "";
       if (payment.status === "approved") {
+<<<<<<< HEAD
         modalActionButtons.innerHTML = `<button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">Revoke and Reject Transaction</button>`;
       } else {
         modalActionButtons.innerHTML = `
           <button class="approve-btn" onclick="updatePaymentStatus('${payment.id}','approved')">Verify and Approve Receipt</button>
           <button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">Revoke and Reject Transaction</button>`;
+=======
+        modalActionButtons.innerHTML = `<button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">ⓧ Reject Payment</button>`;
+      } else {
+        modalActionButtons.innerHTML = `
+          <button class="approve-btn" onclick="updatePaymentStatus('${payment.id}','approved')">ⓒ Approve Payment</button>
+          <button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">ⓧ Reject Payment</button>`;
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       }
 
       document.getElementById("paymentModalBackdrop").classList.add("show");
@@ -1280,7 +2448,11 @@
         await loadDashboardStats();
         closePaymentModal();
       } catch (err) {
+<<<<<<< HEAD
         alert("Network Error: Verification exception at " + err.message);
+=======
+        alert("เกิดข้อผิดพลาด: " + err.message);
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       }
     }
 
@@ -1316,12 +2488,20 @@
         await loadLogs();
         closeMemberModal();
       } catch (err) {
+<<<<<<< HEAD
         alert("Network Error: Update state exception " + err.message);
+=======
+        alert("เกิดข้อผิดพลาด: " + err.message);
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       }
     }
 
     async function deleteMember(id, name) {
+<<<<<<< HEAD
       if (!confirm(`Are you sure you want to use administrative privileges to remove account data for ${name}? This action deletes the history permanently.`)) return;
+=======
+      if (!confirm(`ลบสมาชิก ${name} ?`)) return;
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       try {
         const res = await fetch(`${API_URL}/api/members/${id}`, {
           method: "DELETE",
@@ -1333,7 +2513,11 @@
         await loadLogs();
         await loadDashboardStats();
       } catch (err) {
+<<<<<<< HEAD
         alert("Error occurred. Unable to confirm management command: " + err.message);
+=======
+        alert("เกิดข้อผิดพลาด: " + err.message);
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
       }
     }
 
@@ -1348,7 +2532,11 @@
     });
 
 
+<<<<<<< HEAD
     // Initialize Core Resources
+=======
+    // เริ่มโหลดข้อมูลตอนเปิดหน้า
+>>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
 
     loadDashboardStats();
     loadPayments();
