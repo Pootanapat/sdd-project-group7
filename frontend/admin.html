@@ -744,17 +744,45 @@
             <span class="nav-icon">▦</span>
             <span>Dashboard</span>
           </button>
+          <button class="nav-item" data-page="appointments">
+            <span class="nav-icon">📅</span>
+            <span>Appointments</span>
+          </button>
           <button class="nav-item" data-page="payment">
             <span class="nav-icon">💸</span>
-            <span>Payment</span>
+            <span>Finance</span>
+          </button>
+          <button class="nav-item" data-page="services">
+            <span class="nav-icon">✂️</span>
+            <span>Services</span>
+          </button>
+          <button class="nav-item" data-page="staff">
+            <span class="nav-icon">💈</span>
+            <span>Staff</span>
           </button>
           <button class="nav-item" data-page="members">
             <span class="nav-icon">👤</span>
-            <span>Members</span>
+            <span>Customers</span>
+          </button>
+          <button class="nav-item" data-page="promotions">
+            <span class="nav-icon">🏷️</span>
+            <span>Promotions</span>
+          </button>
+          <button class="nav-item" data-page="reports">
+            <span class="nav-icon">📊</span>
+            <span>Reports</span>
           </button>
           <button class="nav-item" data-page="logs">
             <span class="nav-icon">📄</span>
-            <span>Logs</span>
+            <span>System Logs</span>
+          </button>
+          <button class="nav-item" data-page="settings">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+          </button>
+          <button class="nav-item" data-page="alerts">
+            <span class="nav-icon">🔔</span>
+            <span>Alerts</span>
           </button>
         </div>
       </div>
@@ -926,6 +954,161 @@
             </table>
           </div>
         </section>
+
+        <!-- APPOINTMENTS -->
+        <section class="page" id="appointments-page">
+          <div class="page-title">Bookings & Appointments</div>
+          <div class="page-sub">Manage queue, add/edit/cancel bookings, and monitor today's status</div>
+          <div class="table-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:15px">
+              <h3 style="color:#fff;" id="appointmentsDateTitle">Active Queue</h3>
+              <button class="action-pill" style="background:#50d96d;color:#111;font-weight:700;">+ New Booking</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date / Time</th><th>Customer</th><th>Service</th><th>Barber</th><th>Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="page" id="services-page">
+          <div class="page-title">Services & Pricing</div>
+          <div class="page-sub">Define salon services, durations, and base prices</div>
+          <div class="table-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:15px">
+               <h3 style="color:#fff;">Menu Items</h3>
+               <button class="action-pill" style="background:#f36b2d;color:#111;font-weight:700;">+ Add Service</button>
+            </div>
+            <table>
+              <thead><tr><th>Service Name</th><th>Duration (Mins)</th><th>Price (THB)</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr><td>Haircut (ตัดผมผู้ชาย)</td><td>45</td><td>250</td><td><button class="action-pill">Edit</button></td></tr>
+                <tr><td>Haircut + Wash (ตัด+สระ)</td><td>60</td><td>350</td><td><button class="action-pill">Edit</button></td></tr>
+                <tr><td>Shaving (โกนหนวด)</td><td>20</td><td>100</td><td><button class="action-pill">Edit</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- STAFF -->
+        <section class="page" id="staff-page">
+          <div class="page-title">Staff & Barbers</div>
+          <div class="page-sub">Manage barber schedules, availability, and working hours</div>
+          <div class="dashboard-stats-row">
+            <div class="dashboard-widget" style="align-items:center;">
+              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">👨‍🦱</div>
+              <h3 style="color:#fff;margin:0">Sun</h3>
+              <p style="color:#888;font-size:12px;margin:5px 0">09:00 - 18:00</p>
+              <button class="action-pill">View Schedule</button>
+            </div>
+            <div class="dashboard-widget" style="align-items:center;">
+              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">🧔</div>
+              <h3 style="color:#fff;margin:0">Earth</h3>
+              <p style="color:#888;font-size:12px;margin:5px 0">12:00 - 21:00</p>
+              <button class="action-pill">View Schedule</button>
+            </div>
+            <div class="dashboard-widget" style="align-items:center; justify-content:center; border: 1px dashed #555; background:transparent; cursor:pointer;">
+              <div style="font-size:24px; color:#aaa;">+ Add Staff</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROMOTIONS -->
+        <section class="page" id="promotions-page">
+          <div class="page-title">Promotions & Discounts</div>
+          <div class="page-sub">Manage coupon codes, seasonal discounts, and loyalty programs</div>
+          <div class="table-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:15px">
+               <h3 style="color:#fff;">Active Codes</h3>
+               <button class="action-pill" style="background:#53d465;color:#111;font-weight:700;">+ Create Coupon</button>
+            </div>
+            <table>
+              <thead><tr><th>Code</th><th>Discount</th><th>Usage Limit</th><th>Valid Until</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><strong style="color:#f36b2d">SUMMER2026</strong></td><td>10% Off</td><td>50 times</td><td>30 Jun 2026</td><td><span class="widget-badge" style="background:rgba(80,217,109,0.2);color:#50d96d;">Active</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section class="page" id="reports-page">
+          <div class="page-title">Advanced Reports & Analytics</div>
+          <div class="page-sub">In-depth breakdown of transactions, revenue trends, and customer retention</div>
+          <div class="dashboard-main-grid">
+            <div class="dashboard-widget" style="flex:2">
+              <div class="widget-head">Monthly Revenue Chart</div>
+              <div style="color:#888;text-align:center;padding:80px 0;">[Interactive Chart.js Instance Will Render Here]</div>
+            </div>
+            <div class="dashboard-widget">
+               <div class="widget-head">Customer Types</div>
+               <div style="color:#888;text-align:center;padding:40px 0;">[Pie Chart: 65% Returning, 35% New]</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="page" id="settings-page">
+          <div class="page-title">System Settings</div>
+          <div class="page-sub">Configure shop details, logos, and admin privileges</div>
+          <div class="table-card" style="max-width:600px;">
+             <form class="edit-form" style="display:flex; flex-direction:column; gap:15px;">
+                <div>
+                   <label style="display:block;margin-bottom:5px;color:#aaa">Shop Name</label>
+                   <input type="text" value="BarberShop Group 7" class="search-box" style="width:100%">
+                </div>
+                <div>
+                   <label style="display:block;margin-bottom:5px;color:#aaa">Contact Phone</label>
+                   <input type="text" value="099-999-9999" class="search-box" style="width:100%">
+                </div>
+                <div>
+                   <label style="display:block;margin-bottom:5px;color:#aaa">Shop Address</label>
+                   <textarea class="search-box" style="width:100%; height:80px; resize:none; padding:10px;">Bangkok, Thailand</textarea>
+                </div>
+                <div>
+                   <button type="button" class="action-pill" style="background:#fff; color:#000; padding:10px 20px; font-weight:700;">Save Settings</button>
+                </div>
+             </form>
+          </div>
+        </section>
+
+        <!-- ALERTS -->
+        <section class="page" id="alerts-page">
+          <div class="page-title">Notifications & Alerts</div>
+          <div class="page-sub">System generated alerts for appointments and staff duties</div>
+          <div class="dashboard-side" style="max-width:800px;">
+             <div class="dashboard-widget">
+                <div class="widget-item">
+                   <div class="widget-left">
+                     <div class="widget-title">⏳ New Booking Alert</div>
+                     <div class="widget-sub">Mr. John booked Haircut on 26 Mar at 10:00</div>
+                   </div>
+                   <div style="font-size:12px; color:#888">2 mins ago</div>
+                </div>
+                <div class="widget-item">
+                   <div class="widget-left">
+                     <div class="widget-title">⚠️ Cancellation</div>
+                     <div class="widget-sub">Alex cancelled booking for today at 15:00</div>
+                   </div>
+                   <div style="font-size:12px; color:#888">1 hour ago</div>
+                </div>
+                <div class="widget-item">
+                   <div class="widget-left">
+                     <div class="widget-title">💈 Staff Alert</div>
+                     <div class="widget-sub">Barber Earth shift ends in 30 minutes</div>
+                   </div>
+                   <div style="font-size:12px; color:#888">1 hour ago</div>
+                </div>
+             </div>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
@@ -1144,7 +1327,9 @@
       try {
         const res = await fetch(`${API_URL}/api/payments`);
         payments = await res.json();
+        
         renderPayments();
+        renderAppointments();
       } catch (err) {
         console.error("loadPayments error:", err);
       }
@@ -1229,6 +1414,51 @@
             <div class="status-icon ${statusClass}">${statusIcon}</div>
           </td>`;
         paymentTableBody.appendChild(tr);
+      });
+    }
+
+    function renderAppointments() {
+      const appointmentsTableBody = document.getElementById("appointmentsTableBody");
+      const title = document.getElementById("appointmentsDateTitle");
+      if(!appointmentsTableBody) return;
+      
+      appointmentsTableBody.innerHTML = "";
+      
+      let queue = payments.filter(p => p.status !== "rejected" && p.reservedDate && p.reservedDate !== "-");
+      
+      // Sort upcoming dates ascending
+      queue.sort((a,b) => {
+         const tA = a.reservedTime !== "-" ? a.reservedTime : "00:00";
+         const tB = b.reservedTime !== "-" ? b.reservedTime : "00:00";
+         const dA = new Date(a.reservedDate + "T" + tA);
+         const dB = new Date(b.reservedDate + "T" + tB);
+         return dA - dB;
+      });
+
+      title.textContent = `Active Appointments Queue (${queue.length})`;
+
+      if (queue.length === 0) {
+        appointmentsTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">ไม่มีคิวจอง</td></tr>';
+        return;
+      }
+      
+      queue.forEach(q => {
+         const color = q.status === "approved" ? "#50d96d" : "#ff9d00";
+         const bg = q.status === "approved" ? "rgba(80,217,109,0.2)" : "rgba(255,157,0,0.2)";
+         const statText = q.status.charAt(0).toUpperCase() + q.status.slice(1);
+         
+         const tr = document.createElement("tr");
+         tr.innerHTML = `
+           <td><strong>${q.reservedDate}</strong><br><span style="color:#aaa;font-size:12px">${q.reservedTime !== "-" ? q.reservedTime : "Any time"}</span></td>
+           <td><strong>${q.customer || "-"}</strong></td>
+           <td>${q.service || "-"}</td>
+           <td>${q.barber || "-"}</td>
+           <td><span class="widget-badge" style="background:${bg};color:${color};">${statText}</span></td>
+           <td>
+              <button class="action-pill" onclick="openPaymentModal('${q.id}')">View</button> 
+           </td>
+         `;
+         appointmentsTableBody.appendChild(tr);
       });
     }
 
