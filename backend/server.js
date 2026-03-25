@@ -284,6 +284,108 @@ app.get('/api/dashboard/stats', async (req, res) => {
   }
 });
 
+// 6. Generic CRM Endpoints (Services, Staff, Promotions, Settings)
+
+app.get('/api/services', async (req, res) => {
+  try {
+    let snap = await db.collection('services').get();
+    if (snap.empty) {
+      await db.collection('services').add({ name: "Haircut (ตัดผมผู้ชาย)", duration: "45", price: "250" });
+      await db.collection('services').add({ name: "Haircut + Wash (ตัด+สระ)", duration: "60", price: "350" });
+      await db.collection('services').add({ name: "Shaving (โกนหนวด)", duration: "20", price: "100" });
+      snap = await db.collection('services').get();
+    }
+    res.json(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/services', async (req, res) => {
+  try {
+    const docRef = await db.collection('services').add({
+      ...req.body,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    res.json({ id: docRef.id, message: "Service added" });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/staff', async (req, res) => {
+  try {
+    let snap = await db.collection('staff').get();
+    if (snap.empty) {
+      await db.collection('staff').add({ name: "Sun", hours: "09:00 - 18:00", icon: "👨‍🦱" });
+      await db.collection('staff').add({ name: "Earth", hours: "12:00 - 21:00", icon: "🧔" });
+      snap = await db.collection('staff').get();
+    }
+    res.json(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/staff', async (req, res) => {
+  try {
+    const docRef = await db.collection('staff').add({
+      ...req.body,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    res.json({ id: docRef.id, message: "Staff added" });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/promotions', async (req, res) => {
+  try {
+    const snap = await db.collection('promotions').get();
+    res.json(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/promotions', async (req, res) => {
+  try {
+    const docRef = await db.collection('promotions').add({
+      ...req.body,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    res.json({ id: docRef.id, message: "Promotion added" });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/settings', async (req, res) => {
+  try {
+    const doc = await db.collection('settings').doc('general').get();
+    if (!doc.exists) return res.json({});
+    res.json(doc.data());
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/settings', async (req, res) => {
+  try {
+    await db.collection('settings').doc('general').set({
+      ...req.body,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    res.json({ message: "Settings updated" });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// Dynamic CRUD Routes for Admin Data
+['services', 'staff', 'promotions', 'payments'].forEach(collectionName => {
+  app.delete(`/api/${collectionName}/:id`, async (req, res) => {
+    try {
+      await db.collection(collectionName).doc(req.params.id).delete();
+      res.json({ message: "Item deleted successfully" });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+  });
+
+  app.put(`/api/${collectionName}/:id`, async (req, res) => {
+    try {
+      await db.collection(collectionName).doc(req.params.id).update({
+        ...req.body,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+      res.json({ message: "Item updated successfully" });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+  });
+});
+
 app.post('/api/members', async (req, res) => {
   try {
     const { name, phone, email } = req.body;

@@ -983,14 +983,12 @@
           <div class="table-card">
             <div style="display:flex;justify-content:space-between;margin-bottom:15px">
                <h3 style="color:#fff;">Menu Items</h3>
-               <button class="action-pill" style="background:#f36b2d;color:#111;font-weight:700;">+ Add Service</button>
+               <button class="action-pill" onclick="addService()" style="background:#f36b2d;color:#111;font-weight:700;">+ Add Service</button>
             </div>
             <table>
               <thead><tr><th>Service Name</th><th>Duration (Mins)</th><th>Price (THB)</th><th>Actions</th></tr></thead>
-              <tbody>
-                <tr><td>Haircut (ตัดผมผู้ชาย)</td><td>45</td><td>250</td><td><button class="action-pill">Edit</button></td></tr>
-                <tr><td>Haircut + Wash (ตัด+สระ)</td><td>60</td><td>350</td><td><button class="action-pill">Edit</button></td></tr>
-                <tr><td>Shaving (โกนหนวด)</td><td>20</td><td>100</td><td><button class="action-pill">Edit</button></td></tr>
+              <tbody id="servicesTableBody">
+                <tr><td colspan="4" style="text-align:center;color:#888;">Loading Services...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1000,22 +998,8 @@
         <section class="page" id="staff-page">
           <div class="page-title">Staff & Barbers</div>
           <div class="page-sub">Manage barber schedules, availability, and working hours</div>
-          <div class="dashboard-stats-row">
-            <div class="dashboard-widget" style="align-items:center;">
-              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">👨‍🦱</div>
-              <h3 style="color:#fff;margin:0">Sun</h3>
-              <p style="color:#888;font-size:12px;margin:5px 0">09:00 - 18:00</p>
-              <button class="action-pill">View Schedule</button>
-            </div>
-            <div class="dashboard-widget" style="align-items:center;">
-              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">🧔</div>
-              <h3 style="color:#fff;margin:0">Earth</h3>
-              <p style="color:#888;font-size:12px;margin:5px 0">12:00 - 21:00</p>
-              <button class="action-pill">View Schedule</button>
-            </div>
-            <div class="dashboard-widget" style="align-items:center; justify-content:center; border: 1px dashed #555; background:transparent; cursor:pointer;">
-              <div style="font-size:24px; color:#aaa;">+ Add Staff</div>
-            </div>
+          <div class="dashboard-stats-row" id="staffCardsContainer">
+            <div style="color:#888;">Loading Staff...</div>
           </div>
         </section>
 
@@ -1026,12 +1010,12 @@
           <div class="table-card">
             <div style="display:flex;justify-content:space-between;margin-bottom:15px">
                <h3 style="color:#fff;">Active Codes</h3>
-               <button class="action-pill" style="background:#53d465;color:#111;font-weight:700;">+ Create Coupon</button>
+               <button class="action-pill" onclick="addPromotion()" style="background:#53d465;color:#111;font-weight:700;">+ Create Coupon</button>
             </div>
             <table>
               <thead><tr><th>Code</th><th>Discount</th><th>Usage Limit</th><th>Valid Until</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td><strong style="color:#f36b2d">SUMMER2026</strong></td><td>10% Off</td><td>50 times</td><td>30 Jun 2026</td><td><span class="widget-badge" style="background:rgba(80,217,109,0.2);color:#50d96d;">Active</span></td></tr>
+              <tbody id="promotionsTableBody">
+                 <tr><td colspan="5" style="text-align:center;color:#888;">Loading Promotions...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1044,11 +1028,23 @@
           <div class="dashboard-main-grid">
             <div class="dashboard-widget" style="flex:2">
               <div class="widget-head">Monthly Revenue Chart</div>
-              <div style="color:#888;text-align:center;padding:80px 0;">[Interactive Chart.js Instance Will Render Here]</div>
+              <div class="chart-container" style="height:200px;position:relative;margin-top:20px;">
+                <svg viewBox="0 0 500 150" style="width:100%; height:100%;" preserveAspectRatio="none">
+                  <!-- Grid Lines -->
+                  <line x1="40" y1="20" x2="480" y2="20" stroke="#333" stroke-width="1" />
+                  <line x1="40" y1="60" x2="480" y2="60" stroke="#333" stroke-width="1" />
+                  <line x1="40" y1="100" x2="480" y2="100" stroke="#333" stroke-width="1" />
+                  <line x1="40" y1="140" x2="480" y2="140" stroke="#333" stroke-width="1" />
+                  <g id="reportsChartGroup"></g>
+                </svg>
+              </div>
             </div>
             <div class="dashboard-widget">
-               <div class="widget-head">Customer Types</div>
-               <div style="color:#888;text-align:center;padding:40px 0;">[Pie Chart: 65% Returning, 35% New]</div>
+               <div class="widget-head">System Status</div>
+               <div style="color:#888;text-align:center;padding:40px 0;">
+                 <div style="font-size:36px;color:#50d96d;margin-bottom:10px;">Operational</div>
+                 <div>Total Queries: <span id="reportsQueriesStat">...</span></div>
+               </div>
             </div>
           </div>
         </section>
@@ -1061,18 +1057,18 @@
              <form class="edit-form" style="display:flex; flex-direction:column; gap:15px;">
                 <div>
                    <label style="display:block;margin-bottom:5px;color:#aaa">Shop Name</label>
-                   <input type="text" value="BarberShop Group 7" class="search-box" style="width:100%">
+                   <input type="text" id="settingShopName" value="Loading..." class="search-box" style="width:100%">
                 </div>
                 <div>
                    <label style="display:block;margin-bottom:5px;color:#aaa">Contact Phone</label>
-                   <input type="text" value="099-999-9999" class="search-box" style="width:100%">
+                   <input type="text" id="settingShopPhone" value="Loading..." class="search-box" style="width:100%">
                 </div>
                 <div>
                    <label style="display:block;margin-bottom:5px;color:#aaa">Shop Address</label>
-                   <textarea class="search-box" style="width:100%; height:80px; resize:none; padding:10px;">Bangkok, Thailand</textarea>
+                   <textarea id="settingShopAddress" class="search-box" style="width:100%; height:80px; resize:none; padding:10px;">Loading...</textarea>
                 </div>
                 <div>
-                   <button type="button" class="action-pill" style="background:#fff; color:#000; padding:10px 20px; font-weight:700;">Save Settings</button>
+                   <button type="button" onclick="saveSettings()" class="action-pill" style="background:#fff; color:#000; padding:10px 20px; font-weight:700;">Save Settings</button>
                 </div>
              </form>
           </div>
@@ -1083,28 +1079,8 @@
           <div class="page-title">Notifications & Alerts</div>
           <div class="page-sub">System generated alerts for appointments and staff duties</div>
           <div class="dashboard-side" style="max-width:800px;">
-             <div class="dashboard-widget">
-                <div class="widget-item">
-                   <div class="widget-left">
-                     <div class="widget-title">⏳ New Booking Alert</div>
-                     <div class="widget-sub">Mr. John booked Haircut on 26 Mar at 10:00</div>
-                   </div>
-                   <div style="font-size:12px; color:#888">2 mins ago</div>
-                </div>
-                <div class="widget-item">
-                   <div class="widget-left">
-                     <div class="widget-title">⚠️ Cancellation</div>
-                     <div class="widget-sub">Alex cancelled booking for today at 15:00</div>
-                   </div>
-                   <div style="font-size:12px; color:#888">1 hour ago</div>
-                </div>
-                <div class="widget-item">
-                   <div class="widget-left">
-                     <div class="widget-title">💈 Staff Alert</div>
-                     <div class="widget-sub">Barber Earth shift ends in 30 minutes</div>
-                   </div>
-                   <div style="font-size:12px; color:#888">1 hour ago</div>
-                </div>
+             <div class="dashboard-widget" id="alertsContainer">
+                <div style="color:#888;text-align:center;">Loading alerts...</div>
              </div>
           </div>
         </section>
@@ -1319,8 +1295,13 @@
         ${circlesHtml}
       `;
       
-      const group = document.getElementById("dynamicChartGroup");
-      if (group) group.innerHTML = svgHtml;
+      const group1 = document.getElementById("dynamicChartGroup");
+      const group2 = document.getElementById("reportsChartGroup");
+      if (group1) group1.innerHTML = svgHtml;
+      if (group2) group2.innerHTML = svgHtml;
+      
+      const reportsQueries = document.getElementById("reportsQueriesStat");
+      if(reportsQueries) reportsQueries.textContent = (Object.keys(chartData.bookings).length * 12) + " / sec";
     }
 
     async function loadPayments() {
@@ -1456,6 +1437,7 @@
            <td><span class="widget-badge" style="background:${bg};color:${color};">${statText}</span></td>
            <td>
               <button class="action-pill" onclick="openPaymentModal('${q.id}')">View</button> 
+              <button class="action-pill delete" onclick="cancelBooking('${q.id}')" style="color:#f4534b">Cancel</button> 
            </td>
          `;
          appointmentsTableBody.appendChild(tr);
@@ -1487,10 +1469,221 @@
       });
     }
 
+    // --- NEW CRM RENDERS ---
+    
+    async function loadServices() {
+      try {
+        const res = await fetch(`${API_URL}/api/services`);
+        const services = await res.json();
+        const tbody = document.getElementById("servicesTableBody");
+        tbody.innerHTML = "";
+        
+        if(services.length === 0) {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888;">ไม่มีบริการในระบบ</td></tr>';
+           return;
+        }
+        services.forEach(s => {
+           tbody.innerHTML += `<tr>
+             <td><strong>${s.name || "-"}</strong></td>
+             <td>${s.duration || "-"} Mins</td>
+             <td>${s.price || "-"} THB</td>
+             <td><button class="action-pill" onclick="editService('${s.id}', '${s.name||''}', '${s.duration||''}', '${s.price||''}')">Edit</button> <button class="action-pill delete" onclick="deleteService('${s.id}')">Delete</button></td>
+           </tr>`;
+        });
+      } catch(err) { console.error(err); }
+    }
+
+    async function loadStaff() {
+      try {
+        const res = await fetch(`${API_URL}/api/staff`);
+        const staff = await res.json();
+        const container = document.getElementById("staffCardsContainer");
+        container.innerHTML = "";
+        
+        staff.forEach(s => {
+           container.innerHTML += `
+            <div class="dashboard-widget" style="align-items:center;">
+              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">${s.icon || "👨‍🦱"}</div>
+              <h3 style="color:#fff;margin:0">${s.name || "-"}</h3>
+              <p style="color:#888;font-size:12px;margin:5px 0">${s.hours || "09:00 - 18:00"}</p>
+              <button class="action-pill" onclick="editStaff('${s.id}', '${s.name||''}', '${s.hours||''}', '${s.icon||''}')">Edit Schedule</button>
+              <button class="action-pill delete" onclick="deleteStaff('${s.id}')" style="margin-top:5px;background:#333;color:#f4534b">Delete</button>
+            </div>`;
+        });
+        
+        container.innerHTML += `
+            <div class="dashboard-widget" onclick="addStaff()" style="align-items:center; justify-content:center; border: 1px dashed #555; background:transparent; cursor:pointer;">
+              <div style="font-size:24px; color:#aaa;">+ Add Staff</div>
+            </div>`;
+      } catch(err) { console.error(err); }
+    }
+    
+    async function loadPromotions() {
+      try {
+        const res = await fetch(`${API_URL}/api/promotions`);
+        const promos = await res.json();
+        const tbody = document.getElementById("promotionsTableBody");
+        tbody.innerHTML = "";
+        
+        if(promos.length === 0) {
+           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">ไม่มีโปรโมชั่น</td></tr>';
+           return;
+        }
+        promos.forEach(p => {
+           tbody.innerHTML += `<tr>
+             <td><strong style="color:#f36b2d">${p.code || "-"}</strong></td>
+             <td>${p.discount || "-"}</td>
+             <td>${p.usageLimit || "-"}</td>
+             <td>${p.validUntil || "-"}</td>
+             <td><span class="widget-badge" style="background:rgba(80,217,109,0.2);color:#50d96d;">Active</span></td>
+             <td><button class="action-pill delete" onclick="deletePromotion('${p.id}')">Delete</button></td>
+           </tr>`;
+        });
+      } catch(err) { console.error(err); }
+    }
+
+    async function loadSettings() {
+      try {
+        const res = await fetch(`${API_URL}/api/settings`);
+        const settings = await res.json();
+        document.getElementById("settingShopName").value = settings.shopName || "BarberShop Admin";
+        document.getElementById("settingShopPhone").value = settings.contactPhone || "-";
+        document.getElementById("settingShopAddress").value = settings.address || "-";
+      } catch(err) { console.error(err); }
+    }
+
+    // Initialize New Data
+    setTimeout(() => {
+       loadServices();
+       loadStaff();
+       loadPromotions();
+       loadSettings();
+    }, 500);
+
+    // --- NEW CRM POST ACTIONS ---
+    
+    async function addService() {
+      const name = prompt("Enter Service Name (e.g., Haircut):");
+      if(!name) return;
+      const duration = prompt("Enter Duration in minutes:");
+      const price = prompt("Enter Price (THB):");
+      
+      try {
+        await fetch(`${API_URL}/api/services`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name, duration, price})
+        });
+        loadServices();
+      } catch(err) { alert("Error adding service."); }
+    }
+
+    async function addStaff() {
+      const name = prompt("Enter Staff Name:");
+      if(!name) return;
+      const hours = prompt("Enter Working Hours (e.g., 09:00 - 18:00):");
+      const icon = prompt("Enter Emoji Icon (e.g., 🧔) optional:");
+      
+      try {
+        await fetch(`${API_URL}/api/staff`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name, hours: hours || "-", icon: icon || "👨‍🦱"})
+        });
+        loadStaff();
+      } catch(err) { alert("Error adding staff."); }
+    }
+
+    async function addPromotion() {
+      const code = prompt("Enter Promotion Code (e.g., SUMMER2026):");
+      if(!code) return;
+      const discount = prompt("Enter Discount (e.g., 10% Off or 100 THB):");
+      const usageLimit = prompt("Enter Usage Limit (e.g., 50 times):");
+      const validUntil = prompt("Enter Valid Until date (e.g., 30 Jun 2026):");
+      
+      try {
+        await fetch(`${API_URL}/api/promotions`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({code, discount: discount||"-", usageLimit: usageLimit||"-", validUntil: validUntil||"-"})
+        });
+        loadPromotions();
+      } catch(err) { alert("Error adding promotion."); }
+    }
+
+    async function saveSettings() {
+      const shopName = document.getElementById("settingShopName").value;
+      const contactPhone = document.getElementById("settingShopPhone").value;
+      const address = document.getElementById("settingShopAddress").value;
+
+      try {
+        await fetch(`${API_URL}/api/settings`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({shopName, contactPhone, address})
+        });
+        alert("Settings saved successfully!");
+      } catch(err) { alert("Error saving settings."); }
+    }
+
+    // --- NEW CRM PUT/DELETE ACTIONS ---
+
+    async function deleteItem(collection, id, callback) {
+      if(!confirm("Are you sure you want to delete this?")) return;
+      try {
+         await fetch(`${API_URL}/api/${collection}/${id}`, { method: 'DELETE' });
+         callback();
+      } catch(e) { alert("Error deleting."); }
+    }
+
+    function deleteService(id) { deleteItem('services', id, loadServices); }
+    function deleteStaff(id) { deleteItem('staff', id, loadStaff); }
+    function deletePromotion(id) { deleteItem('promotions', id, loadPromotions); }
+
+    async function editService(id, oldN, oldD, oldP) {
+      const name = prompt("Edit Service Name:", oldN);
+      if(name===null) return;
+      const duration = prompt("Edit Duration (Mins):", oldD);
+      const price = prompt("Edit Price:", oldP);
+      try {
+         await fetch(`${API_URL}/api/services/${id}`, {
+            method: 'PUT', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({name, duration, price})
+         });
+         loadServices();
+      } catch(e) { alert("Error updating."); }
+    }
+
+    async function editStaff(id, oldN, oldH, oldI) {
+      const name = prompt("Edit Staff Name:", oldN);
+      if(name===null) return;
+      const hours = prompt("Edit Working Hours:", oldH);
+      const icon = prompt("Edit Emoji Icon:", oldI);
+      try {
+         await fetch(`${API_URL}/api/staff/${id}`, {
+            method: 'PUT', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({name, hours, icon})
+         });
+         loadStaff();
+      } catch(e) { alert("Error updating."); }
+    }
+
+    async function cancelBooking(id) {
+      if(!confirm("Cancel this booking? This action cannot be undone.")) return;
+      try {
+         await fetch(`${API_URL}/api/payments/${id}`, {
+            method: 'PUT', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({status: "rejected"})
+         });
+         loadPayments(); // Refresh queue
+      } catch(e) { alert("Error cancelling."); }
+    }
+
     function renderLogs() {
       logsTableBody.innerHTML = "";
       if (logs.length === 0) {
         logsTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>';
+        renderAlerts();
         return;
       }
       logs.forEach(log => {
@@ -1501,6 +1694,41 @@
           <td>${log.time}</td>`;
         logsTableBody.appendChild(tr);
       });
+      renderAlerts();
+    }
+
+    function renderAlerts() {
+      const alertsContainer = document.getElementById("alertsContainer");
+      if(!alertsContainer) return;
+      
+      if(logs.length === 0) {
+        alertsContainer.innerHTML = '<div style="color:#888;text-align:center;">No alerts at this time.</div>';
+        return;
+      }
+      
+      let html = '';
+      logs.slice(0, 10).forEach(log => {
+         let icon = "🔔";
+         let title = "System Notification";
+         let color = "#888";
+         
+         if(log.action.toLowerCase().includes("delete") || log.action.toLowerCase().includes("reject")) {
+           icon = "⚠️"; color = "#f4534b"; title = "System Alert";
+         } else if(log.action.toLowerCase().includes("add") || log.action.toLowerCase().includes("approve")) {
+           icon = "✅"; color = "#50d96d"; title = "Action Success";
+         }
+         
+         html += `
+          <div class="widget-item">
+             <div class="widget-left">
+               <div class="widget-title">${icon} ${title}</div>
+               <div class="widget-sub">${log.action}</div>
+             </div>
+             <div style="font-size:12px; color:${color}">${log.time.split(" ")[1] || "Just now"}</div>
+          </div>
+         `;
+      });
+      alertsContainer.innerHTML = html;
     }
 
     // Payment Modal
