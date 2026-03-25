@@ -1,102 +1,117 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Segoe UI',sans-serif;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
     }
-    body{
-      background:#4a4a4a;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      padding:20px;
+
+    body {
+      background: #4a4a4a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      padding: 20px;
     }
-    .wrap{
-      width:100%;
-      max-width:700px;
-      text-align:center;
+
+    .wrap {
+      width: 100%;
+      max-width: 700px;
+      text-align: center;
     }
-    .title-top{
-      color:#ff9900;
-      font-size:30px;
-      font-weight:800;
+
+    .title-top {
+      color: #ff9900;
+      font-size: 30px;
+      font-weight: 800;
     }
-    .title-main{
-      font-size:52px;
-      font-weight:800;
-      margin-bottom:18px;
+
+    .title-main {
+      font-size: 52px;
+      font-weight: 800;
+      margin-bottom: 18px;
     }
-    .card{
-      width:100%;
-      max-width:340px;
-      margin:0 auto;
-      background:linear-gradient(90deg,#171717,#1f1f1f);
-      border:1px solid rgba(255,255,255,.5);
-      border-radius:16px;
-      padding:22px 24px 14px;
-      text-align:left;
+
+    .card {
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+      background: linear-gradient(90deg, #171717, #1f1f1f);
+      border: 1px solid rgba(255, 255, 255, .5);
+      border-radius: 16px;
+      padding: 22px 24px 14px;
+      text-align: left;
     }
-    .field{
-      margin-bottom:18px;
+
+    .field {
+      margin-bottom: 18px;
     }
-    .label{
-      font-size:16px;
-      font-weight:700;
-      margin-bottom:8px;
+
+    .label {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
-    .input-wrap{
-      position:relative;
+
+    .input-wrap {
+      position: relative;
     }
-    input{
-      width:100%;
-      height:28px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.5);
-      background:#4d4d4d;
-      color:#fff;
-      padding:0 12px;
-      outline:none;
+
+    input {
+      width: 100%;
+      height: 28px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, .5);
+      background: #4d4d4d;
+      color: #fff;
+      padding: 0 12px;
+      outline: none;
     }
-    .eye{
-      position:absolute;
-      right:10px;
-      top:50%;
-      transform:translateY(-50%);
-      cursor:pointer;
-      font-size:14px;
+
+    .eye {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
     }
-    .btn{
-      width:100%;
-      height:42px;
-      border:none;
-      border-radius:10px;
-      background:#ff9900;
-      color:#111;
-      font-size:18px;
-      font-weight:700;
-      cursor:pointer;
-      margin-top:8px;
-      margin-bottom:16px;
+
+    .btn {
+      width: 100%;
+      height: 42px;
+      border: none;
+      border-radius: 10px;
+      background: #ff9900;
+      color: #111;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-bottom: 16px;
     }
-    .bottom{
-      text-align:center;
-      font-size:14px;
+
+    .bottom {
+      text-align: center;
+      font-size: 14px;
     }
-    .bottom a{
-      color:#fff;
-      font-weight:700;
+
+    .bottom a {
+      color: #fff;
+      font-weight: 700;
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="title-top">Sign Up</div>
@@ -111,6 +126,11 @@
       <div class="field">
         <div class="label">Email</div>
         <input type="email" id="email" placeholder="Email">
+      </div>
+
+      <div class="field">
+        <div class="label">Phone Number</div>
+        <input type="text" id="phone" placeholder="Phone Number">
       </div>
 
       <div class="field">
@@ -138,33 +158,57 @@
   </div>
 
   <script>
-    function togglePassword(id){
+    function togglePassword(id) {
       const input = document.getElementById(id);
       input.type = input.type === 'password' ? 'text' : 'password';
     }
 
-    function signUp(){
+    async function signUp() {
       const username = document.getElementById('username').value.trim();
       const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
       const password = document.getElementById('password').value.trim();
       const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-      if(!username || !email || !password || !confirmPassword){
+      if (!username || !email || !phone || !password || !confirmPassword) {
         alert('กรุณากรอกข้อมูลให้ครบ');
         return;
       }
 
-      if(password !== confirmPassword){
+      if (password !== confirmPassword) {
         alert('รหัสผ่านไม่ตรงกัน');
         return;
       }
 
-      localStorage.setItem('profileName', username);
-      localStorage.setItem('profileEmail', email);
-      localStorage.setItem('loggedInUser', username);
+      try {
+        const response = await fetch('http://localhost:3000/api/members', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: username,
+            email: email,
+            phone: phone
+          })
+        });
 
-      window.location.href = 'signin.html';
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('profileName', username);
+          localStorage.setItem('profileEmail', email);
+          localStorage.setItem('loggedInUser', username);
+
+          alert('สมัครสมาชิกสำเร็จ!');
+          window.location.href = 'signin.html';
+        } else {
+          alert('เกิดข้อผิดพลาด: ' + (data.error || 'ไม่สามารถสมัครสมาชิกได้'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+      }
     }
   </script>
 </body>
+
 </html>

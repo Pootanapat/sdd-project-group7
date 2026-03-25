@@ -21,6 +21,7 @@ const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Setup Multer for file uploads (simulating Firebase Storage upload by saving locally for now)
 const uploadDir = path.join(__dirname, 'uploads');
@@ -60,6 +61,7 @@ app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
             receiptNo: receiptNo,
             originalFilename: req.file.originalname,
             localFilePath: req.file.path, // หากมีการอัปโหลดขึ้น Firebase Storage ค่อยเปลี่ยน path ตรงนี้
+            slip: 'http://localhost:3000/uploads/' + req.file.filename,
             status: 'pending', // คุณสามารถตั้งให้เป็น 'waiting' ถ้าต้องการให้แอดมินตรวจก่อน
             amount: Number(req.body.amount) ,
             customer: req.body.customer || "Unknown",
