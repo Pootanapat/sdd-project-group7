@@ -808,6 +808,7 @@
           </div>
         </section>
 
+
         <!-- LOGS -->
         <section class="page" id="logs-page">
           <div class="page-title">Activity Logs</div>
@@ -887,49 +888,21 @@
     </div>
   </div>
 
-  <script>
-    const payments = [
-      { id:1, customer:"Nattakit Tutu", service:"Classic Haircut", date:"2026/02/10", amount:200, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+1" },
-      { id:2, customer:"Kaiwa Yakru", service:"Full Set", date:"2026/02/10", amount:350, status:"rejected", slip:"" },
-      { id:3, customer:"Cumrai Kub", service:"Shave", date:"2026/02/09", amount:150, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+3" },
-      { id:4, customer:"Bitkab Komkom", service:"Wash, blow-dry", date:"2026/02/09", amount:100, status:"rejected", slip:"" },
-      { id:5, customer:"Ronaldo Diwa", service:"Haircut", date:"2026/02/09", amount:200, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+5" },
-      { id:6, customer:"Messi Deekoo", service:"Premium Haircut", date:"2026/02/08", amount:500, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+6" },
-      { id:7, customer:"Kit BadBlood", service:"Full Set", date:"2026/02/08", amount:350, status:"rejected", slip:"" },
-      { id:8, customer:"Tae Mongkolkit", service:"Classic Haircut", date:"2026/02/08", amount:200, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+8" },
-      { id:9, customer:"Taa Gaxy", service:"Shave", date:"2026/02/07", amount:150, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+9" },
-      { id:10, customer:"Anutin Ha-roi", service:"Kong", date:"2026/02/08", amount:500000000, status:"rejected", slip:"" }
-    ];
+<script>
 
-    const members = [
-      { id:1, name:"Nattakit Tutu", phone:"080-000-1001", email:"nattakit.tutu@example.com" },
-      { id:2, name:"Kaiwa Yakru", phone:"080-000-1002", email:"kaiwa.yakru@example.com" },
-      { id:3, name:"Cumrai Kub", phone:"080-000-1003", email:"cumrai.kub@example.com" },
-      { id:4, name:"Bitkab Komkom", phone:"080-000-1004", email:"bitkab.kom@example.com" },
-      { id:5, name:"Ronaldo Diwa", phone:"080-000-1005", email:"ronaldo.diwa@example.com" },
-      { id:6, name:"Messi Deekoo", phone:"080-000-1006", email:"messi.deekoo@example.com" },
-      { id:7, name:"Kit BadBlood", phone:"080-000-1007", email:"kit.badblood@example.com" },
-      { id:8, name:"Tae Mongkolkit", phone:"080-000-1008", email:"tae.mongkolkit@example.com" },
-      { id:9, name:"Taa Gaxy", phone:"080-000-1009", email:"taa.gaxy@example.com" },
-      { id:10, name:"Anutin Ha-roi", phone:"080-000-1010", email:"anutin.haroi@example.com" }
-    ];
 
-    const logs = [
-      { admin:"Admin User", action:"Approved payment for Nattakit Tutu - ฿200", time:"2026-02-10 14:32:15" },
-      { admin:"Admin User", action:"Added new member: Kaiwa Yakru", time:"2026-02-10 13:21:42" },
-      { admin:"Admin User", action:"Updated member profile: Cumrai Kub", time:"2026-02-10 12:15:33" },
-      { admin:"Admin User", action:"Rejected payment for Bitkab Komkom - ฿100", time:"2026-02-10 11:45:21" },
-      { admin:"Admin User", action:"Approved payment for Ronaldo Diwa - ฿200", time:"2026-02-10 10:30:18" },
-      { admin:"Admin User", action:"Deleted member: Messi Deekoo", time:"2026-02-09 16:22:09" },
-      { admin:"Admin User", action:"Approved payment for Kit BadBlood - ฿350", time:"2026-02-09 15:10:55" },
-      { admin:"Admin User", action:"Updated service pricing", time:"2026-02-09 14:05:42" },
-      { admin:"Admin User", action:"Added new member: Tae Mongkolkit", time:"2026-02-08 13:18:31" },
-      { admin:"Admin User", action:"Anutin Ha-roi ia ook jak nayok", time:"2025-12-12 10:20:08" }
-    ];
+    const API_URL = 'http://localhost:3000'; // URL ของ server.js
 
+    // State
+    let payments = [];
+    let members = [];
+    let logs = [];
     let editingMemberId = null;
     let modalPaymentId = null;
 
+    
+    // Navigation
+    
     const navItems = document.querySelectorAll(".nav-item");
     const pages = document.querySelectorAll(".page");
     const paymentTableBody = document.getElementById("paymentTableBody");
@@ -944,114 +917,167 @@
         const target = item.dataset.page;
         pages.forEach(page => page.classList.remove("active"));
         document.getElementById(target + "-page").classList.add("active");
+
+        // โหลดข้อมูลใหม่ทุกครั้งที่สลับหน้า
+        if (target === "payment")   loadPayments();
+        if (target === "members")   loadMembers();
+        if (target === "logs")      loadLogs();
+        if (target === "dashboard") loadDashboardStats();
       });
     });
 
-    function formatMoney(num){
+   
+    // Helper
+    function formatMoney(num) {
       return "฿" + Number(num).toLocaleString();
     }
 
-    function pushLog(actionText){
-      logs.unshift({
-        admin:"Admin User",
-        action:actionText,
-        time:new Date().toISOString().slice(0,19).replace("T"," ")
-      });
-      renderLogs();
-      renderDashboardStats();
+ 
+    // โหลดข้อมูลจาก API
+
+    async function loadDashboardStats() {
+      try {
+        const res = await fetch(`${API_URL}/api/dashboard/stats`);
+        const data = await res.json();
+        document.getElementById("dailyBookingsStat").textContent = data.dailyBookings;
+        document.getElementById("monthlyRevenueStat").textContent = formatMoney(data.monthlyRevenue);
+        document.getElementById("newMembersStat").textContent = data.totalMembers;
+        document.getElementById("totalCustomersStat").textContent = Number(data.totalMembers).toLocaleString();
+      } catch (err) {
+        console.error("loadDashboardStats error:", err);
+      }
     }
 
-    function renderPayments(){
-      paymentTableBody.innerHTML = "";
+    async function loadPayments() {
+      try {
+        const res = await fetch(`${API_URL}/api/payments`);
+        payments = await res.json();
+        renderPayments();
+      } catch (err) {
+        console.error("loadPayments error:", err);
+      }
+    }
 
-      payments.forEach(payment => {
-        const tr = document.createElement("tr");
-        const statusClass = payment.status === "approved" ? "status-approved" : "status-rejected";
-        const statusIcon = payment.status === "approved" ? "✓" : "✖";
-        const extraClass = payment.id === 10 ? "danger-big" : "";
+    async function loadMembers() {
+      try {
+        const res = await fetch(`${API_URL}/api/members`);
+        members = await res.json();  // <-- เก็บลง global state
 
-        tr.innerHTML = `
-          <td><strong>${payment.customer}</strong></td>
-          <td>${payment.service}</td>
-          <td>${payment.date}</td>
-          <td>${payment.amount.toLocaleString()}.00฿</td>
-          <td><button class="action-pill" onclick="openPaymentModal(${payment.id})">👁 View</button></td>
-          <td style="text-align:center;">
-            <div class="status-icon ${statusClass} ${extraClass}">${statusIcon}</div>
-          </td>
+        membersTableBody.innerHTML = "";
+
+        if (members.length === 0) {
+          membersTableBody.innerHTML = `
+            <tr>
+              <td colspan="4" style="text-align:center;">ไม่มีข้อมูล</td>
+            </tr>
+          `;
+          return;
+        }
+
+        renderMembers(); // ใช้ global members
+      } catch (err) {
+        console.error("โหลดสมาชิกไม่ได้", err);
+        membersTableBody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align:center;color:red;">เกิดข้อผิดพลาดในการโหลดข้อมูล</td>
+          </tr>
         `;
+      }
+    }
+
+    async function loadLogs() {
+      try {
+        const res = await fetch(`${API_URL}/api/logs`);
+        logs = await res.json();
+        renderLogs();
+      } catch (err) {
+        console.error("loadLogs error:", err);
+      }
+    }
+
+   
+    // Render
+
+    function renderPayments() {
+      paymentTableBody.innerHTML = "";
+      if (payments.length === 0) {
+        paymentTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>';
+        return;
+      }
+      payments.forEach(payment => {
+        const statusClass = payment.status === "approved" ? "status-approved" : "status-rejected";
+        const statusIcon  = payment.status === "approved" ? "✓" : "✖";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${payment.customer || "-"}</strong></td>
+          <td>${payment.service || "-"}</td>
+          <td>${payment.date || "-"}</td>
+          <td>${Number(payment.amount || 0).toLocaleString()}.00฿</td>
+          <td><button class="action-pill" onclick="openPaymentModal('${payment.id}')">👁 View</button></td>
+          <td style="text-align:center;">
+            <div class="status-icon ${statusClass}">${statusIcon}</div>
+          </td>`;
         paymentTableBody.appendChild(tr);
       });
     }
 
-    function renderMembers(){
+    function renderMembers() {
       membersTableBody.innerHTML = "";
 
-      members.forEach(member => {
-        const firstLetter = member.name.charAt(0).toUpperCase();
-        const tr = document.createElement("tr");
+      if (!members || members.length === 0) {
+        membersTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>`;
+        return;
+      }
 
+      members.forEach(member => {
+        const firstLetter = (member.name || "?").charAt(0).toUpperCase();
+        const tr = document.createElement("tr");
         tr.innerHTML = `
           <td><span class="member-badge">${firstLetter}</span><strong>${member.name}</strong></td>
-          <td>${member.phone}</td>
-          <td>${member.email}</td>
+          <td>${member.phone || "-"}</td>
+          <td>${member.email || "-"}</td>
           <td>
             <div class="action-inline">
-              <button class="icon-btn" onclick="openEditMember(${member.id})">📝</button>
-              <button class="icon-btn delete" onclick="deleteMember(${member.id})">🗑</button>
+              <button class="icon-btn" onclick="openEditMember('${member.id}')">📝</button>
+              <button class="icon-btn delete" onclick="deleteMember('${member.id}', '${member.name}')">🗑</button>
             </div>
-          </td>
-        `;
+          </td>`;
         membersTableBody.appendChild(tr);
       });
     }
 
-    function renderLogs(){
+    function renderLogs() {
       logsTableBody.innerHTML = "";
-
+      if (logs.length === 0) {
+        logsTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">ไม่มีข้อมูล</td></tr>';
+        return;
+      }
       logs.forEach(log => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>
-            <div class="logs-name">
-              <span class="member-badge">A</span>
-              <span>${log.admin}</span>
-            </div>
-          </td>
+          <td><div class="logs-name"><span class="member-badge">A</span><span>${log.admin}</span></div></td>
           <td>${log.action}</td>
-          <td>${log.time}</td>
-        `;
+          <td>${log.time}</td>`;
         logsTableBody.appendChild(tr);
       });
     }
 
-    function renderDashboardStats(){
-      document.getElementById("dailyBookingsStat").textContent = payments.length + 14;
-      document.getElementById("monthlyRevenueStat").textContent = formatMoney(
-        payments.filter(p => p.status === "approved").reduce((sum,p) => sum + p.amount, 0)
-      );
-      document.getElementById("newMembersStat").textContent = members.length + 119;
-      document.getElementById("totalCustomersStat").textContent = (members.length + 2837).toLocaleString();
-    }
+    // Payment Modal
 
-    function openPaymentModal(id){
+    function openPaymentModal(id) {
       modalPaymentId = id;
       const payment = payments.find(p => p.id === id);
-      if(!payment) return;
+      if (!payment) return;
 
-      document.getElementById("paymentTransactionId").textContent = "Transaction ID: #" + payment.id;
-      document.getElementById("modalCustomerName").textContent = payment.customer;
-      document.getElementById("modalService").textContent = payment.service;
-      document.getElementById("modalDate").textContent = payment.date;
-      document.getElementById("modalTxnId").textContent = "TXN-1234567";
-      document.getElementById("modalAmount").textContent = payment.amount.toFixed(2) + "฿";
+      document.getElementById("paymentTransactionId").textContent = "Transaction ID: " + payment.id;
+      document.getElementById("modalCustomerName").textContent = payment.customer || "-";
+      document.getElementById("modalService").textContent = payment.service || "-";
+      document.getElementById("modalDate").textContent = payment.date || "-";
+      document.getElementById("modalTxnId").textContent = payment.id;
+      document.getElementById("modalAmount").textContent = Number(payment.amount || 0).toFixed(2) + "฿";
 
       const slipBox = document.getElementById("modalSlipBox");
-      if(payment.slip){
-        slipBox.innerHTML = `<img src="${payment.slip}" alt="slip">`;
-      }else{
-        slipBox.innerHTML = `ไม่มีสลิป`;
-      }
+      slipBox.innerHTML = payment.slip ? `<img src="${payment.slip}" alt="slip">` : "ไม่มีสลิป";
 
       const statusIcon = document.getElementById("modalStatusIcon");
       statusIcon.className = "status-icon mini " + (payment.status === "approved" ? "status-approved" : "status-rejected");
@@ -1059,49 +1085,43 @@
 
       const modalActionButtons = document.getElementById("modalActionButtons");
       modalActionButtons.innerHTML = "";
-
-      if(payment.status === "approved"){
-        modalActionButtons.innerHTML = `
-          <button class="reject-btn" onclick="rejectPayment(${payment.id})">ⓧ Reject Payment</button>
-        `;
+      if (payment.status === "approved") {
+        modalActionButtons.innerHTML = `<button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">ⓧ Reject Payment</button>`;
       } else {
         modalActionButtons.innerHTML = `
-          <button class="approve-btn" onclick="approvePayment(${payment.id})">ⓒ Approve Payment</button>
-          <button class="reject-btn" onclick="rejectPayment(${payment.id})">ⓧ Reject Payment</button>
-        `;
+          <button class="approve-btn" onclick="updatePaymentStatus('${payment.id}','approved')">ⓒ Approve Payment</button>
+          <button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">ⓧ Reject Payment</button>`;
       }
 
       document.getElementById("paymentModalBackdrop").classList.add("show");
     }
 
-    function closePaymentModal(){
+    function closePaymentModal() {
       document.getElementById("paymentModalBackdrop").classList.remove("show");
     }
 
-    function approvePayment(id){
-      const payment = payments.find(p => p.id === id);
-      if(!payment) return;
-      payment.status = "approved";
-      renderPayments();
-      renderDashboardStats();
-      pushLog(`Approved payment for ${payment.customer} - ฿${payment.amount}`);
-      openPaymentModal(id);
+    async function updatePaymentStatus(id, status) {
+      try {
+        const res = await fetch(`${API_URL}/api/payments/${id}/status`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status, adminName: "Admin User" })
+        });
+        if (!res.ok) throw new Error("Failed");
+        await loadPayments();
+        await loadLogs();
+        await loadDashboardStats();
+        closePaymentModal();
+      } catch (err) {
+        alert("เกิดข้อผิดพลาด: " + err.message);
+      }
     }
 
-    function rejectPayment(id){
-      const payment = payments.find(p => p.id === id);
-      if(!payment) return;
-      payment.status = "rejected";
-      renderPayments();
-      renderDashboardStats();
-      pushLog(`Rejected payment for ${payment.customer} - ฿${payment.amount}`);
-      openPaymentModal(id);
-    }
+    // Member Modal
 
-    function openEditMember(id){
+    function openEditMember(id) {
       const member = members.find(m => m.id === id);
-      if(!member) return;
-
+      if (!member) return;
       editingMemberId = id;
       document.getElementById("editMemberSubtitle").textContent = "Edit profile: " + member.name;
       document.getElementById("editMemberName").value = member.name;
@@ -1110,49 +1130,63 @@
       document.getElementById("memberModalBackdrop").classList.add("show");
     }
 
-    function closeMemberModal(){
+    function closeMemberModal() {
       document.getElementById("memberModalBackdrop").classList.remove("show");
     }
 
-    function saveMemberEdit(){
-      const member = members.find(m => m.id === editingMemberId);
-      if(!member) return;
-
-      member.name = document.getElementById("editMemberName").value.trim();
-      member.phone = document.getElementById("editMemberPhone").value.trim();
-      member.email = document.getElementById("editMemberEmail").value.trim();
-
-      renderMembers();
-      renderDashboardStats();
-      pushLog(`Updated member profile: ${member.name}`);
-      closeMemberModal();
+    async function saveMemberEdit() {
+      try {
+        const name  = document.getElementById("editMemberName").value.trim();
+        const phone = document.getElementById("editMemberPhone").value.trim();
+        const email = document.getElementById("editMemberEmail").value.trim();
+        const res = await fetch(`${API_URL}/api/members/${editingMemberId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, phone, email, adminName: "Admin User" })
+        });
+        if (!res.ok) throw new Error("Failed");
+        await loadMembers();
+        await loadLogs();
+        closeMemberModal();
+      } catch (err) {
+        alert("เกิดข้อผิดพลาด: " + err.message);
+      }
     }
 
-    function deleteMember(id){
-      const index = members.findIndex(m => m.id === id);
-      if(index === -1) return;
-
-      const deleted = members[index];
-      if(!confirm(`ลบสมาชิก ${deleted.name} ?`)) return;
-
-      members.splice(index, 1);
-      renderMembers();
-      renderDashboardStats();
-      pushLog(`Deleted member: ${deleted.name}`);
+    async function deleteMember(id, name) {
+      if (!confirm(`ลบสมาชิก ${name} ?`)) return;
+      try {
+        const res = await fetch(`${API_URL}/api/members/${id}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ adminName: "Admin User" })
+        });
+        if (!res.ok) throw new Error("Failed");
+        await loadMembers();
+        await loadLogs();
+        await loadDashboardStats();
+      } catch (err) {
+        alert("เกิดข้อผิดพลาด: " + err.message);
+      }
     }
+
+
+    // Modal backdrop close
 
     document.getElementById("paymentModalBackdrop").addEventListener("click", (e) => {
-      if(e.target.id === "paymentModalBackdrop") closePaymentModal();
+      if (e.target.id === "paymentModalBackdrop") closePaymentModal();
     });
-
     document.getElementById("memberModalBackdrop").addEventListener("click", (e) => {
-      if(e.target.id === "memberModalBackdrop") closeMemberModal();
+      if (e.target.id === "memberModalBackdrop") closeMemberModal();
     });
 
-    renderPayments();
-    renderMembers();
-    renderLogs();
-    renderDashboardStats();
+
+    // เริ่มโหลดข้อมูลตอนเปิดหน้า
+
+    loadDashboardStats();
+    loadPayments();
+    loadMembers();
+    loadLogs();
   </script>
 </body>
 </html>
