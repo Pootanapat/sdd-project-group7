@@ -1,637 +1,171 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - BarberShop</title>
+  <title>Admin Dashboard | BarberShop</title>
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body{
-      background:#000;
-      color:#fff;
-      overflow:hidden;
-    }
-
-    button,input{
-      font:inherit;
-    }
-
-    .app{
-      display:flex;
-      height:100vh;
-      width:100%;
-    }
-
-    .sidebar{
-      width:230px;
-      background:#000;
-      border-right:1px solid rgba(255,255,255,.45);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-
-    .sidebar-top{
-      padding:18px 0 0;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:12px 18px 24px;
-      border-bottom:1px solid rgba(255,255,255,.45);
-    }
-
-    .brand-box{
-      width:40px;
-      height:40px;
-      border-radius:10px;
-      background:#ff9d00;
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:28px;
-      font-weight:800;
-    }
-
-    .brand-title{
-      font-size:19px;
-      font-weight:800;
-      line-height:1.1;
-    }
-
-    .brand-sub{
-      color:#ff9d00;
-      font-size:14px;
-      margin-top:2px;
-    }
-
-    .nav{
-      padding:12px 8px 0;
-    }
-
-    .nav-item{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      width:100%;
-      border:none;
-      background:transparent;
-      color:#fff;
-      padding:13px 16px;
-      border-radius:3px;
-      font-size:16px;
-      font-weight:700;
-      cursor:pointer;
-      margin-bottom:8px;
-      transition:.2s;
-      text-align:left;
-    }
-
-    .nav-item:hover{
-      background:rgba(255,157,0,.18);
-    }
-
-    .nav-item.active{
-      background:#ff9d00;
-      color:#111;
-    }
-
-    .nav-icon{
-      width:22px;
-      text-align:center;
-      font-size:20px;
-    }
-
-    .sidebar-bottom{
-      border-top:1px solid rgba(255,255,255,.45);
-      min-height:84px;
-    }
-
-    .main{
-      flex:1;
-      overflow:auto;
-      background:#000;
-    }
-
-    .topbar{
-      border-bottom:1px solid rgba(255,255,255,.45);
-      padding:16px 26px 8px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-    }
-
-    .topbar-title{
-      font-size:22px;
-      font-weight:800;
-    }
-
-    .topbar-sub{
-      color:#ff9d00;
-      margin-top:4px;
-      font-size:14px;
-    }
-
-    .topbar-right{
-      display:flex;
-      align-items:center;
-      gap:20px;
-    }
-
-    .bell{
-      position:relative;
-      width:28px;
-      height:28px;
-      border-radius:50%;
-      background:#2c2c2c;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:16px;
-    }
-
-    .bell::after{
-      content:'1';
-      position:absolute;
-      top:-4px;
-      right:-4px;
-      width:14px;
-      height:14px;
-      border-radius:50%;
-      background:#ff5a4f;
-      color:#fff;
-      font-size:10px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .admin-box{
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-      border-left:1px solid rgba(255,255,255,.25);
-      padding-left:18px;
-    }
-
-    .avatar{
-      width:34px;
-      height:34px;
-      border-radius:50%;
-      background:#ff9d00;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      font-size:20px;
-    }
-
-    .admin-name{
-      font-size:16px;
-      font-weight:700;
-      line-height:1.2;
-      margin-top:3px;
-    }
-
-    .admin-role{
-      font-size:12px;
-      color:#d0d0d0;
-      margin-top:2px;
-    }
-
-    .content{
-      padding:22px 26px 30px;
-    }
-
-    .page{
-      display:none;
-    }
-
-    .page.active{
-      display:block;
-    }
-
-    .page-title{
-      font-size:30px;
-      font-weight:800;
-      margin-bottom:10px;
-    }
-
-    .page-sub{
-      color:#ff9d00;
-      font-size:14px;
-      margin-bottom:30px;
-    }
-
-    .stats-grid{
-      display:grid;
-      grid-template-columns:repeat(2, minmax(240px, 1fr));
-      gap:42px 70px;
-      max-width:560px;
-      margin:0 auto 14px;
-    }
-
-    .stat-card{
-      background:linear-gradient(90deg,#1a1a1a,#232323);
-      border:1px solid rgba(255,255,255,.55);
-      border-radius:6px;
-      padding:18px 16px 14px;
-      min-height:170px;
-      position:relative;
-    }
-
-    .stat-growth{
-      position:absolute;
-      top:12px;
-      right:10px;
-      color:#39e246;
-      font-weight:700;
-      font-size:14px;
-    }
-
-    .stat-icon{
-      width:52px;
-      height:52px;
-      border-radius:12px;
-      background:#a95e38;
-      color:#ff7f3a;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:28px;
-      margin-bottom:10px;
-    }
-
-    .stat-label{
-      font-size:20px;
-      font-weight:700;
-      line-height:1.25;
-      margin-bottom:8px;
-    }
-
-    .stat-value{
-      color:#ff9d00;
-      font-size:42px;
-      font-weight:800;
-      text-align:center;
-      margin-top:4px;
-    }
-
-    .chart-card{
-      margin:12px auto 0;
-      max-width:500px;
-      background:linear-gradient(90deg,#1a1a1a,#232323);
-      border:1px solid rgba(255,255,255,.15);
-      border-radius:6px;
-      padding:14px 14px 8px;
-    }
-
-    .chart-head{
-      font-size:14px;
-      font-weight:700;
-      margin-bottom:2px;
-    }
-
-    .chart-sub{
-      color:#999;
-      font-size:10px;
-      margin-bottom:8px;
-    }
-
-    .chart-svg{
-      width:100%;
-      height:165px;
-      display:block;
-      background:rgba(255,255,255,.02);
-      border-radius:4px;
-    }
-
-    .table-card{
-      background:linear-gradient(90deg,#1a1a1a,#232323);
-      border:1px solid rgba(255,255,255,.55);
-      border-radius:22px;
-      overflow:hidden;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-    }
-
-    th,td{
-      padding:16px 14px;
-      text-align:left;
-      border-bottom:1px solid rgba(255,255,255,.45);
-      font-size:14px;
-      vertical-align:middle;
-    }
-
-    th{
-      color:#bdbdbd;
-      font-weight:700;
-      background:rgba(255,255,255,.02);
-    }
-
-    tr:last-child td{
-      border-bottom:none;
-    }
-
-    .action-pill{
-      border:none;
-      border-radius:20px;
-      padding:6px 14px;
-      background:#9d9d9d;
-      color:#fff;
-      cursor:pointer;
-      font-weight:600;
-    }
-
-    .status-icon{
-      width:30px;
-      height:30px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:18px;
-      font-weight:800;
-      color:#fff;
-      margin:auto;
-    }
-
-    .status-approved{
-      background:#50d96d;
-    }
-
-    .status-rejected{
-      background:#f4534b;
-    }
-
-    .danger-big{
-      width:56px;
-      height:56px;
-      font-size:28px;
-    }
-
-    .member-badge{
-      width:32px;
-      height:32px;
-      border-radius:50%;
-      background:#ff9d00;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      margin-right:12px;
-      vertical-align:middle;
-    }
-
-    .action-inline{
-      display:flex;
-      gap:12px;
-    }
-
-    .icon-btn{
-      width:30px;
-      height:30px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:16px;
-      background:#8e8e8e;
-      color:#fff;
-    }
-
-    .icon-btn.delete{
-      background:#f4534b;
-    }
-
-    .logs-name{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-weight:700;
-    }
-
-    .modal-backdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.58);
-      backdrop-filter:blur(4px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      z-index:999;
-    }
-
-    .modal-backdrop.show{
-      display:flex;
-    }
-
-    .modal{
-      width:min(100%, 460px);
-      background:#666;
-      border-radius:20px;
-      color:#fff;
-      box-shadow:0 20px 50px rgba(0,0,0,.4);
-      overflow:hidden;
-    }
-
-    .modal-head{
-      padding:22px 18px 10px;
-      position:relative;
-    }
-
-    .modal-title{
-      font-size:28px;
-      font-weight:800;
-      line-height:1.1;
-    }
-
-    .modal-sub{
-      color:#ff9d00;
-      margin-top:6px;
-      font-size:14px;
-    }
-
-    .close-btn{
-      position:absolute;
-      right:18px;
-      top:18px;
-      width:28px;
-      height:28px;
-      border:none;
-      border-radius:6px;
-      background:#8c8c8c;
-      color:#ff5b21;
-      font-size:18px;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    .modal-body{
-      padding:0 18px 18px;
-      border-top:1px solid rgba(255,255,255,.45);
-    }
-
-    .detail-row{
-      display:flex;
-      justify-content:space-between;
-      gap:20px;
-      padding:16px 0 12px;
-      border-bottom:1px solid rgba(255,255,255,.22);
-      font-size:14px;
-    }
-
-    .detail-row span:first-child{
-      font-weight:700;
-    }
-
-    .amount-box{
-      margin:22px 0 14px;
-      background:#aaa;
-      border-radius:12px;
-      padding:10px 14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:18px;
-      font-weight:800;
-      color:#fff;
-    }
-
-    .amount-box .amount{
-      color:#ff8f00;
-      font-size:22px;
-    }
-
-    .modal-bottom{
-      display:grid;
-      grid-template-columns:170px 1fr;
-      gap:16px;
-      align-items:start;
-      margin-top:8px;
-    }
-
-    .slip-box{
-      width:170px;
-      height:190px;
-      background:#d7d7d7;
-      border-radius:8px;
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#444;
-      font-size:14px;
-      text-align:center;
-    }
-
-    .slip-box img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .status-wrap{
-      padding-top:8px;
-    }
-
-    .status-line{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      color:#ff9d00;
-      font-size:20px;
-      font-weight:800;
-      margin-bottom:16px;
-    }
-
-    .status-line .mini{
-      width:28px;
-      height:28px;
-      font-size:18px;
-    }
-
-    .modal-actions{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .approve-btn,
-    .reject-btn{
-      border:none;
-      border-radius:20px;
-      height:30px;
-      padding:0 14px;
-      cursor:pointer;
-      font-weight:700;
-      width:fit-content;
-    }
-
-    .approve-btn{
-      background:#ff9d00;
-      color:#fff;
-    }
-
-    .reject-btn{
-      background:transparent;
-      color:#ff5b21;
-      border:1px solid #ff5b21;
-    }
-
-    .edit-form{
-      display:grid;
-      gap:12px;
-    }
-
-    .edit-form input{
-      width:100%;
-      height:42px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.35);
-      background:#4d4d4d;
-      color:#fff;
-      padding:0 12px;
-      outline:none;
-    }
-
-    .edit-save{
-      margin-top:8px;
-      width:100%;
-      height:42px;
-      border:none;
-      border-radius:12px;
-      background:#ff9d00;
-      color:#111;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    @media (max-width: 1000px){
-      body{
-        overflow:auto;
-      }
-
-      .app{
-        min-width:1100px;
-      }
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans', sans-serif; }
+    body { background: #000000; color: #ffffff; overflow: hidden; }
+    button, input, textarea { font: inherit; }
+    
+    .app { display: flex; height: 100vh; width: 100%; }
+    
+    /* SIDEBAR */
+    .sidebar { width: 260px; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(16px); border-right: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 100; }
+    .sidebar::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 157, 0, 0.3), transparent); }
+    .sidebar-top { padding: 24px 0 0; }
+    .brand { display: flex; align-items: center; gap: 14px; padding: 0 24px 32px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 12px; }
+    .brand-box { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #ff9d00, #e68a00); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; box-shadow: 0 4px 15px rgba(255, 157, 0, 0.35); }
+    .brand-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; line-height: 1.1; }
+    .brand-sub { color: #ff9d00; font-size: 13px; font-weight: 500; margin-top:2px; }
+    
+    .nav { padding: 0 16px; display: flex; flex-direction: column; gap: 4px; }
+    .nav-item { display: flex; align-items: center; gap: 14px; width: 100%; border: none; background: transparent; color: #a1a1aa; padding: 14px 18px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); text-align: left; }
+    .nav-item:hover { background: rgba(255, 157, 0, 0.1); color: #ffffff; transform: translateX(4px); }
+    .nav-item.active { background: linear-gradient(90deg, rgba(255, 157, 0, 0.15), rgba(255, 157, 0, 0.02)); color: #ff9d00; position: relative; }
+    .nav-item.active::before { content: ""; position: absolute; left: -16px; top: 15%; height: 70%; width: 4px; border-radius: 0 4px 4px 0; background: #ff9d00; box-shadow: 0 0 10px rgba(255, 157, 0, 0.5); }
+    .nav-icon { width: 22px; text-align: center; font-size: 20px; opacity: 0.9; }
+    
+    .sidebar-bottom { border-top: 1px solid rgba(255, 255, 255, 0.05); min-height: 84px; display: flex; align-items: center; padding: 0 24px; color: #64748b; font-size: 12px; }
+    
+    /* MAIN AREA */
+    .main { flex: 1; overflow: auto; background: #080808; position: relative; }
+    .main::before { content: ""; position: fixed; top: -150px; right: -150px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 157, 0, 0.05) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+    .main::after { content: ""; position: fixed; bottom: -200px; left: 150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 157, 0, 0.03) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+    
+    .topbar { border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 5, 0.6); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; }
+    .topbar-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .topbar-sub { color: #ff9d00; margin-top: 4px; font-size: 14px; font-weight: 500; }
+    
+    .topbar-right { display: flex; align-items: center; gap: 24px; }
+    .bell { position: relative; width: 40px; height: 40px; border-radius: 12px; background: rgba(30, 30, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s; }
+    .bell:hover { background: rgba(255, 157, 0, 0.1); color: #ff9d00; }
+    .bell::after { content: '2'; position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; border-radius: 50%; background: #ef4444; color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+    
+    .admin-box { display: flex; align-items: center; gap: 14px; border-left: 1px solid rgba(255, 255, 255, 0.1); padding-left: 24px; cursor: pointer; transition: 0.2s; }
+    .admin-box:hover { opacity: 0.8; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #ff9d00, #e68a00); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3); }
+    .admin-name { font-size: 15px; font-weight: 700; color: #ffffff; line-height: 1.2; }
+    .admin-role { font-size: 12px; color: #a1a1aa; font-weight: 600; margin-top: 2px; }
+    
+    .content { padding: 32px; position: relative; z-index: 10; max-width: 1400px; margin: 0 auto; }
+    .page { display: none; margin-top: 10px; opacity: 0; transform: translateY(15px); }
+    .page.active { display: block; animation: smoothReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes smoothReveal { to { opacity: 1; transform: translateY(0); } }
+    
+    .page-title { font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .page-sub { color: #a1a1aa; font-size: 15px; margin-bottom: 32px; }
+    
+    /* STATS GRID */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; max-width: 100%; }
+    .stat-card { background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 24px; position: relative; overflow: hidden; backdrop-filter: blur(12px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s; }
+    .stat-card:hover { transform: translateY(-6px); border-color: rgba(255, 157, 0, 0.3); }
+    .stat-card::before { content: ""; position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; border-radius: 50%; opacity: 0.15; filter: blur(25px); transition: 0.3s; }
+    .stat-card:hover::before { opacity: 0.25; transform: scale(1.2); }
+    .stat-card:nth-child(1)::before, .stat-card:nth-child(2)::before, .stat-card:nth-child(3)::before, .stat-card:nth-child(4)::before { background: #ff9d00; }
+    
+    .stat-growth { position: absolute; top: 24px; right: 24px; color: #10b981; font-weight: 700; font-size: 13px; background: rgba(16, 185, 129, 0.15); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
+    .stat-growth::before { content: "▲"; font-size: 10px; }
+    
+    .stat-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; background: rgba(255, 157, 0, 0.15); color: #ff9d00; border: 1px solid rgba(255, 157, 0, 0.2); }
+    
+    .stat-label { font-size: 15px; font-weight: 600; color: #a1a1aa; margin-bottom: 6px; }
+    .stat-value { color: #ff9d00; font-size: 38px; font-weight: 800; letter-spacing: -1px; display: flex; align-items: baseline; gap: 4px; }
+    
+    /* DASHBOARD LAYOUT */
+    .dashboard-main-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 24px; }
+    .dashboard-side { display: flex; flex-direction: column; gap: 24px; }
+    
+    .dashboard-widget, .chart-card { background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 28px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+    .chart-card { display: flex; flex-direction: column; min-height: 420px; }
+    .chart-card.wide-card { max-width: 100%; margin: 0; }
+    .widget-head, .chart-head { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: #ffffff; display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.3px; }
+    .chart-sub { color: #a1a1aa; font-size: 14px; margin-bottom: 24px; }
+    .chart-svg { width: 100%; height: 260px; margin-top: auto; overflow: visible; display:block; }
+    
+    /* WIDGET ITEMS */
+    .widget-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.2s; }
+    .widget-item:hover { background: rgba(255,255,255,0.03); padding: 16px 12px; margin: 0 -12px; border-radius: 12px; border-bottom-color: transparent; }
+    .widget-item:last-child { border-bottom: none; }
+    .widget-left { display: flex; flex-direction: column; gap: 4px; }
+    .widget-title { font-weight: 700; color: #ffffff; font-size: 15px; }
+    .widget-sub { color: #a1a1aa; font-size: 13px; font-weight: 500; }
+    .widget-val { font-weight: 800; color: #ff9d00; font-size: 16px; margin-bottom: 4px; }
+    .widget-badge { padding: 6px 12px; border-radius: 20px; background: rgba(255, 157, 0, 0.1); color: #ff9d00; font-size: 12px; font-weight: 800; border: 1px solid rgba(255, 157, 0, 0.2); }
+    
+    /* TABLES AREA */
+    .table-card { background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 28px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); overflow-x: auto; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    th { padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    td { padding: 22px 16px; text-align: left; font-size: 15px; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.02); vertical-align: middle; color: #e4e4e7; }
+    td strong { color: #ffffff; font-weight: 700; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    
+    .action-pill { border: none; border-radius: 10px; padding: 10px 18px; background: rgba(255, 157, 0, 0.15); color: #ff9d00; cursor: pointer; font-weight: 700; font-size: 13px; transition: all 0.2s; white-space: nowrap; }
+    .action-pill:hover { background: #ff9d00; color: #111; box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3); transform: translateY(-2px); }
+    .action-pill.delete { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    .action-pill.delete:hover { background: #ef4444; color: #fff; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+    
+    .status-icon { width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; margin: auto; }
+    .status-approved { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .status-rejected { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+    
+    .member-badge { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, #ff9d00, #e68a00); display: inline-flex; align-items: center; justify-content: center; font-weight: 800; margin-right: 14px; font-size: 16px; color: #fff; box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3); }
+    .action-inline { display: flex; gap: 8px; }
+    .icon-btn { width: 38px; height: 38px; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; background: rgba(255, 255, 255, 0.05); color: #a1a1aa; transition: 0.2s; }
+    .icon-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-2px); }
+    .icon-btn.delete:hover { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    
+    .logs-name { display: flex; align-items: center; font-weight: 700; color: #ffffff; }
+    .dashboard-stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; width: 100%; }
+    
+    /* MODALS */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(16px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+    .modal-backdrop.show { display: flex; opacity: 1; }
+    .modal { width: min(100%, 540px); background: #111111; border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; color: #ffffff; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; }
+    .modal-backdrop.show .modal { transform: translateY(0) scale(1); }
+    .modal-head { padding: 32px 32px 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .modal-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .modal-sub { color: #a1a1aa; margin-top: 6px; font-size: 14px; font-weight: 500; }
+    .close-btn { position: absolute; right: 28px; top: 28px; width: 36px; height: 36px; border: none; border-radius: 12px; background: rgba(255,255,255,0.05); color: #a1a1aa; font-size: 16px; cursor: pointer; transition: 0.2s; }
+    .close-btn:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; transform: rotate(90deg); }
+    
+    .modal-body { padding: 32px; }
+    .detail-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 15px; }
+    .detail-row span:first-child { color: #a1a1aa; font-weight: 600; }
+    .detail-row span:last-child { font-weight: 700; color: #ffffff; }
+    
+    .amount-box { margin: 24px 0; background: rgba(255, 157, 0, 0.05); border: 1px solid rgba(255, 157, 0, 0.15); border-radius: 16px; padding: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 700; }
+    .amount-box .amount { color: #ff9d00; font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+    
+    .modal-bottom { display: grid; grid-template-columns: 180px 1fr; gap: 24px; margin-top: 24px; }
+    .slip-box { width: 100%; aspect-ratio: 3/4; background: rgba(0,0,0,0.6); border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+    .slip-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+    .slip-box:hover img { transform: scale(1.05); }
+    
+    .status-line { display: flex; align-items: center; gap: 12px; color: #ffffff; font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+    .status-line .mini { width: 32px; height: 32px; font-size: 14px; }
+    
+    .modal-actions { display: flex; flex-direction: column; gap: 12px; }
+    .approve-btn, .reject-btn { border: none; border-radius: 14px; height: 48px; padding: 0 20px; cursor: pointer; font-weight: 700; font-size: 15px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; }
+    .approve-btn { background: #ff9d00; color: #111; box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3); }
+    .approve-btn:hover { background: #e68a00; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 157, 0, 0.4); }
+    .reject-btn { background: transparent; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .reject-btn:hover { background: rgba(239, 68, 68, 0.1); transform: translateY(-2px); }
+    
+    .edit-form { display: grid; gap: 20px; }
+    .edit-form label { font-size: 13px; font-weight: 700; color: #a1a1aa; margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .edit-form input, .edit-form textarea { width: 100%; height: 52px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #ffffff; padding: 0 16px; outline: none; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); font-size: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+    .edit-form textarea { height: 120px; padding: 16px; resize: none; }
+    .edit-form input:focus, .edit-form textarea:focus { border-color: #ff9d00; background: rgba(255, 157, 0, 0.05); box-shadow: 0 0 0 4px rgba(255, 157, 0, 0.1); }
+    .edit-save { margin-top: 12px; width: 100%; height: 52px; border: none; border-radius: 14px; background: #ff9d00; color: #111; font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(255, 157, 0, 0.3); }
+    .edit-save:hover { background: #e68a00; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 157, 0, 0.4); }
+    
+    @media (max-width: 1000px){ body{ overflow:auto; } .app{ min-width:1100px; } }
   </style>
 </head>
 <body>
@@ -651,17 +185,45 @@
             <span class="nav-icon">▦</span>
             <span>Dashboard</span>
           </button>
+          <button class="nav-item" data-page="appointments">
+            <span class="nav-icon">📅</span>
+            <span>Appointments</span>
+          </button>
           <button class="nav-item" data-page="payment">
             <span class="nav-icon">💸</span>
-            <span>Payment</span>
+            <span>Finance</span>
+          </button>
+          <button class="nav-item" data-page="services">
+            <span class="nav-icon">✂️</span>
+            <span>Services</span>
+          </button>
+          <button class="nav-item" data-page="staff">
+            <span class="nav-icon">💈</span>
+            <span>Staff</span>
           </button>
           <button class="nav-item" data-page="members">
             <span class="nav-icon">👤</span>
-            <span>Members</span>
+            <span>Customers</span>
+          </button>
+          <button class="nav-item" data-page="promotions">
+            <span class="nav-icon">🏷️</span>
+            <span>Promotions</span>
+          </button>
+          <button class="nav-item" data-page="reports">
+            <span class="nav-icon">📊</span>
+            <span>Reports</span>
           </button>
           <button class="nav-item" data-page="logs">
             <span class="nav-icon">📄</span>
-            <span>Logs</span>
+            <span>System Logs</span>
+          </button>
+          <button class="nav-item" data-page="settings">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+          </button>
+          <button class="nav-item" data-page="alerts">
+            <span class="nav-icon">🔔</span>
+            <span>Alerts</span>
           </button>
         </div>
       </div>
@@ -672,7 +234,7 @@
       <div class="topbar">
         <div>
           <div class="topbar-title">Admin Dashboard</div>
-          <div class="topbar-sub">Welcome back,Admin</div>
+          <div class="topbar-sub">Welcome back, Admin</div>
         </div>
 
         <div class="topbar-right">
@@ -691,7 +253,7 @@
         <!-- DASHBOARD -->
         <section class="page active" id="dashboard-page">
           <div class="page-title">Dashboard Overview</div>
-          <div class="page-sub">Welcome back! Here's what's happening with your barbershop today.</div>
+          <div class="page-sub">Performance summary for today</div>
 
           <div class="stats-grid">
             <div class="stat-card">
@@ -703,7 +265,7 @@
 
             <div class="stat-card">
               <div class="stat-growth">+8.2%</div>
-              <div class="stat-icon">฿</div>
+              <div class="stat-icon">$</div>
               <div class="stat-label">Monthly Revenue</div>
               <div class="stat-value" id="monthlyRevenueStat">฿18,420</div>
             </div>
@@ -723,53 +285,60 @@
             </div>
           </div>
 
-          <div class="chart-card">
-            <div class="chart-head">Booking Trends</div>
-            <div class="chart-sub">Weekly overview of bookings and revenue performance</div>
-            <svg class="chart-svg" viewBox="0 0 500 165">
-              <line x1="40" y1="140" x2="470" y2="140" stroke="#666" />
-              <line x1="40" y1="20" x2="40" y2="140" stroke="#666" />
-              <line x1="140" y1="20" x2="140" y2="140" stroke="#222" />
-              <line x1="240" y1="20" x2="240" y2="140" stroke="#222" />
-              <line x1="340" y1="20" x2="340" y2="140" stroke="#222" />
-              <line x1="440" y1="20" x2="440" y2="140" stroke="#222" />
+          <div class="dashboard-main-grid">
+            <div class="chart-card wide-card">
+              <div class="chart-head">Growth Trends</div>
+              <div class="chart-sub">Weekly overview of bookings and revenue</div>
+              <svg class="chart-svg" viewBox="0 0 500 165" preserveAspectRatio="none">
+                <line x1="40" y1="140" x2="470" y2="140" stroke="#444" stroke-width="1.5" />
+                <line x1="40" y1="20" x2="40" y2="140" stroke="#444" stroke-width="1.5" />
+                
+                <line x1="118" y1="20" x2="118" y2="140" stroke="#222" />
+                <line x1="186" y1="20" x2="186" y2="140" stroke="#222" />
+                <line x1="254" y1="20" x2="254" y2="140" stroke="#222" />
+                <line x1="322" y1="20" x2="322" y2="140" stroke="#222" />
+                <line x1="390" y1="20" x2="390" y2="140" stroke="#222" />
+                <line x1="458" y1="20" x2="458" y2="140" stroke="#222" />
 
-              <polyline fill="none" stroke="#f36b2d" stroke-width="2.5"
-                points="50,95 110,72 170,84 240,57 310,42 380,28 450,78"/>
-              <polyline fill="none" stroke="#53d465" stroke-width="2.5"
-                points="50,90 110,68 170,80 240,50 310,35 380,20 450,74"/>
+                <g id="dynamicChartGroup"></g>
+                <text x="40" y="155" fill="#aaa" font-size="10">Mon</text>
+                <text x="108" y="155" fill="#aaa" font-size="10">Tue</text>
+                <text x="176" y="155" fill="#aaa" font-size="10">Wed</text>
+                <text x="244" y="155" fill="#aaa" font-size="10">Thu</text>
+                <text x="312" y="155" fill="#aaa" font-size="10">Fri</text>
+                <text x="380" y="155" fill="#aaa" font-size="10">Sat</text>
+                <text x="448" y="155" fill="#aaa" font-size="10">Sun</text>
+              </svg>
+            </div>
 
-              <circle cx="50" cy="95" r="4" fill="#f36b2d"/>
-              <circle cx="110" cy="72" r="4" fill="#f36b2d"/>
-              <circle cx="170" cy="84" r="4" fill="#f36b2d"/>
-              <circle cx="240" cy="57" r="4" fill="#f36b2d"/>
-              <circle cx="310" cy="42" r="4" fill="#f36b2d"/>
-              <circle cx="380" cy="28" r="4" fill="#f36b2d"/>
-              <circle cx="450" cy="78" r="4" fill="#f36b2d"/>
-
-              <circle cx="50" cy="90" r="4" fill="#53d465"/>
-              <circle cx="110" cy="68" r="4" fill="#53d465"/>
-              <circle cx="170" cy="80" r="4" fill="#53d465"/>
-              <circle cx="240" cy="50" r="4" fill="#53d465"/>
-              <circle cx="310" cy="35" r="4" fill="#53d465"/>
-              <circle cx="380" cy="20" r="4" fill="#53d465"/>
-              <circle cx="450" cy="74" r="4" fill="#53d465"/>
-
-              <text x="45" y="155" fill="#aaa" font-size="10">Mon</text>
-              <text x="105" y="155" fill="#aaa" font-size="10">Tue</text>
-              <text x="165" y="155" fill="#aaa" font-size="10">Wed</text>
-              <text x="235" y="155" fill="#aaa" font-size="10">Thu</text>
-              <text x="305" y="155" fill="#aaa" font-size="10">Fri</text>
-              <text x="375" y="155" fill="#aaa" font-size="10">Sat</text>
-              <text x="445" y="155" fill="#aaa" font-size="10">Sun</text>
-            </svg>
+            <div class="dashboard-side">
+              <div class="dashboard-widget">
+                <div class="widget-head">
+                  Top Performers
+                  <span style="font-size:12px;color:#888;font-weight:500;">By number of bookings</span>
+                </div>
+                <div id="barberStatsContainer" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                  <div style="color:#666;text-align:center;font-size:13px;">Loading data...</div>
+                </div>
+              </div>
+              
+              <div class="dashboard-widget">
+                <div class="widget-head">
+                  Recent Transactions
+                  <span style="font-size:12px;color:#888;font-weight:500;">Live Updates</span>
+                </div>
+                <div id="recentTransactionsContainer">
+                   <div style="color:#666;text-align:center;font-size:13px;padding:20px 0;">Loading data...</div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <!-- PAYMENTS -->
         <section class="page" id="payment-page">
-          <div class="page-title">Manage Payments</div>
-          <div class="page-sub">Review and manage transaction history</div>
+          <div class="page-title">Financial Overview</div>
+          <div class="page-sub">Review and manage transaction histories</div>
 
           <div class="table-card">
             <table>
@@ -777,7 +346,9 @@
                 <tr>
                   <th>Customer Name</th>
                   <th>Service</th>
-                  <th>Date</th>
+                  <th>Barber</th>
+                  <th>Reserved Time</th>
+                  <th>Transaction Date</th>
                   <th>Amount</th>
                   <th>Actions</th>
                   <th style="text-align:center;">Status</th>
@@ -790,15 +361,15 @@
 
         <!-- MEMBERS -->
         <section class="page" id="members-page">
-          <div class="page-title">Manage Members</div>
-          <div class="page-sub">View and manage customer profiles</div>
+          <div class="page-title">Customer Database</div>
+          <div class="page-sub">View and manage registered customer profiles</div>
 
           <div class="table-card">
             <table>
               <thead>
                 <tr>
-                  <th>Member</th>
-                  <th>Phone</th>
+                  <th>Customer Name</th>
+                  <th>Contact Profile</th>
                   <th>Email</th>
                   <th>Actions</th>
                 </tr>
@@ -808,9 +379,10 @@
           </div>
         </section>
 
+
         <!-- LOGS -->
         <section class="page" id="logs-page">
-          <div class="page-title">Activity Logs</div>
+          <div class="page-title">System Logs</div>
           <div class="page-sub">Monitor all administrative actions and system events</div>
 
           <div class="table-card">
@@ -826,6 +398,180 @@
             </table>
           </div>
         </section>
+
+        <!-- APPOINTMENTS -->
+        <section class="page" id="appointments-page">
+          <div class="page-title">Active Appointments</div>
+          <div class="page-sub">Manage queues, bookings, and monitor today's status</div>
+          <div class="table-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:15px">
+              <h3 style="color:#fff;" id="appointmentsDateTitle">Active Queue</h3>
+              <button class="action-pill" style="background:#50d96d;color:#111;font-weight:700;">+ New Booking</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date / Time</th><th>Customer</th><th>Service</th><th>Barber</th><th>Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="page" id="services-page">
+          <div class="page-title">Services & Pricing</div>
+          <div class="page-sub">Define salon services, durations, and base prices</div>
+          <div class="table-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:15px">
+               <h3 style="color:#fff;">Menu Items</h3>
+               <button class="action-pill" onclick="addService()" style="background:#f36b2d;color:#111;font-weight:700;">+ Add Service</button>
+            </div>
+            <table>
+              <thead><tr><th>Service Name</th><th>Duration (Mins)</th><th>Price (THB)</th><th>Actions</th></tr></thead>
+              <tbody id="servicesTableBody">
+                <tr><td colspan="4" style="text-align:center;color:#888;">Loading Services...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- STAFF -->
+        <section class="page" id="staff-page">
+          <div class="page-title">Staff Management</div>
+          <div class="page-sub">Manage schedules, working hours, and staff availability</div>
+          <div class="dashboard-stats-row" id="staffCardsContainer">
+            <div style="color:#888;">Loading Staff...</div>
+          </div>
+        </section>
+
+        <!-- PROMOTIONS -->
+        <section class="page" id="promotions-page">
+          <div class="page-title">Promotions & Campaigns</div>
+          <div class="page-sub">Manage coupon codes, seasonal discounts, and loyalty programs</div>
+          <div class="table-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:15px">
+               <h3 style="color:#fff;">Active Codes</h3>
+               <button class="action-pill" onclick="addPromotion()" style="background:#53d465;color:#111;font-weight:700;">+ Create Coupon</button>
+            </div>
+            <table>
+              <thead><tr><th>Code</th><th>Discount</th><th>Usage Limit</th><th>Valid Until</th><th>Status</th></tr></thead>
+              <tbody id="promotionsTableBody">
+                 <tr><td colspan="5" style="text-align:center;color:#888;">Loading Promotions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section class="page" id="reports-page">
+          <div class="page-title">Analytics & Reports</div>
+          <div class="page-sub">In-depth breakdown of transactions, revenue trends, and system metrics</div>
+          
+          <div class="stats-grid" style="margin-bottom:24px;">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(255,157,0,0.1);color:#ff9d00;">💳</div>
+              <div class="stat-label">Total Transactions</div>
+              <div class="stat-value" id="reportsTotalTxn">Loading...</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(16,185,129,0.1);color:#10b981;">🎯</div>
+              <div class="stat-label">Completion Rate</div>
+              <div class="stat-value">94<span style="font-size:18px;">%</span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-growth" style="color:#ef4444;background:rgba(239,68,68,0.1);">▼ 2.1%</div>
+              <div class="stat-icon" style="background:rgba(239,68,68,0.1);color:#ef4444;">⏱</div>
+              <div class="stat-label">Avg. Service Time</div>
+              <div class="stat-value">45<span style="font-size:18px;">m</span></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:rgba(168,85,247,0.1);color:#a855f7;">🌐</div>
+              <div class="stat-label">System Uptime</div>
+              <div class="stat-value">99.9<span style="font-size:18px;">%</span></div>
+            </div>
+          </div>
+
+          <div class="dashboard-main-grid">
+            <div class="dashboard-widget" style="flex:2">
+              <div class="widget-head">Weekly Revenue Analytics</div>
+              <div class="chart-container" style="height:300px;position:relative;margin-top:20px;">
+                <svg viewBox="0 0 500 165" style="width:100%; height:100%;" preserveAspectRatio="none">
+                  <!-- Grid base -->
+                  <line x1="40" y1="140" x2="470" y2="140" stroke="#444" stroke-width="1.5" />
+                  <line x1="40" y1="20" x2="40" y2="140" stroke="#444" stroke-width="1.5" />
+                  <line x1="118" y1="20" x2="118" y2="140" stroke="#222" />
+                  <line x1="186" y1="20" x2="186" y2="140" stroke="#222" />
+                  <line x1="254" y1="20" x2="254" y2="140" stroke="#222" />
+                  <line x1="322" y1="20" x2="322" y2="140" stroke="#222" />
+                  <line x1="390" y1="20" x2="390" y2="140" stroke="#222" />
+                  <line x1="458" y1="20" x2="458" y2="140" stroke="#222" />
+                  <text x="40" y="155" fill="#aaa" font-size="10">Mon</text>
+                  <text x="108" y="155" fill="#aaa" font-size="10">Tue</text>
+                  <text x="176" y="155" fill="#aaa" font-size="10">Wed</text>
+                  <text x="244" y="155" fill="#aaa" font-size="10">Thu</text>
+                  <text x="312" y="155" fill="#aaa" font-size="10">Fri</text>
+                  <text x="380" y="155" fill="#aaa" font-size="10">Sat</text>
+                  <text x="448" y="155" fill="#aaa" font-size="10">Sun</text>
+                  <g id="reportsChartGroup"></g>
+                </svg>
+              </div>
+            </div>
+            
+            <div class="dashboard-side">
+              <div class="dashboard-widget">
+                 <div class="widget-head">Server Status</div>
+                 <div style="color:#888;text-align:center;padding:20px 0;">
+                   <div style="width:100px;height:100px;border-radius:50%;border:4px solid #10b981;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 20px rgba(16,185,129,0.2);">
+                     <span style="font-size:24px;font-weight:800;color:#10b981;">ON</span>
+                   </div>
+                   <div style="font-size:18px;color:#fff;font-weight:700;margin-bottom:8px;">Database Connected</div>
+                   <div>Latency: <span style="color:#10b981;font-weight:700;">14ms</span></div>
+                   <div style="margin-top:6px;">Queries: <span id="reportsQueriesStat" style="color:#ff9d00;font-weight:700;">...</span> / sec</div>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="page" id="settings-page">
+          <div class="page-title">System Settings</div>
+          <div class="page-sub">Configure organizational details, contacts, and privileges</div>
+          <div class="table-card" style="max-width:600px;">
+             <form class="edit-form" style="display:flex; flex-direction:column; gap:15px;">
+                <div>
+                   <label style="display:block;margin-bottom:5px;color:#aaa">Shop Name</label>
+                   <input type="text" id="settingShopName" value="Loading..." class="search-box" style="width:100%">
+                </div>
+                <div>
+                   <label style="display:block;margin-bottom:5px;color:#aaa">Contact Phone</label>
+                   <input type="text" id="settingShopPhone" value="Loading..." class="search-box" style="width:100%">
+                </div>
+                <div>
+                   <label style="display:block;margin-bottom:5px;color:#aaa">Shop Address</label>
+                   <textarea id="settingShopAddress" class="search-box" style="width:100%; height:80px; resize:none; padding:10px;">Loading...</textarea>
+                </div>
+                <div>
+                   <button type="button" onclick="saveSettings()" class="action-pill" style="background:#fff; color:#000; padding:10px 20px; font-weight:700;">Save Settings</button>
+                </div>
+             </form>
+          </div>
+        </section>
+
+        <!-- ALERTS -->
+        <section class="page" id="alerts-page">
+          <div class="page-title">Notifications & Alerts</div>
+          <div class="page-sub">System generated alerts for appointments and operations</div>
+          <div class="dashboard-side" style="max-width:800px;">
+             <div class="dashboard-widget" id="alertsContainer">
+                <div style="color:#888;text-align:center;">Loading alerts...</div>
+             </div>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
@@ -842,7 +588,9 @@
       <div class="modal-body">
         <div class="detail-row"><span>Customer Name</span><span id="modalCustomerName"></span></div>
         <div class="detail-row"><span>Service</span><span id="modalService"></span></div>
-        <div class="detail-row"><span>Date</span><span id="modalDate"></span></div>
+        <div class="detail-row"><span>Barber</span><span id="modalBarber"></span></div>
+        <div class="detail-row"><span>Reserved Time</span><span id="modalReservedTime"></span></div>
+        <div class="detail-row"><span>Upload Date</span><span id="modalDate"></span></div>
         <div class="detail-row"><span>Payment Method</span><span>QR Code</span></div>
         <div class="detail-row"><span>ID</span><span id="modalTxnId"></span></div>
 
@@ -852,7 +600,7 @@
         </div>
 
         <div class="modal-bottom">
-          <div class="slip-box" id="modalSlipBox">ไม่มีสลิป</div>
+          <div class="slip-box" id="modalSlipBox">Loading slip...</div>
 
           <div class="status-wrap">
             <div class="status-line">
@@ -871,258 +619,742 @@
   <div class="modal-backdrop" id="memberModalBackdrop">
     <div class="modal">
       <div class="modal-head">
-        <div class="modal-title">Edit Member</div>
-        <div class="modal-sub" id="editMemberSubtitle">Update member profile</div>
+        <div class="modal-title">Edit Customer Profile</div>
+        <div class="modal-sub" id="editMemberSubtitle">Update member details</div>
         <button class="close-btn" onclick="closeMemberModal()">✖</button>
       </div>
 
       <div class="modal-body">
         <div class="edit-form">
-          <input type="text" id="editMemberName" placeholder="ชื่อสมาชิก">
-          <input type="text" id="editMemberPhone" placeholder="เบอร์โทร">
-          <input type="email" id="editMemberEmail" placeholder="อีเมล">
-          <button class="edit-save" onclick="saveMemberEdit()">บันทึกข้อมูล</button>
+          <input type="text" id="editMemberName" placeholder="Customer Name">
+          <input type="text" id="editMemberPhone" placeholder="Phone Number">
+          <input type="email" id="editMemberEmail" placeholder="Email Address">
+          <button class="edit-save" onclick="saveMemberEdit()">Save Details</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    import { db, auth } from './firebase.js';
-    import { 
-      collection, query, getDocs, onSnapshot, 
-      doc, updateDoc, deleteDoc, orderBy 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<script>
 
+
+    const API_URL = 'http://localhost:3000'; // server.js URL
+
+    // State
     let payments = [];
     let members = [];
     let logs = [];
     let editingMemberId = null;
     let modalPaymentId = null;
 
+    
+    // Navigation
+    
     const navItems = document.querySelectorAll(".nav-item");
     const pages = document.querySelectorAll(".page");
     const paymentTableBody = document.getElementById("paymentTableBody");
     const membersTableBody = document.getElementById("membersTableBody");
     const logsTableBody = document.getElementById("logsTableBody");
 
-    // --- Tab Navigation ---
     navItems.forEach(item => {
       item.addEventListener("click", () => {
         navItems.forEach(nav => nav.classList.remove("active"));
         item.classList.add("active");
+
         const target = item.dataset.page;
         pages.forEach(page => page.classList.remove("active"));
         document.getElementById(target + "-page").classList.add("active");
+
+        // Reload data periodically when swapping
+        if (target === "payment" || target === "appointments") loadPayments();
+        if (target === "members")   loadMembers();
+        if (target === "logs" || target === "alerts") loadLogs();
+        if (target === "dashboard" || target === "reports") loadDashboardStats();
+        if (target === "services")  loadServices();
+        if (target === "staff")     loadStaff();
+        if (target === "promotions") loadPromotions();
+        if (target === "settings")  loadSettings();
       });
     });
 
-    // --- Firebase Sync: Bookings (Payments) ---
-    onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snapshot) => {
-      payments = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPayments();
-      renderDashboardStats();
-    });
-
-    // --- Firebase Sync: Members (Users) ---
-    onSnapshot(collection(db, "users"), (snapshot) => {
-      members = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderMembers();
-      renderDashboardStats();
-    });
-
+   
+    // Helper
     function formatMoney(num) {
-      return "฿" + (Number(num) || 0).toLocaleString();
+      return "฿" + Number(num).toLocaleString();
     }
 
-    function pushLog(action) {
-      const time = new Date().toLocaleString('th-TH');
-      logs.unshift({ admin: "Admin", action, time });
-      renderLogs();
+ 
+    // Fetch Data from API
+
+    async function loadPayments() {
+      try {
+        const res = await fetch(`${API_URL}/api/payments`);
+        payments = await res.json();
+        
+        renderPayments();
+        renderAppointments();
+      } catch (err) {
+        console.error("loadPayments error:", err);
+      }
     }
 
-    window.renderPayments = function() {
+    async function loadMembers() {
+      try {
+        const res = await fetch(`${API_URL}/api/members`);
+        members = await res.json();  
+
+        membersTableBody.innerHTML = "";
+
+        if (members.length === 0) {
+          membersTableBody.innerHTML = `
+            <tr>
+              <td colspan="4" style="text-align:center;">No registered members found.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        renderMembers(); 
+      } catch (err) {
+        console.error("Database connection error", err);
+        membersTableBody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align:center;color:red;">Error fetching member data</td>
+          </tr>
+        `;
+      }
+    }
+
+    async function loadLogs() {
+      try {
+        const res = await fetch(`${API_URL}/api/logs`);
+        logs = await res.json();
+
+        logs.sort((a, b) => {
+          const dateA = parseLogTime(a.time);
+          const dateB = parseLogTime(b.time);
+          return dateB - dateA; 
+        });
+
+        renderLogs();
+      } catch (err) {
+        console.error("loadLogs error:", err);
+      }
+    }
+
+    function parseLogTime(timeStr) {
+      if (!timeStr) return new Date();
+      if (!timeStr.includes('/')) return new Date(timeStr);
+      const [datePart, timePart] = timeStr.split(' ');
+      const [day, month, year] = datePart.split('/').map(Number);
+      const [hour, minute] = timePart ? timePart.split(':').map(Number) : [0,0];
+      return new Date(year, month - 1, day, hour, minute);
+    }
+
+   
+    // Render Variables
+
+    function renderPayments() {
       paymentTableBody.innerHTML = "";
-      payments.forEach(p => {
+      if (payments.length === 0) {
+        paymentTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;">No financial records found</td></tr>';
+        return;
+      }
+      payments.forEach(payment => {
+        const statusClass = payment.status === "approved" ? "status-approved" : "status-rejected";
+        const statusIcon  = payment.status === "approved" ? "✓" : "✖";
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${p.customerName || 'N/A'}</td>
-          <td>${p.serviceName || 'N/A'}</td>
-          <td>${p.date || 'N/A'}</td>
-          <td>${formatMoney(p.price)}</td>
-          <td>
-            <button class="action-pill" onclick="openPaymentModal('${p.id}')">View Slip</button>
-          </td>
+          <td><strong>${payment.customer || "-"}</strong></td>
+          <td>${payment.service || "-"}</td>
+          <td>${payment.barber || "-"}</td>
+          <td>${payment.reservedDate || "-"} ${payment.reservedTime !== "-" ? payment.reservedTime : ""}</td>
+          <td>${payment.date || "-"}</td>
+          <td>${Number(payment.amount || 0).toLocaleString()}.00฿</td>
+          <td><button class="action-pill" onclick="openPaymentModal('${payment.id}')">👁 View Full</button></td>
           <td style="text-align:center;">
-            <div class="status-icon ${p.status === 'success' ? 'status-approved' : p.status === 'rejected' ? 'status-rejected' : ''}">
-              ${p.status === 'success' ? '✓' : p.status === 'rejected' ? '✖' : '⏳'}
-            </div>
-          </td>
-        `;
+            <div class="status-icon ${statusClass}">${statusIcon}</div>
+          </td>`;
         paymentTableBody.appendChild(tr);
       });
     }
 
-    window.renderMembers = function() {
+    function renderAppointments() {
+      const appointmentsTableBody = document.getElementById("appointmentsTableBody");
+      const title = document.getElementById("appointmentsDateTitle");
+      if(!appointmentsTableBody) return;
+      
+      appointmentsTableBody.innerHTML = "";
+      
+      let queue = payments.filter(p => p.status !== "rejected" && p.reservedDate && p.reservedDate !== "-");
+      
+      // Sort upcoming dates ascending
+      queue.sort((a,b) => {
+         const tA = a.reservedTime !== "-" ? a.reservedTime : "00:00";
+         const tB = b.reservedTime !== "-" ? b.reservedTime : "00:00";
+         const dA = new Date(a.reservedDate + "T" + tA);
+         const dB = new Date(b.reservedDate + "T" + tB);
+         return dA - dB;
+      });
+
+      title.textContent = `Active Appointments Queue (${queue.length})`;
+
+      if (queue.length === 0) {
+        appointmentsTableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;">No appointments scheduled</td></tr>';
+        return;
+      }
+      
+      queue.forEach(q => {
+         const color = q.status === "approved" ? "#50d96d" : "#ff9d00";
+         const bg = q.status === "approved" ? "rgba(80,217,109,0.2)" : "rgba(255,157,0,0.2)";
+         const statText = q.status.charAt(0).toUpperCase() + q.status.slice(1);
+         
+         const tr = document.createElement("tr");
+         tr.innerHTML = `
+           <td><strong>${q.reservedDate}</strong><br><span style="color:#aaa;font-size:12px">${q.reservedTime !== "-" ? q.reservedTime : "Any time"}</span></td>
+           <td><strong>${q.customer || "-"}</strong></td>
+           <td>${q.service || "-"}</td>
+           <td>${q.barber || "-"}</td>
+           <td><span class="widget-badge" style="background:${bg};color:${color};">${statText}</span></td>
+           <td>
+              <button class="action-pill" onclick="openPaymentModal('${q.id}')">Review</button> 
+              <button class="action-pill delete" onclick="cancelBooking('${q.id}')" style="color:#f4534b">Cancel</button> 
+           </td>
+         `;
+         appointmentsTableBody.appendChild(tr);
+      });
+    }
+
+    function renderMembers() {
       membersTableBody.innerHTML = "";
+
+      if (!members || members.length === 0) {
+        membersTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#888;">No index data available</td></tr>`;
+        return;
+      }
+
       members.forEach(member => {
+        const firstLetter = (member.name || "?").charAt(0).toUpperCase();
         const tr = document.createElement("tr");
-        const initial = (member.displayName || member.username || "U").charAt(0).toUpperCase();
         tr.innerHTML = `
-          <td>
-            <span class="member-badge">${initial}</span>
-            <span>${member.displayName || member.username}</span>
-          </td>
-          <td>${member.phone || '-'}</td>
-          <td>${member.email || '-'}</td>
+          <td><span class="member-badge">${firstLetter}</span><strong>${member.name}</strong></td>
+          <td>${member.phone || "-"}</td>
+          <td>${member.email || "-"}</td>
           <td>
             <div class="action-inline">
               <button class="icon-btn" onclick="openEditMember('${member.id}')">📝</button>
-              <button class="icon-btn delete" onclick="deleteMember('${member.id}')">🗑</button>
+              <button class="icon-btn delete" onclick="deleteMember('${member.id}', '${member.name}')">🗑</button>
             </div>
-          </td>
-        `;
+          </td>`;
         membersTableBody.appendChild(tr);
       });
     }
 
-    window.renderLogs = function() {
+    // --- NEW CRM RENDERS ---
+
+    async function loadDashboardStats() {
+      try {
+        const res = await fetch(`${API_URL}/api/dashboard/stats`);
+        const stats = await res.json();
+        
+        document.getElementById("dailyBookingsStat").textContent = stats.dailyBookings || 0;
+        document.getElementById("monthlyRevenueStat").textContent = "฿" + Number(stats.monthlyRevenue || 0).toLocaleString();
+        document.getElementById("newMembersStat").textContent = stats.totalMembers || 0;
+        document.getElementById("totalCustomersStat").textContent = Number(stats.totalMembers || 0).toLocaleString();
+        
+        const chartGroup = document.getElementById("dynamicChartGroup");
+        if(chartGroup && stats.chartData && stats.chartData.revenue) {
+           const revData = stats.chartData.revenue;
+           chartGroup.innerHTML = "";
+           const maxRev = Math.max(...revData, 100);
+           
+           let defs = `
+             <defs>
+               <linearGradient id="gradientOrange" x1="0%" y1="0%" x2="0%" y2="100%">
+                 <stop offset="0%" stop-color="rgba(255, 157, 0, 0.5)" />
+                 <stop offset="100%" stop-color="rgba(255, 157, 0, 0)" />
+               </linearGradient>
+             </defs>
+           `;
+           
+           let pathD = "";
+           let fillPath = "";
+           let pointsHtml = "";
+           
+           revData.forEach((rev, i) => {
+              const x = 50 + (i * 68);
+              const y = 135 - ((rev / maxRev) * 110);
+              
+              if (i === 0) {
+                 pathD += `M ${x} ${y} `;
+                 fillPath += `M ${x} 140 L ${x} ${y} `;
+              } else {
+                 pathD += `L ${x} ${y} `;
+                 fillPath += `L ${x} ${y} `;
+              }
+              
+              pointsHtml += `<circle cx="${x}" cy="${y}" r="5" fill="#161616" stroke="#ff9d00" stroke-width="2.5" />`;
+           });
+           
+           const lastX = 50 + ((revData.length - 1) * 68);
+           fillPath += `L ${lastX} 140 Z`;
+           
+           chartGroup.innerHTML = defs + 
+             `<path d="${fillPath}" fill="url(#gradientOrange)" />` +
+             `<path d="${pathD}" fill="none" stroke="#ff9d00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0px 6px 8px rgba(255,157,0,0.4));" />` + 
+             pointsHtml;
+             
+           const repChartGroup = document.getElementById("reportsChartGroup");
+           if(repChartGroup) repChartGroup.innerHTML = chartGroup.innerHTML;
+        }
+        
+        // Populate Reports Stats
+        const repTotalTxn = document.getElementById("reportsTotalTxn");
+        if(repTotalTxn) repTotalTxn.textContent = stats.dailyBookings || 0;
+        
+        const repQueries = document.getElementById("reportsQueriesStat");
+        if(repQueries && stats.chartData && stats.chartData.revenue) {
+            repQueries.textContent = Math.floor(Math.random() * 50) + 120; // Simulated active queries
+        }
+        
+        if(stats.barberStats) {
+           const container = document.getElementById("barberStatsContainer");
+           container.innerHTML = "";
+           const barbers = Object.entries(stats.barberStats).map(x => ({name: x[0], count: x[1]}));
+           if(barbers.length === 0) {
+               container.innerHTML = '<div style="color:#666;text-align:center;font-size:13px;padding-top:20px;">No booking data</div>';
+           }
+           barbers.forEach(b => {
+             container.innerHTML += `
+               <div class="widget-item">
+                 <div class="widget-left">
+                   <div class="widget-title">${b.name}</div>
+                   <div class="widget-sub">Staff Member</div>
+                 </div>
+                 <div class="widget-val">${b.count} <span style="font-size:12px;color:#888;font-weight:500;">bookings</span></div>
+               </div>
+             `;
+           });
+        }
+        
+        if(stats.recentTransactions) {
+           const rContainer = document.getElementById("recentTransactionsContainer");
+           if(rContainer) {
+              rContainer.innerHTML = "";
+              if(stats.recentTransactions.length === 0) {
+                 rContainer.innerHTML = '<div style="color:#666;text-align:center;font-size:13px;padding-top:20px;">No recent transactions</div>';
+              }
+              stats.recentTransactions.forEach(tx => {
+                 let tCol = tx.status === 'approved' ? '#50d96d' : (tx.status === 'rejected' ? '#f4534b' : '#ff9d00');
+                 rContainer.innerHTML += `
+                   <div class="widget-item">
+                     <div class="widget-left">
+                       <div class="widget-title">${tx.customer}</div>
+                       <div class="widget-sub">${tx.time}</div>
+                     </div>
+                     <div style="text-align:right;">
+                       <div class="widget-val">฿${tx.amount}</div>
+                       <div style="font-size:11px;color:${tCol};text-transform:uppercase;font-weight:700;">${tx.status}</div>
+                     </div>
+                   </div>
+                 `;
+              });
+           }
+        }
+      } catch(err) {
+        console.error("Dashboard Stats Error:", err);
+      }
+    }
+    
+    async function loadServices() {
+      try {
+        const res = await fetch(`${API_URL}/api/services`);
+        const services = await res.json();
+        const tbody = document.getElementById("servicesTableBody");
+        tbody.innerHTML = "";
+        
+        if(services.length === 0) {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#888;">No salon services defined yet</td></tr>';
+           return;
+        }
+        services.forEach(s => {
+           tbody.innerHTML += `<tr>
+             <td><strong>${s.name || "-"}</strong></td>
+             <td>${s.duration || "-"} Mins</td>
+             <td>${s.price || "-"} THB</td>
+             <td><button class="action-pill" onclick="editService('${s.id}', '${s.name||''}', '${s.duration||''}', '${s.price||''}')">Edit</button> <button class="action-pill delete" onclick="deleteService('${s.id}')">Delete</button></td>
+           </tr>`;
+        });
+      } catch(err) { console.error(err); }
+    }
+
+    async function loadStaff() {
+      try {
+        const res = await fetch(`${API_URL}/api/staff`);
+        const staff = await res.json();
+        const container = document.getElementById("staffCardsContainer");
+        container.innerHTML = "";
+        
+        staff.forEach(s => {
+           container.innerHTML += `
+            <div class="dashboard-widget" style="align-items:center;">
+              <div style="width:60px;height:60px;background:#333;border-radius:50%;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:24px;">${s.icon || "👨🦱"}</div>
+              <h3 style="color:#fff;margin:0">${s.name || "-"}</h3>
+              <p style="color:#888;font-size:12px;margin:5px 0">${s.hours || "09:00 - 18:00"}</p>
+              <button class="action-pill" onclick="editStaff('${s.id}', '${s.name||''}', '${s.hours||''}', '${s.icon||''}')">Edit Schedule</button>
+              <button class="action-pill delete" onclick="deleteStaff('${s.id}')" style="margin-top:5px;background:#333;color:#f4534b">Dismiss</button>
+            </div>`;
+        });
+        
+        container.innerHTML += `
+            <div class="dashboard-widget" onclick="addStaff()" style="align-items:center; justify-content:center; border: 1px dashed #555; background:transparent; cursor:pointer;">
+              <div style="font-size:24px; color:#aaa;">+ Add Staff</div>
+            </div>`;
+      } catch(err) { console.error(err); }
+    }
+    
+    async function loadPromotions() {
+      try {
+        const res = await fetch(`${API_URL}/api/promotions`);
+        const promos = await res.json();
+        const tbody = document.getElementById("promotionsTableBody");
+        tbody.innerHTML = "";
+        
+        if(promos.length === 0) {
+           tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;">No active campaigns found</td></tr>';
+           return;
+        }
+        promos.forEach(p => {
+           tbody.innerHTML += `<tr>
+             <td><strong style="color:#f36b2d">${p.code || "-"}</strong></td>
+             <td>${p.discount || "-"}</td>
+             <td>${p.usageLimit || "-"}</td>
+             <td>${p.validUntil || "-"}</td>
+             <td><span class="widget-badge" style="background:rgba(80,217,109,0.2);color:#50d96d;">Active</span></td>
+             <td><button class="action-pill delete" onclick="deletePromotion('${p.id}')">Delete Code</button></td>
+           </tr>`;
+        });
+      } catch(err) { console.error(err); }
+    }
+
+    async function loadSettings() {
+      try {
+        const res = await fetch(`${API_URL}/api/settings`);
+        const settings = await res.json();
+        document.getElementById("settingShopName").value = settings.shopName || "Admin Executive Group";
+        document.getElementById("settingShopPhone").value = settings.contactPhone || "-";
+        document.getElementById("settingShopAddress").value = settings.address || "-";
+      } catch(err) { console.error(err); }
+    }
+
+    // Initialize New Data
+    setTimeout(() => {
+       loadDashboardStats();
+       loadServices();
+       loadStaff();
+       loadPromotions();
+       loadSettings();
+    }, 500);
+
+    // --- NEW CRM POST ACTIONS ---
+    
+    async function addService() {
+      const name = prompt("Please enter the service name (e.g., Haircut):");
+      if(!name) return;
+      const duration = prompt("Please enter the estimated duration in minutes:");
+      const price = prompt("Please enter the standard price (THB):");
+      
+      try {
+        await fetch(`${API_URL}/api/services`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name, duration, price})
+        });
+        loadServices();
+      } catch(err) { alert("Error: Failed to connect to the network. Please try again."); }
+    }
+
+    async function addStaff() {
+      const name = prompt("Please enter the staff member's name:");
+      if(!name) return;
+      const hours = prompt("Please set their working shift (e.g., 10:00 - 19:00):");
+      const icon = prompt("Assign an emoji icon (e.g., 🧔) :");
+      
+      try {
+        await fetch(`${API_URL}/api/staff`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name, hours: hours || "-", icon: icon || "👨🦱"})
+        });
+        loadStaff();
+      } catch(err) { alert("Error: Failed to connect to the network. Please try again."); }
+    }
+
+    async function addPromotion() {
+      const code = prompt("Please approve a new promotion discount code (e.g., BIGSALE2026):");
+      if(!code) return;
+      const discount = prompt("Define the discount scope (e.g., 15% or 150 THB):");
+      const usageLimit = prompt("Define usage limits per account:");
+      const validUntil = prompt("Specify expiry date (e.g., 30 Nov 2026):");
+      
+      try {
+        await fetch(`${API_URL}/api/promotions`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({code, discount: discount||"-", usageLimit: usageLimit||"-", validUntil: validUntil||"-"})
+        });
+        loadPromotions();
+      } catch(err) { alert("Error: Failed to connect to the network. Please try again."); }
+    }
+
+    async function saveSettings() {
+      const shopName = document.getElementById("settingShopName").value;
+      const contactPhone = document.getElementById("settingShopPhone").value;
+      const address = document.getElementById("settingShopAddress").value;
+
+      try {
+        await fetch(`${API_URL}/api/settings`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({shopName, contactPhone, address})
+        });
+        alert("Success - Organizational data has been updated to the latest version.");
+      } catch(err) { alert("Error: Organizational configurations could not be updated."); }
+    }
+
+    // --- NEW CRM PUT/DELETE ACTIONS ---
+
+    async function deleteItem(collection, id, callback) {
+      if(!confirm("Warning: Data will be permanently deleted. Are you sure you wish to proceed?")) return;
+      try {
+         await fetch(`${API_URL}/api/${collection}/${id}`, { method: 'DELETE' });
+         callback();
+      } catch(e) { alert("Action Failed: Deletion unverified."); }
+    }
+
+    function deleteService(id) { deleteItem('services', id, loadServices); }
+    function deleteStaff(id) { deleteItem('staff', id, loadStaff); }
+    function deletePromotion(id) { deleteItem('promotions', id, loadPromotions); }
+
+    async function editService(id, oldN, oldD, oldP) {
+      const name = prompt("Update service name:", oldN);
+      if(name===null) return;
+      const duration = prompt("Update duration timeframe:", oldD);
+      const price = prompt("Update standard rate:", oldP);
+      try {
+         await fetch(`${API_URL}/api/services/${id}`, {
+            method: 'PUT', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({name, duration, price})
+         });
+         loadServices();
+      } catch(e) { alert("Action Failed: Data overwrite failed."); }
+    }
+
+    async function editStaff(id, oldN, oldH, oldI) {
+      const name = prompt("Modify personnel details:", oldN);
+      if(name===null) return;
+      const hours = prompt("Change working schedule:", oldH);
+      const icon = prompt("Update profile icon:", oldI);
+      try {
+         await fetch(`${API_URL}/api/staff/${id}`, {
+            method: 'PUT', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({name, hours, icon})
+         });
+         loadStaff();
+      } catch(e) { alert("Action Failed: Data overwrite failed."); }
+    }
+
+    async function cancelBooking(id) {
+      if(!confirm("Review Request: Do you wish to revoke this client's booking? This process may affect queuing workflows.")) return;
+      try {
+         await fetch(`${API_URL}/api/payments/${id}`, {
+            method: 'PUT', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({status: "rejected"})
+         });
+         loadPayments(); // Refresh queue
+      } catch(e) { alert("Action Failed: Network Error."); }
+    }
+
+    function renderLogs() {
       logsTableBody.innerHTML = "";
+      if (logs.length === 0) {
+        logsTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#888;">No system reports generated</td></tr>';
+        renderAlerts();
+        return;
+      }
       logs.forEach(log => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>
-            <div class="logs-name">
-              <span class="member-badge">A</span>
-              <span>${log.admin}</span>
-            </div>
-          </td>
+          <td><div class="logs-name"><span class="member-badge">AD</span><span>${log.admin}</span></div></td>
           <td>${log.action}</td>
-          <td>${log.time}</td>
-        `;
+          <td>${log.time}</td>`;
         logsTableBody.appendChild(tr);
       });
+      renderAlerts();
     }
 
-    window.renderDashboardStats = function() {
-      document.getElementById("dailyBookingsStat").textContent = payments.length;
-      const revenue = payments
-        .filter(p => p.status === "success")
-        .reduce((sum, p) => sum + (Number(p.price) || 0), 0);
-      document.getElementById("monthlyRevenueStat").textContent = formatMoney(revenue);
-      document.getElementById("newMembersStat").textContent = members.length;
-      document.getElementById("totalCustomersStat").textContent = members.length.toLocaleString();
+    function renderAlerts() {
+      const alertsContainer = document.getElementById("alertsContainer");
+      if(!alertsContainer) return;
+      
+      if(logs.length === 0) {
+        alertsContainer.innerHTML = '<div style="color:#888;text-align:center;">Analyzing incoming notifications...</div>';
+        return;
+      }
+      
+      let html = '';
+      logs.slice(0, 10).forEach(log => {
+         let icon = "🔔";
+         let title = "Network Security Log";
+         let color = "#888";
+         
+         if(log.action.toLowerCase().includes("delete") || log.action.toLowerCase().includes("reject")) {
+           icon = "⚠️"; color = "#f4534b"; title = "Critical Alert";
+         } else if(log.action.toLowerCase().includes("add") || log.action.toLowerCase().includes("approve") || log.action.toLowerCase().includes("updated")) {
+           icon = "✅"; color = "#50d96d"; title = "Action Success";
+         }
+         
+         html += `
+          <div class="widget-item">
+             <div class="widget-left">
+               <div class="widget-title">${icon} ${title}</div>
+               <div class="widget-sub">${log.action}</div>
+             </div>
+             <div style="font-size:12px; color:${color}">${log.time.split(" ")[1] || "Just now"}</div>
+          </div>
+         `;
+      });
+      alertsContainer.innerHTML = html;
     }
 
-    window.openPaymentModal = function(id) {
+    // Payment Modal
+
+    function openPaymentModal(id) {
       modalPaymentId = id;
       const payment = payments.find(p => p.id === id);
-      if(!payment) return;
+      if (!payment) return;
 
-      document.getElementById("paymentTransactionId").textContent = "Receipt No: " + (payment.receiptNo || id);
-      document.getElementById("modalCustomerName").textContent = payment.customerName || '-';
-      document.getElementById("modalService").textContent = payment.serviceName || '-';
-      document.getElementById("modalDate").textContent = payment.date || '-';
+      document.getElementById("paymentTransactionId").textContent = "Reference ID: " + payment.id;
+      document.getElementById("modalCustomerName").textContent = payment.customer || "-";
+      document.getElementById("modalService").textContent = payment.service || "-";
+      document.getElementById("modalBarber").textContent = payment.barber || "-";
+      document.getElementById("modalReservedTime").textContent = (payment.reservedDate || "-") + " " + (payment.reservedTime && payment.reservedTime !== "-" ? payment.reservedTime : "");
+      document.getElementById("modalDate").textContent = payment.date || "-";
       document.getElementById("modalTxnId").textContent = payment.id;
-      document.getElementById("modalAmount").textContent = formatMoney(payment.price);
+      document.getElementById("modalAmount").textContent = Number(payment.amount || 0).toFixed(2) + "฿";
 
       const slipBox = document.getElementById("modalSlipBox");
-      const slipUrl = payment.localFilePath ? "http://localhost:3000/uploads/" + payment.localFilePath.split(/[\\/]/).pop() : null;
-
-      if(slipUrl){
-        slipBox.innerHTML = `<img src="${slipUrl}" alt="slip" onerror="this.parentElement.innerHTML='Slip Load Failed'">`;
-      }else{
-        slipBox.innerHTML = `ไม่มีสลิป`;
-      }
+      slipBox.innerHTML = payment.slip ? `<img src="${payment.slip}" alt="slip">` : "Document not found";
 
       const statusIcon = document.getElementById("modalStatusIcon");
-      statusIcon.className = "status-icon mini " + (payment.status === "success" ? "status-approved" : payment.status === "rejected" ? "status-rejected" : "");
-      statusIcon.textContent = payment.status === "success" ? "✓" : payment.status === "rejected" ? "✖" : "⏳";
+      statusIcon.className = "status-icon mini " + (payment.status === "approved" ? "status-approved" : "status-rejected");
+      statusIcon.textContent = payment.status === "approved" ? "✓" : "✖";
 
       const modalActionButtons = document.getElementById("modalActionButtons");
-      modalActionButtons.innerHTML = `
-          <button class="approve-btn" onclick="approvePayment('${payment.id}')">ⓒ Approve</button>
-          <button class="reject-btn" onclick="rejectPayment('${payment.id}')">ⓧ Reject</button>
-      `;
+      modalActionButtons.innerHTML = "";
+      if (payment.status === "approved") {
+        modalActionButtons.innerHTML = `<button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">Revoke and Reject Transaction</button>`;
+      } else {
+        modalActionButtons.innerHTML = `
+          <button class="approve-btn" onclick="updatePaymentStatus('${payment.id}','approved')">Verify and Approve Receipt</button>
+          <button class="reject-btn" onclick="updatePaymentStatus('${payment.id}','rejected')">Revoke and Reject Transaction</button>`;
+      }
 
       document.getElementById("paymentModalBackdrop").classList.add("show");
     }
 
-    window.closePaymentModal = function() {
+    function closePaymentModal() {
       document.getElementById("paymentModalBackdrop").classList.remove("show");
     }
 
-    window.approvePayment = async function(id) {
+    async function updatePaymentStatus(id, status) {
       try {
-        await updateDoc(doc(db, "bookings", id), { status: "success" });
-        pushLog(`Approved payment for booking ${id}`);
+        const res = await fetch(`${API_URL}/api/payments/${id}/status`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status, adminName: "Admin User" })
+        });
+        if (!res.ok) throw new Error("Failed");
+        await loadPayments();
+        await loadLogs();
+        await loadDashboardStats();
         closePaymentModal();
       } catch (err) {
-        alert("Failed to approve: " + err.message);
+        alert("Network Error: Verification exception at " + err.message);
       }
     }
 
-    window.rejectPayment = async function(id) {
-      try {
-        await updateDoc(doc(db, "bookings", id), { status: "rejected" });
-        pushLog(`Rejected payment for booking ${id}`);
-        closePaymentModal();
-      } catch (err) {
-        alert("Failed to reject: " + err.message);
-      }
-    }
+    // Member Modal
 
-    window.openEditMember = function(id) {
+    function openEditMember(id) {
       const member = members.find(m => m.id === id);
-      if(!member) return;
+      if (!member) return;
       editingMemberId = id;
-      document.getElementById("editMemberSubtitle").textContent = "Edit profile: " + (member.displayName || member.username);
-      document.getElementById("editMemberName").value = member.displayName || member.username || '';
-      document.getElementById("editMemberPhone").value = member.phone || '';
-      document.getElementById("editMemberEmail").value = member.email || '';
+      document.getElementById("editMemberSubtitle").textContent = "Accessing profile reference: " + member.name;
+      document.getElementById("editMemberName").value = member.name;
+      document.getElementById("editMemberPhone").value = member.phone;
+      document.getElementById("editMemberEmail").value = member.email;
       document.getElementById("memberModalBackdrop").classList.add("show");
     }
 
-    window.closeMemberModal = function() {
+    function closeMemberModal() {
       document.getElementById("memberModalBackdrop").classList.remove("show");
     }
 
-    window.saveMemberEdit = async function() {
-      const name = document.getElementById("editMemberName").value.trim();
-      const phone = document.getElementById("editMemberPhone").value.trim();
-      const email = document.getElementById("editMemberEmail").value.trim();
-
+    async function saveMemberEdit() {
       try {
-        await updateDoc(doc(db, "users", editingMemberId), { 
-          displayName: name, 
-          phone: phone, 
-          email: email 
+        const name  = document.getElementById("editMemberName").value.trim();
+        const phone = document.getElementById("editMemberPhone").value.trim();
+        const email = document.getElementById("editMemberEmail").value.trim();
+        const res = await fetch(`${API_URL}/api/members/${editingMemberId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, phone, email, adminName: "Admin User" })
         });
-        pushLog(`Updated member profile ID: ${editingMemberId}`);
+        if (!res.ok) throw new Error("Failed");
+        await loadMembers();
+        await loadLogs();
         closeMemberModal();
       } catch (err) {
-        alert("Save failed: " + err.message);
+        alert("Network Error: Update state exception " + err.message);
       }
     }
 
-    window.deleteMember = async function(id) {
-      if(!confirm(`ต้องการลบสมาชิกชุดนี้ใช่หรือไม่?`)) return;
+    async function deleteMember(id, name) {
+      if (!confirm(`Are you sure you want to use administrative privileges to remove account data for ${name}? This action deletes the history permanently.`)) return;
       try {
-        await deleteDoc(doc(db, "users", id));
-        pushLog(`Deleted member ID: ${id}`);
+        const res = await fetch(`${API_URL}/api/members/${id}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ adminName: "Admin User" })
+        });
+        if (!res.ok) throw new Error("Failed");
+        await loadMembers();
+        await loadLogs();
+        await loadDashboardStats();
       } catch (err) {
-        alert("Delete failed: " + err.message);
+        alert("Error occurred. Unable to confirm management command: " + err.message);
       }
     }
 
-    // Modal backdrops
+
+    // Modal backdrop close
+
     document.getElementById("paymentModalBackdrop").addEventListener("click", (e) => {
-      if(e.target.id === "paymentModalBackdrop") closePaymentModal();
+      if (e.target.id === "paymentModalBackdrop") closePaymentModal();
     });
     document.getElementById("memberModalBackdrop").addEventListener("click", (e) => {
-      if(e.target.id === "memberModalBackdrop") closeMemberModal();
+      if (e.target.id === "memberModalBackdrop") closeMemberModal();
     });
+
+
+    // Initialize Core Resources
+
+    loadDashboardStats();
+    loadPayments();
+    loadMembers();
+    loadLogs();
   </script>
 </body>
 </html>
+
