@@ -299,6 +299,7 @@ if (submitBtn) {
       const cred = await createUserWithEmailAndPassword(auth, e, p);
       await setDoc(doc(db, 'users', cred.user.uid), {
         username: u,
+        name: u,
         email: e,
         phone: '',
         displayName: u,

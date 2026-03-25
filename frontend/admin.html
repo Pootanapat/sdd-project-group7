@@ -834,10 +834,11 @@
       }
 
       members.forEach(member => {
-        const firstLetter = (member.name || "?").charAt(0).toUpperCase();
+        const memberName = member.name || member.displayName || member.username || "Unknown";
+        const firstLetter = (memberName).charAt(0).toUpperCase();
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><span class="member-badge">${firstLetter}</span><strong>${member.name}</strong></td>
+          <td><span class="member-badge">${firstLetter}</span><strong>${memberName}</strong></td>
           <td>${member.phone || "-"}</td>
           <td>${member.email || "-"}</td>
           <td>
@@ -1290,10 +1291,11 @@
       const member = members.find(m => m.id === id);
       if (!member) return;
       editingMemberId = id;
-      document.getElementById("editMemberSubtitle").textContent = "Accessing profile reference: " + member.name;
-      document.getElementById("editMemberName").value = member.name;
-      document.getElementById("editMemberPhone").value = member.phone;
-      document.getElementById("editMemberEmail").value = member.email;
+      const mName = member.name || member.displayName || member.username || "Unknown";
+      document.getElementById("editMemberSubtitle").textContent = "Accessing profile reference: " + mName;
+      document.getElementById("editMemberName").value = member.name || member.displayName || member.username || "";
+      document.getElementById("editMemberPhone").value = member.phone || "";
+      document.getElementById("editMemberEmail").value = member.email || "";
       document.getElementById("memberModalBackdrop").classList.add("show");
     }
 
