@@ -989,10 +989,27 @@
       try {
         const res = await fetch(`${API_URL}/api/logs`);
         logs = await res.json();
+
+        // แปลง log.time เป็น Date ก่อน sort
+        logs.sort((a, b) => {
+          const dateA = parseLogTime(a.time);
+          const dateB = parseLogTime(b.time);
+          return dateB - dateA; // ล่าสุดขึ้นบน
+        });
+
         renderLogs();
       } catch (err) {
         console.error("loadLogs error:", err);
       }
+    }
+
+    // ฟังก์ชันช่วยแปลง log.time เป็น Date object
+    function parseLogTime(timeStr) {
+      // ถ้าเป็นรูปแบบ "DD/MM/YYYY HH:mm"
+      const [datePart, timePart] = timeStr.split(' ');
+      const [day, month, year] = datePart.split('/').map(Number);
+      const [hour, minute] = timePart.split(':').map(Number);
+      return new Date(year, month - 1, day, hour, minute);
     }
 
    
