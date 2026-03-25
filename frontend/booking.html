@@ -1101,7 +1101,6 @@
       document.getElementById('statusTitle').classList.remove('success');
       document.getElementById('statusMessage').innerHTML = 'ระบบกำลังตรวจสอบสลิปการโอนเงินของคุณ<br>โปรดรอสักครู่...';
 
-<<<<<<< HEAD
       // build form data
       const formData = new FormData();
       formData.append('slip', mySelectedFile);
@@ -1138,21 +1137,6 @@
         document.getElementById('statusMessage').innerText = 'ระบบยังไม่สามารถตรวจสอบสลิปได้ โปรดลองอีกครั้งหรือเปลี่ยนเป็น mock สำเร็จอัตโนมัติ';
         showSuccessAndReceipt();
       }, 12000);
-=======
-      // Submit to backend
-      const fullName = document.getElementById("fullName").value.trim();
-      const amount = priceMap[selectedService] || 0;
-      const bookingDate = document.getElementById("bookingDate").value;
-
-      const formData = new FormData();
-      formData.append('slip', mySelectedFile);
-      formData.append('amount', amount);
-      formData.append('customer', fullName);
-      formData.append('service', selectedService);
-      formData.append('barber', selectedBarber);
-      formData.append('reservedDate', bookingDate);
-      formData.append('reservedTime', selectedTime);
->>>>>>> fc50b985243b6c54b85d1c8629b0e25337b467c1
 
       fetch('http://localhost:3000/api/upload-slip', {
         method: 'POST',
