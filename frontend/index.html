@@ -686,28 +686,54 @@
 
   <button class="top-btn" id="topBtn" onclick="goSection('hero')">↑</button>
 
-  <script>
-    function goSection(id){
+  <script type="module">
+    import { auth, db } from './firebase.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    window.goSection = function(id){
       const target = document.getElementById(id);
       if(target){
         target.scrollIntoView({ behavior:'smooth' });
       }
     }
 
-    function goBooking(){
+    window.goBooking = function(){
       window.location.href = 'booking.html';
     }
 
-    function loadNavProfile(){
+    // Check Auth State and Update UI
+    onAuthStateChanged(auth, async (user) => {
+      const navActions = document.querySelector('.nav-actions');
+      const signinBtn = navActions.querySelector('button[onclick*="signin.html"]');
+      const signupBtn = navActions.querySelector('button[onclick*="signup.html"]');
+      const profileLink = document.querySelector('.profile-link');
       const navProfileImage = document.getElementById('navProfileImage');
-      const savedAvatar = localStorage.getItem('profileImage');
 
-      if(savedAvatar){
-        navProfileImage.src = savedAvatar;
-      }else{
-        navProfileImage.src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+      if (user) {
+        // User is signed in
+        if(signinBtn) signinBtn.style.display = 'none';
+        if(signupBtn) signupBtn.style.display = 'none';
+        profileLink.style.display = 'flex';
+
+        // Fetch profile image from Firestore or use default
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists() && userDoc.data().profileImage) {
+            navProfileImage.src = userDoc.data().profileImage;
+          } else {
+            navProfileImage.src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+          }
+        } catch (e) {
+          navProfileImage.src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+        }
+      } else {
+        // User is signed out
+        if(signinBtn) signinBtn.style.display = 'inline-block';
+        if(signupBtn) signupBtn.style.display = 'inline-block';
+        profileLink.style.display = 'none';
       }
-    }
+    });
 
     const navbar = document.getElementById('navbar');
     const topBtn = document.getElementById('topBtn');
@@ -754,8 +780,8 @@
     window.addEventListener('scroll', updateOnScroll);
     window.addEventListener('load', () => {
       updateOnScroll();
-      loadNavProfile();
     });
   </script>
+
 </body>
 </html>

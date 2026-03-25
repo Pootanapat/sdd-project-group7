@@ -124,24 +124,43 @@ async function loadBookingHistory(uid) {
    เช็คสถานะการล็อกอินอัตโนมัติ 
 ════════════════════════════════════════════ */
 onAuthStateChanged(auth, async (user) => {
+  // --- Sync Navigation Buttons (Global) ---
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const navProfile = document.querySelector('.nav-profile, .profile-link');
+  
   if (user) {
     currentUID = user.uid;
+    // User is logged in: Hide Sign in/Signup, Show Profile
+    navBtns.forEach(btn => {
+      // Don't hide if it's a generic action button that happens to have the same class
+      if (btn.innerText.toLowerCase().includes('sign')) {
+        btn.style.display = 'none';
+      }
+    });
+    if (navProfile) navProfile.style.display = 'flex';
+
     if (window.location.pathname.includes('profile.html')) {
       await fillProfile(user);
-      
-      // 🟢 3. เรียกใช้ฟังก์ชันดึงประวัติการจองหลังจากโหลดข้อมูลโปรไฟล์เสร็จ
       await loadBookingHistory(user.uid);
-      
       const content = document.getElementById('profile-content');
       if(content) content.style.display = 'block'; 
     }
   } else {
     currentUID = null;
+    // User is logged out: Show Sign in/Signup, Hide Profile
+    navBtns.forEach(btn => {
+      if (btn.innerText.toLowerCase().includes('sign')) {
+        btn.style.display = 'inline-block';
+      }
+    });
+    if (navProfile) navProfile.style.display = 'none';
+
     if (window.location.pathname.includes('profile.html')) {
       window.location.replace('Signin.html'); 
     }
   }
 });
+
 
 /* ════════════════════════════════════════════
    EYE TOGGLE, SIGN IN, FORGOT PASSWORD, SIGN UP

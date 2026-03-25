@@ -22,6 +22,15 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+// 🟢 NEW: Serve Frontend Static Files
+// You can now open http://localhost:3000 to see the website!
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// 🟢 NEW: Serve Uploaded Slips
+// Admin can view slips at http://localhost:3000/uploads/filename
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 // Setup Multer for file uploads (simulating Firebase Storage upload by saving locally for now)
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -88,10 +97,11 @@ app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
         // Respond back to frontend
         res.status(200).json({
             success: true,
-            message: 'Slip uploaded successfully and data saved to Firebase',
+            message: 'Booking saved successfully',
             receiptNo: receiptNo,
-            filePath: req.file.path
+            filePath: `/uploads/${req.file.filename}` // Return relative path for the frontend
         });
+
 
     } catch (error) {
         console.error('Error processing upload:', error);

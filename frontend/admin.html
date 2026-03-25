@@ -887,46 +887,17 @@
     </div>
   </div>
 
-  <script>
-    const payments = [
-      { id:1, customer:"Nattakit Tutu", service:"Classic Haircut", date:"2026/02/10", amount:200, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+1" },
-      { id:2, customer:"Kaiwa Yakru", service:"Full Set", date:"2026/02/10", amount:350, status:"rejected", slip:"" },
-      { id:3, customer:"Cumrai Kub", service:"Shave", date:"2026/02/09", amount:150, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+3" },
-      { id:4, customer:"Bitkab Komkom", service:"Wash, blow-dry", date:"2026/02/09", amount:100, status:"rejected", slip:"" },
-      { id:5, customer:"Ronaldo Diwa", service:"Haircut", date:"2026/02/09", amount:200, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+5" },
-      { id:6, customer:"Messi Deekoo", service:"Premium Haircut", date:"2026/02/08", amount:500, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+6" },
-      { id:7, customer:"Kit BadBlood", service:"Full Set", date:"2026/02/08", amount:350, status:"rejected", slip:"" },
-      { id:8, customer:"Tae Mongkolkit", service:"Classic Haircut", date:"2026/02/08", amount:200, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+8" },
-      { id:9, customer:"Taa Gaxy", service:"Shave", date:"2026/02/07", amount:150, status:"approved", slip:"https://dummyimage.com/220x240/e9e9e9/222.png&text=Slip+9" },
-      { id:10, customer:"Anutin Ha-roi", service:"Kong", date:"2026/02/08", amount:500000000, status:"rejected", slip:"" }
-    ];
+  <script type="module">
+    import { db, auth } from './firebase.js';
+    import { 
+      collection, query, getDocs, onSnapshot, 
+      doc, updateDoc, deleteDoc, orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    const members = [
-      { id:1, name:"Nattakit Tutu", phone:"080-000-1001", email:"nattakit.tutu@example.com" },
-      { id:2, name:"Kaiwa Yakru", phone:"080-000-1002", email:"kaiwa.yakru@example.com" },
-      { id:3, name:"Cumrai Kub", phone:"080-000-1003", email:"cumrai.kub@example.com" },
-      { id:4, name:"Bitkab Komkom", phone:"080-000-1004", email:"bitkab.kom@example.com" },
-      { id:5, name:"Ronaldo Diwa", phone:"080-000-1005", email:"ronaldo.diwa@example.com" },
-      { id:6, name:"Messi Deekoo", phone:"080-000-1006", email:"messi.deekoo@example.com" },
-      { id:7, name:"Kit BadBlood", phone:"080-000-1007", email:"kit.badblood@example.com" },
-      { id:8, name:"Tae Mongkolkit", phone:"080-000-1008", email:"tae.mongkolkit@example.com" },
-      { id:9, name:"Taa Gaxy", phone:"080-000-1009", email:"taa.gaxy@example.com" },
-      { id:10, name:"Anutin Ha-roi", phone:"080-000-1010", email:"anutin.haroi@example.com" }
-    ];
-
-    const logs = [
-      { admin:"Admin User", action:"Approved payment for Nattakit Tutu - ฿200", time:"2026-02-10 14:32:15" },
-      { admin:"Admin User", action:"Added new member: Kaiwa Yakru", time:"2026-02-10 13:21:42" },
-      { admin:"Admin User", action:"Updated member profile: Cumrai Kub", time:"2026-02-10 12:15:33" },
-      { admin:"Admin User", action:"Rejected payment for Bitkab Komkom - ฿100", time:"2026-02-10 11:45:21" },
-      { admin:"Admin User", action:"Approved payment for Ronaldo Diwa - ฿200", time:"2026-02-10 10:30:18" },
-      { admin:"Admin User", action:"Deleted member: Messi Deekoo", time:"2026-02-09 16:22:09" },
-      { admin:"Admin User", action:"Approved payment for Kit BadBlood - ฿350", time:"2026-02-09 15:10:55" },
-      { admin:"Admin User", action:"Updated service pricing", time:"2026-02-09 14:05:42" },
-      { admin:"Admin User", action:"Added new member: Tae Mongkolkit", time:"2026-02-08 13:18:31" },
-      { admin:"Admin User", action:"Anutin Ha-roi ia ook jak nayok", time:"2025-12-12 10:20:08" }
-    ];
-
+    let payments = [];
+    let members = [];
+    let logs = [];
     let editingMemberId = null;
     let modalPaymentId = null;
 
@@ -936,69 +907,79 @@
     const membersTableBody = document.getElementById("membersTableBody");
     const logsTableBody = document.getElementById("logsTableBody");
 
+    // --- Tab Navigation ---
     navItems.forEach(item => {
       item.addEventListener("click", () => {
         navItems.forEach(nav => nav.classList.remove("active"));
         item.classList.add("active");
-
         const target = item.dataset.page;
         pages.forEach(page => page.classList.remove("active"));
         document.getElementById(target + "-page").classList.add("active");
       });
     });
 
-    function formatMoney(num){
-      return "฿" + Number(num).toLocaleString();
-    }
-
-    function pushLog(actionText){
-      logs.unshift({
-        admin:"Admin User",
-        action:actionText,
-        time:new Date().toISOString().slice(0,19).replace("T"," ")
-      });
-      renderLogs();
+    // --- Firebase Sync: Bookings (Payments) ---
+    onSnapshot(query(collection(db, "bookings"), orderBy("createdAt", "desc")), (snapshot) => {
+      payments = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPayments();
       renderDashboardStats();
+    });
+
+    // --- Firebase Sync: Members (Users) ---
+    onSnapshot(collection(db, "users"), (snapshot) => {
+      members = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderMembers();
+      renderDashboardStats();
+    });
+
+    function formatMoney(num) {
+      return "฿" + (Number(num) || 0).toLocaleString();
     }
 
-    function renderPayments(){
+    function pushLog(action) {
+      const time = new Date().toLocaleString('th-TH');
+      logs.unshift({ admin: "Admin", action, time });
+      renderLogs();
+    }
+
+    window.renderPayments = function() {
       paymentTableBody.innerHTML = "";
-
-      payments.forEach(payment => {
+      payments.forEach(p => {
         const tr = document.createElement("tr");
-        const statusClass = payment.status === "approved" ? "status-approved" : "status-rejected";
-        const statusIcon = payment.status === "approved" ? "✓" : "✖";
-        const extraClass = payment.id === 10 ? "danger-big" : "";
-
         tr.innerHTML = `
-          <td><strong>${payment.customer}</strong></td>
-          <td>${payment.service}</td>
-          <td>${payment.date}</td>
-          <td>${payment.amount.toLocaleString()}.00฿</td>
-          <td><button class="action-pill" onclick="openPaymentModal(${payment.id})">👁 View</button></td>
+          <td>${p.customerName || 'N/A'}</td>
+          <td>${p.serviceName || 'N/A'}</td>
+          <td>${p.date || 'N/A'}</td>
+          <td>${formatMoney(p.price)}</td>
+          <td>
+            <button class="action-pill" onclick="openPaymentModal('${p.id}')">View Slip</button>
+          </td>
           <td style="text-align:center;">
-            <div class="status-icon ${statusClass} ${extraClass}">${statusIcon}</div>
+            <div class="status-icon ${p.status === 'success' ? 'status-approved' : p.status === 'rejected' ? 'status-rejected' : ''}">
+              ${p.status === 'success' ? '✓' : p.status === 'rejected' ? '✖' : '⏳'}
+            </div>
           </td>
         `;
         paymentTableBody.appendChild(tr);
       });
     }
 
-    function renderMembers(){
+    window.renderMembers = function() {
       membersTableBody.innerHTML = "";
-
       members.forEach(member => {
-        const firstLetter = member.name.charAt(0).toUpperCase();
         const tr = document.createElement("tr");
-
+        const initial = (member.displayName || member.username || "U").charAt(0).toUpperCase();
         tr.innerHTML = `
-          <td><span class="member-badge">${firstLetter}</span><strong>${member.name}</strong></td>
-          <td>${member.phone}</td>
-          <td>${member.email}</td>
+          <td>
+            <span class="member-badge">${initial}</span>
+            <span>${member.displayName || member.username}</span>
+          </td>
+          <td>${member.phone || '-'}</td>
+          <td>${member.email || '-'}</td>
           <td>
             <div class="action-inline">
-              <button class="icon-btn" onclick="openEditMember(${member.id})">📝</button>
-              <button class="icon-btn delete" onclick="deleteMember(${member.id})">🗑</button>
+              <button class="icon-btn" onclick="openEditMember('${member.id}')">📝</button>
+              <button class="icon-btn delete" onclick="deleteMember('${member.id}')">🗑</button>
             </div>
           </td>
         `;
@@ -1006,9 +987,8 @@
       });
     }
 
-    function renderLogs(){
+    window.renderLogs = function() {
       logsTableBody.innerHTML = "";
-
       logs.forEach(log => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -1025,134 +1005,124 @@
       });
     }
 
-    function renderDashboardStats(){
-      document.getElementById("dailyBookingsStat").textContent = payments.length + 14;
-      document.getElementById("monthlyRevenueStat").textContent = formatMoney(
-        payments.filter(p => p.status === "approved").reduce((sum,p) => sum + p.amount, 0)
-      );
-      document.getElementById("newMembersStat").textContent = members.length + 119;
-      document.getElementById("totalCustomersStat").textContent = (members.length + 2837).toLocaleString();
+    window.renderDashboardStats = function() {
+      document.getElementById("dailyBookingsStat").textContent = payments.length;
+      const revenue = payments
+        .filter(p => p.status === "success")
+        .reduce((sum, p) => sum + (Number(p.price) || 0), 0);
+      document.getElementById("monthlyRevenueStat").textContent = formatMoney(revenue);
+      document.getElementById("newMembersStat").textContent = members.length;
+      document.getElementById("totalCustomersStat").textContent = members.length.toLocaleString();
     }
 
-    function openPaymentModal(id){
+    window.openPaymentModal = function(id) {
       modalPaymentId = id;
       const payment = payments.find(p => p.id === id);
       if(!payment) return;
 
-      document.getElementById("paymentTransactionId").textContent = "Transaction ID: #" + payment.id;
-      document.getElementById("modalCustomerName").textContent = payment.customer;
-      document.getElementById("modalService").textContent = payment.service;
-      document.getElementById("modalDate").textContent = payment.date;
-      document.getElementById("modalTxnId").textContent = "TXN-1234567";
-      document.getElementById("modalAmount").textContent = payment.amount.toFixed(2) + "฿";
+      document.getElementById("paymentTransactionId").textContent = "Receipt No: " + (payment.receiptNo || id);
+      document.getElementById("modalCustomerName").textContent = payment.customerName || '-';
+      document.getElementById("modalService").textContent = payment.serviceName || '-';
+      document.getElementById("modalDate").textContent = payment.date || '-';
+      document.getElementById("modalTxnId").textContent = payment.id;
+      document.getElementById("modalAmount").textContent = formatMoney(payment.price);
 
       const slipBox = document.getElementById("modalSlipBox");
-      if(payment.slip){
-        slipBox.innerHTML = `<img src="${payment.slip}" alt="slip">`;
+      const slipUrl = payment.localFilePath ? "http://localhost:3000/uploads/" + payment.localFilePath.split(/[\\/]/).pop() : null;
+
+      if(slipUrl){
+        slipBox.innerHTML = `<img src="${slipUrl}" alt="slip" onerror="this.parentElement.innerHTML='Slip Load Failed'">`;
       }else{
         slipBox.innerHTML = `ไม่มีสลิป`;
       }
 
       const statusIcon = document.getElementById("modalStatusIcon");
-      statusIcon.className = "status-icon mini " + (payment.status === "approved" ? "status-approved" : "status-rejected");
-      statusIcon.textContent = payment.status === "approved" ? "✓" : "✖";
+      statusIcon.className = "status-icon mini " + (payment.status === "success" ? "status-approved" : payment.status === "rejected" ? "status-rejected" : "");
+      statusIcon.textContent = payment.status === "success" ? "✓" : payment.status === "rejected" ? "✖" : "⏳";
 
       const modalActionButtons = document.getElementById("modalActionButtons");
-      modalActionButtons.innerHTML = "";
-
-      if(payment.status === "approved"){
-        modalActionButtons.innerHTML = `
-          <button class="reject-btn" onclick="rejectPayment(${payment.id})">ⓧ Reject Payment</button>
-        `;
-      } else {
-        modalActionButtons.innerHTML = `
-          <button class="approve-btn" onclick="approvePayment(${payment.id})">ⓒ Approve Payment</button>
-          <button class="reject-btn" onclick="rejectPayment(${payment.id})">ⓧ Reject Payment</button>
-        `;
-      }
+      modalActionButtons.innerHTML = `
+          <button class="approve-btn" onclick="approvePayment('${payment.id}')">ⓒ Approve</button>
+          <button class="reject-btn" onclick="rejectPayment('${payment.id}')">ⓧ Reject</button>
+      `;
 
       document.getElementById("paymentModalBackdrop").classList.add("show");
     }
 
-    function closePaymentModal(){
+    window.closePaymentModal = function() {
       document.getElementById("paymentModalBackdrop").classList.remove("show");
     }
 
-    function approvePayment(id){
-      const payment = payments.find(p => p.id === id);
-      if(!payment) return;
-      payment.status = "approved";
-      renderPayments();
-      renderDashboardStats();
-      pushLog(`Approved payment for ${payment.customer} - ฿${payment.amount}`);
-      openPaymentModal(id);
+    window.approvePayment = async function(id) {
+      try {
+        await updateDoc(doc(db, "bookings", id), { status: "success" });
+        pushLog(`Approved payment for booking ${id}`);
+        closePaymentModal();
+      } catch (err) {
+        alert("Failed to approve: " + err.message);
+      }
     }
 
-    function rejectPayment(id){
-      const payment = payments.find(p => p.id === id);
-      if(!payment) return;
-      payment.status = "rejected";
-      renderPayments();
-      renderDashboardStats();
-      pushLog(`Rejected payment for ${payment.customer} - ฿${payment.amount}`);
-      openPaymentModal(id);
+    window.rejectPayment = async function(id) {
+      try {
+        await updateDoc(doc(db, "bookings", id), { status: "rejected" });
+        pushLog(`Rejected payment for booking ${id}`);
+        closePaymentModal();
+      } catch (err) {
+        alert("Failed to reject: " + err.message);
+      }
     }
 
-    function openEditMember(id){
+    window.openEditMember = function(id) {
       const member = members.find(m => m.id === id);
       if(!member) return;
-
       editingMemberId = id;
-      document.getElementById("editMemberSubtitle").textContent = "Edit profile: " + member.name;
-      document.getElementById("editMemberName").value = member.name;
-      document.getElementById("editMemberPhone").value = member.phone;
-      document.getElementById("editMemberEmail").value = member.email;
+      document.getElementById("editMemberSubtitle").textContent = "Edit profile: " + (member.displayName || member.username);
+      document.getElementById("editMemberName").value = member.displayName || member.username || '';
+      document.getElementById("editMemberPhone").value = member.phone || '';
+      document.getElementById("editMemberEmail").value = member.email || '';
       document.getElementById("memberModalBackdrop").classList.add("show");
     }
 
-    function closeMemberModal(){
+    window.closeMemberModal = function() {
       document.getElementById("memberModalBackdrop").classList.remove("show");
     }
 
-    function saveMemberEdit(){
-      const member = members.find(m => m.id === editingMemberId);
-      if(!member) return;
+    window.saveMemberEdit = async function() {
+      const name = document.getElementById("editMemberName").value.trim();
+      const phone = document.getElementById("editMemberPhone").value.trim();
+      const email = document.getElementById("editMemberEmail").value.trim();
 
-      member.name = document.getElementById("editMemberName").value.trim();
-      member.phone = document.getElementById("editMemberPhone").value.trim();
-      member.email = document.getElementById("editMemberEmail").value.trim();
-
-      renderMembers();
-      renderDashboardStats();
-      pushLog(`Updated member profile: ${member.name}`);
-      closeMemberModal();
+      try {
+        await updateDoc(doc(db, "users", editingMemberId), { 
+          displayName: name, 
+          phone: phone, 
+          email: email 
+        });
+        pushLog(`Updated member profile ID: ${editingMemberId}`);
+        closeMemberModal();
+      } catch (err) {
+        alert("Save failed: " + err.message);
+      }
     }
 
-    function deleteMember(id){
-      const index = members.findIndex(m => m.id === id);
-      if(index === -1) return;
-
-      const deleted = members[index];
-      if(!confirm(`ลบสมาชิก ${deleted.name} ?`)) return;
-
-      members.splice(index, 1);
-      renderMembers();
-      renderDashboardStats();
-      pushLog(`Deleted member: ${deleted.name}`);
+    window.deleteMember = async function(id) {
+      if(!confirm(`ต้องการลบสมาชิกชุดนี้ใช่หรือไม่?`)) return;
+      try {
+        await deleteDoc(doc(db, "users", id));
+        pushLog(`Deleted member ID: ${id}`);
+      } catch (err) {
+        alert("Delete failed: " + err.message);
+      }
     }
 
+    // Modal backdrops
     document.getElementById("paymentModalBackdrop").addEventListener("click", (e) => {
       if(e.target.id === "paymentModalBackdrop") closePaymentModal();
     });
-
     document.getElementById("memberModalBackdrop").addEventListener("click", (e) => {
       if(e.target.id === "memberModalBackdrop") closeMemberModal();
     });
-
-    renderPayments();
-    renderMembers();
-    renderLogs();
-    renderDashboardStats();
   </script>
 </body>
 </html>
