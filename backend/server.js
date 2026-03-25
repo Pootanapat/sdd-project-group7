@@ -1,0 +1,86 @@
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const admin = require("firebase-admin");
+
+// 1. Initialize Firebase (Using actual credentials)
+// กรุณานำไฟล์ serviceAccountKey.json มาวางไว้ในโฟลเดอร์เดียวกันกับ server.js ด้วยนะครับ
+const serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+
+
+const app = express();
+const PORT = 3000;
+
+app.use(cors());
+app.use(express.json());
+
+// Setup Multer for file uploads (simulating Firebase Storage upload by saving locally for now)
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir)
+    },
+    filename: function (req, file, cb) {
+        cb(null, 'slip-' + Date.now() + path.extname(file.originalname))
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// API Endpoint to process payment slip
+app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No slip file uploaded' });
+        }
+
+        console.log(`Received slip: ${req.file.filename}`);
+
+        // Generate Receipt No
+        const receiptNo = 'INV-' + Math.floor(Math.random() * 1000000);
+
+        // Prepare data to save in Firestore
+        const paymentRecord = {
+            receiptNo: receiptNo,
+            originalFilename: req.file.originalname,
+            localFilePath: req.file.path, // หากมีการอัปโหลดขึ้น Firebase Storage ค่อยเปลี่ยน path ตรงนี้
+            status: 'success', // คุณสามารถตั้งให้เป็น 'waiting' ถ้าต้องการให้แอดมินตรวจก่อน
+            createdAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+
+        // Save to Firebase Firestore collection named 'payments'
+        await db.collection('payments').doc(receiptNo).set(paymentRecord);
+
+        console.log(`[Firebase] Successfully saved document with ID ${receiptNo} to 'payments' collection.`);
+
+        // Respond back to frontend
+        res.status(200).json({
+            success: true,
+            message: 'Slip uploaded successfully and data saved to Firebase',
+            receiptNo: receiptNo,
+            filePath: req.file.path
+        });
+
+    } catch (error) {
+        console.error('Error processing upload:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Payment Server running on http://localhost:${PORT}`);
+});
+
+

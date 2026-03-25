@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile — โปรไฟล์ของฉัน</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  
+  <style>
+    /* 🎨 ขยายกล่องและปรับสีตามแบบเรฟเฟอเรนซ์ */
+    .profile-inner {
+      max-width: 850px !important; 
+      width: 95%;
+    }
+
+    .profile-card {
+      padding: 3rem 4rem !important; 
+      border: 1px solid #666; 
+      border-radius: 16px !important;
+      background-color: #242424 !important; 
+      overflow: hidden;
+    }
+
+    .profile-avatar {
+      width: 140px !important;
+      height: 140px !important;
+    }
+
+    /* 📌 จัด Field แนวนอน */
+    .profile-field {
+      display: flex !important;
+      align-items: center !important;
+      margin-bottom: 25px !important;
+    }
+
+    .profile-field > svg {
+      min-width: 24px;
+      margin-right: 15px !important;
+    }
+
+    .profile-field-label {
+      width: 130px !important; 
+      font-size: 1.1rem !important;
+      margin-bottom: 0 !important;
+      text-align: left;
+    }
+
+    .profile-field-wrap, 
+    .profile-field > input.profile-field-input {
+      flex: none !important;
+      width: 400px !important; 
+      position: relative;
+    }
+
+    .profile-field-input {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      font-size: 1.05rem !important;
+      padding: 10px 40px 10px 20px !important; /* เว้นที่ฝั่งขวาไว้ให้ไอคอน */
+      border-radius: 30px !important; 
+      border: 1px solid #777 !important; 
+      background-color: rgba(255, 255, 255, 0.05) !important; 
+      color: #fff !important;
+    }
+    
+    /* กรณี readonly (เช่น อีเมล) ให้สีดูทึบลงนิดนึงเพื่อบอกว่าแก้ไม่ได้ */
+    .profile-field-input[readonly] {
+      background-color: rgba(255, 255, 255, 0.02) !important;
+      color: #aaa !important;
+      padding-right: 20px !important; /* อีเมลไม่มีไอคอน ไม่ต้องเว้นเยอะ */
+    }
+
+    .edit-icon {
+      position: absolute !important;
+      right: 15px !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      pointer-events: none;
+      color: #aaa;
+    }
+
+    /* 📋 ส่วนประวัติการจอง (รอรับข้อมูลจริงจาก JS) */
+    .history-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 35px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .history-box {
+      border: 1px solid #666 !important;
+      border-radius: 12px !important;
+      padding: 20px !important;
+      min-height: 150px;
+      background-color: #000; 
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* จัดให้อยู่ตรงกลางตอนที่ว่างเปล่า */
+    }
+
+    /* ข้อความตอนยังไม่มีประวัติ */
+    .history-empty {
+      text-align: center;
+      color: #888;
+      font-size: 1rem;
+    }
+
+    /* เผื่อไว้ให้ JS ตอนสร้างกล่องประวัติ จะได้ใช้ Style นี้ */
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      color: #ddd;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+    }
+    .history-item div {
+      flex: 1;
+    }
+    .history-item .h-price { text-align: center; }
+    .history-item .h-date { text-align: right; }
+
+    /* 🔘 ปุ่มกด */
+    .action-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 40px;
+      justify-content: center;
+    }
+    .save-btn, .logout-btn {
+      font-size: 1.1rem !important;
+      padding: 12px 30px !important;
+      width: auto !important; 
+      min-width: 180px;
+      border-radius: 30px !important;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="navbar-brand">BARBERSHOP</div>
+  <div class="navbar-links">
+    <button class="nav-link">บริการ</button>
+    <button class="nav-link">ช่างของเรา</button>
+    <button class="nav-link">จองคิว</button>
+    <button class="nav-link">ติดต่อเรา</button>
+    <div class="nav-spacer"></div>
+    <button class="nav-btn" onclick="window.location.href='Signin.html'">Sign in</button>
+    <button class="nav-btn" onclick="window.location.href='Signup.html'">Signup</button>
+    <button class="nav-profile active" onclick="window.location.href='profile.html'">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      Profile
+    </button>
+  </div>
+</nav>
+
+<div class="page active" id="profile-content" style="display: none;">
+  <div class="profile-inner">
+    <div class="profile-title">Profile</div>
+
+    <div class="profile-avatar-wrap">
+      <label class="avatar-upload-wrap" for="avatar-file-input" title="เปลี่ยนรูปโปรไฟล์">
+        <div class="profile-avatar" id="profile-avatar">
+          <svg id="avatar-default-icon" width="60" height="60" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+          <img id="avatar-img" src="" alt="avatar" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+        </div>
+        <div class="avatar-overlay">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M3 17v3h3l9.9-9.9-3-3L3 17zm17.7-10.3a1 1 0 0 0 0-1.4l-2-2a1 1 0 0 0-1.4 0l-1.6 1.6 3 3 2-1.6-.0-.2z"/></svg>
+          เปลี่ยนรูป
+        </div>
+      </label>
+      <input type="file" id="avatar-file-input" accept="image/*" style="display: none;"/>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-field">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        <div class="profile-field-label">ชื่อ-นามสกุล</div>
+        <div class="profile-field-wrap">
+          <input class="profile-field-input" id="pf-name" type="text" placeholder="กรอกชื่อ-นามสกุล"/>
+          <span class="edit-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+      
+      <div class="profile-field">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+        <div class="profile-field-label">เบอร์โทร</div>
+        <div class="profile-field-wrap">
+          <input class="profile-field-input" id="pf-phone" type="tel" placeholder="กรอกเบอร์โทรศัพท์"/>
+          <span class="edit-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="profile-field">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <div class="profile-field-label">อีเมล</div>
+        <input class="profile-field-input" id="pf-email" type="email" readonly/>
+      </div>
+
+      <div>
+        <div class="history-title">ประวัติการจอง</div>
+        <div class="history-box" id="history-box">
+          <div class="history-empty">ยังไม่มีประวัติการจอง</div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="save-btn" id="save-profile-btn">💾 บันทึกข้อมูล</button>
+        <button class="logout-btn" id="logout-btn">🚪 ออกจากระบบ</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module" src="app-firebase.js"></script>
+</body>
+</html>
