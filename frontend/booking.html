@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>จองคิวออนไลน์ - BARBERSHOP</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body{
+      background:#4c4c4c;
+      color:#fff;
+      min-height:100vh;
+      padding:24px 18px 40px;
+    }
+
+    .booking-page{
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    .top-title{
+      text-align:center;
+      margin-bottom:28px;
+    }
+
+    .top-title .small{
+      color:#ffa200;
+      font-size:18px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .top-title h1{
+      font-size:52px;
+      font-weight:800;
+      line-height:1.1;
+      margin-bottom:8px;
+    }
+
+    .top-title p{
+      color:#d8d8d8;
+      font-size:16px;
+    }
+
+    .booking-card{
+      background:linear-gradient(90deg,#161616,#1f1f1f);
+      border:1px solid rgba(255,255,255,.65);
+      border-radius:16px;
+      padding:26px 26px 20px;
+      box-shadow:0 14px 30px rgba(0,0,0,.18);
+    }
+
+    .steps{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:30px;
+      padding:0 12px;
+    }
+
+    .step{
+      width:52px;
+      height:52px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#e4e4e4;
+      color:#444;
+      font-size:22px;
+      font-weight:800;
+    }
+
+    .step.active{
+      background:#ffa200;
+      color:#111;
+    }
+
+    .step.done{
+      background:#ffa200;
+      color:#1aa332;
+      font-size:30px;
+      font-weight:900;
+    }
+
+    .panel{
+      display:none;
+    }
+
+    .panel.active{
+      display:block;
+      animation:fadeUp .3s ease;
+    }
+
+    @keyframes fadeUp{
+      from{
+        opacity:0;
+        transform:translateY(14px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .section-title{
+      font-size:22px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .group-title{
+      font-size:15px;
+      color:#d3d3d3;
+      margin-bottom:10px;
+      margin-top:8px;
+    }
+
+    .label{
+      color:#d3d3d3;
+      font-size:14px;
+      margin-bottom:10px;
+    }
+
+    .service-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:24px;
+    }
+
+    .service-grid .full{
+      grid-column:1 / -1;
+      max-width:49%;
+    }
+
+    .barber-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
+      margin-bottom:12px;
+    }
+
+    .time-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .choice-btn,
+    .time-btn,
+    .action-btn,
+    .back-btn,
+    .upload-btn{
+      height:48px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.55);
+      background:transparent;
+      color:#fff;
+      font-size:15px;
+      cursor:pointer;
+      transition:.25s;
+      padding:0 16px;
+    }
+
+    .choice-btn:hover,
+    .time-btn:hover,
+    .back-btn:hover,
+    .upload-btn:hover{
+      border-color:#ffa200;
+      box-shadow:0 0 16px rgba(255,162,0,.15);
+      transform:translateY(-2px);
+    }
+
+    .choice-btn.active,
+    .time-btn.active{
+      background:#ffa200;
+      color:#111;
+      border-color:#ffa200;
+      font-weight:800;
+    }
+
+    .date-input,
+    .text-input{
+      width:100%;
+      height:50px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.55);
+      background:#000;
+      color:#fff;
+      padding:0 18px;
+      font-size:15px;
+      outline:none;
+      margin-bottom:16px;
+    }
+
+    .date-input::-webkit-calendar-picker-indicator{
+      filter:invert(1);
+      cursor:pointer;
+    }
+
+    .summary-box{
+      width:100%;
+      min-height:140px;
+      background:#000;
+      border:1px solid rgba(255,255,255,.55);
+      border-radius:14px;
+      padding:18px;
+      margin-bottom:18px;
+      line-height:2;
+      color:#ededed;
+    }
+
+    .actions{
+      margin-top:12px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+
+    .back-btn{
+      width:200px;
+      background:rgba(255,255,255,.04);
+      font-weight:700;
+    }
+
+    .action-btn{
+      flex:1;
+      border:none;
+      background:#ffa200;
+      color:#111;
+      font-weight:800;
+      height:50px;
+    }
+
+    .action-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 20px rgba(255,162,0,.24);
+    }
+
+    .payment-grid{
+      display:grid;
+      grid-template-columns:1fr 1px 1fr;
+      gap:28px;
+      align-items:start;
+      margin-top:8px;
+    }
+
+    .divider{
+      width:1px;
+      background:rgba(255,255,255,.6);
+      min-height:350px;
+    }
+
+    .payment-title{
+      font-size:20px;
+      font-weight:800;
+      margin-bottom:16px;
+    }
+
+    .qr-box{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .qr-card{
+      width:200px;
+      background:#fff;
+      color:#111;
+      border-radius:2px;
+      overflow:hidden;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+      text-align:center;
+    }
+
+    .qr-header{
+      background:#184a7a;
+      color:#fff;
+      padding:10px 8px;
+      font-size:18px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .qr-sub{
+      background:#ececec;
+      color:#333;
+      font-size:10px;
+      padding:4px 0;
+    }
+
+    .fake-qr{
+      width:100px;
+      height:100px;
+      margin:16px auto 10px;
+      background:
+        linear-gradient(90deg,#000 10%,transparent 10%,transparent 20%,#000 20%,#000 30%,transparent 30%,transparent 40%,#000 40%,#000 50%,transparent 50%,transparent 60%,#000 60%,#000 70%,transparent 70%,transparent 80%,#000 80%,#000 90%,transparent 90%),
+        linear-gradient(#000 10%,transparent 10%,transparent 20%,#000 20%,#000 30%,transparent 30%,transparent 40%,#000 40%,#000 50%,transparent 50%,transparent 60%,#000 60%,#000 70%,transparent 70%,transparent 80%,#000 80%,#000 90%,transparent 90%);
+      background-size:20px 20px;
+      border:6px solid #fff;
+      outline:2px solid #000;
+    }
+
+    .qr-info{
+      font-size:11px;
+      line-height:1.6;
+      color:#555;
+      padding:0 14px 14px;
+    }
+
+    .upload-wrap{
+      text-align:center;
+    }
+
+    .upload-btn{
+      width:100%;
+      max-width:420px;
+      margin:0 auto 14px;
+      border:none;
+      background:#ffa200;
+      color:#111;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .slip-preview{
+      width:240px;
+      height:240px;
+      margin:0 auto 14px;
+      border:2px solid #06a3ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background:#101010;
+    }
+
+    .slip-preview img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:none;
+    }
+
+    .slip-placeholder{
+      color:#cfcfcf;
+      font-size:14px;
+      padding:12px;
+      text-align:center;
+      line-height:1.6;
+    }
+
+    .confirm-small{
+      width:160px;
+      margin:0 auto;
+      display:block;
+    }
+
+    .details-card{
+      width:100%;
+      min-height:210px;
+      background:#000;
+      border:1px solid rgba(255,255,255,.55);
+      border-radius:14px;
+      padding:18px 18px 16px;
+      margin-bottom:18px;
+      line-height:1.9;
+      color:#ededed;
+    }
+
+    .details-card .head{
+      font-size:20px;
+      margin-bottom:10px;
+    }
+
+    .line{
+      width:120px;
+      height:1px;
+      background:rgba(255,255,255,.4);
+      margin:10px 0;
+    }
+
+    .back-home{
+      display:inline-block;
+      margin-top:16px;
+      color:#fff;
+      opacity:.85;
+      text-decoration:none;
+      transition:.25s;
+    }
+
+    .back-home:hover{
+      color:#ffa200;
+    }
+
+    input[type="file"]{
+      display:none;
+    }
+
+    @media (max-width: 900px){
+      .payment-grid{
+        grid-template-columns:1fr;
+      }
+
+      .divider{
+        display:none;
+      }
+
+      .top-title h1{
+        font-size:40px;
+      }
+
+      .time-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .barber-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+
+      .service-grid{
+        grid-template-columns:1fr;
+      }
+
+      .service-grid .full{
+        max-width:100%;
+        grid-column:auto;
+      }
+
+      .actions{
+        flex-direction:column;
+      }
+
+      .back-btn{
+        width:100%;
+      }
+
+      .step{
+        width:44px;
+        height:44px;
+        font-size:20px;
+      }
+    }
+    /* --- NEW CSS for Payment UI, Modal, Status --- */
+    .hidden { display: none !important; }
+    
+    .status-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(90deg,#161616,#1f1f1f);
+      border: 1px solid rgba(255,255,255,.55);
+      border-radius: 16px;
+      padding: 40px 20px;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255, 162, 0, 0.2);
+      border-left-color: #ffa200;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .status-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .status-title.success { color: #1aa332; }
+    .status-message { color: #d3d3d3; font-size: 15px; margin-bottom: 20px; }
+
+    /* Modal Popup */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999; padding: 20px;
+    }
+
+    .modal-content {
+      background: #1f1f1f;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%; max-width: 420px;
+      position: relative;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .close-btn {
+      position: absolute; top: 15px; right: 20px;
+      font-size: 24px; color: #888; cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
+
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,.4);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+      cursor: pointer;
+      min-height: 220px; display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      margin-bottom: 24px; margin-top: 10px;
+      transition: .3s; position: relative; overflow: hidden;
+    }
+
+    .upload-area:hover { border-color: #ffa200; background: rgba(255, 162, 0, 0.05); }
+
+    .image-preview {
+      width: 100%; height: 100%; object-fit: contain;
+      position: absolute; top: 0; left: 0;
+    }
+
+    .modal-actions { display: flex; gap: 10px; }
+    .btn-outline { background: transparent; border: 1px solid #555; color: #ccc; flex: 1; border-radius: 8px; cursor:pointer;}
+    .btn-outline:hover { background: rgba(255,255,255,.05); color: #fff; }
+    .btn-primary { background: #ffa200; color: #111; border: none; flex: 1; font-weight:800; border-radius: 8px; cursor:pointer;}
+    .btn-primary:hover:not(:disabled) { box-shadow: 0 5px 15px rgba(255,162,0,.3); transform: translateY(-1px); }
+    .btn-primary:disabled { background: #444; color: #888; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="booking-page">
+    <div class="top-title">
+      <div class="small">APPOINTMENT</div>
+      <h1>จองคิวออนไลน์</h1>
+      <p>รวดเร็ว ทันใจ ไม่ต้องรอนาน</p>
+    </div>
+
+    <div class="booking-card">
+      <div class="steps">
+        <div class="step active" id="step1Icon">1</div>
+        <div class="step" id="step2Icon">2</div>
+        <div class="step" id="step3Icon">3</div>
+        <div class="step" id="step4Icon">4</div>
+      </div>
+
+      <div class="panel active" id="step1">
+        <div class="section-title">เลือกบริการและช่าง</div>
+
+        <div class="group-title">บริการ</div>
+        <div class="service-grid">
+          <button class="choice-btn service-btn">ตัดผมชาย</button>
+          <button class="choice-btn service-btn">โกนหนวด</button>
+          <button class="choice-btn service-btn full">Full set</button>
+        </div>
+
+        <div class="group-title">ช่าง</div>
+        <div class="barber-grid">
+          <button class="choice-btn barber-btn">ช่างซัน</button>
+          <button class="choice-btn barber-btn">ช่างโต๋</button>
+          <button class="choice-btn barber-btn">ช่างเวียร์</button>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn" onclick="goToStep2()">ขั้นตอนถัดไป</button>
+        </div>
+      </div>
+
+      <div class="panel" id="step2">
+        <div class="section-title">เลือกเวลา</div>
+        <div class="label">วันที่</div>
+
+        <input type="date" id="bookingDate" class="date-input" />
+
+        <div class="time-grid">
+          <button class="time-btn">10:00</button>
+          <button class="time-btn">11:00</button>
+          <button class="time-btn">12:00</button>
+          <button class="time-btn">13:00</button>
+          <button class="time-btn">14:00</button>
+          <button class="time-btn">15:00</button>
+          <button class="time-btn">16:00</button>
+          <button class="time-btn">17:00</button>
+          <button class="time-btn">18:00</button>
+          <button class="time-btn">19:00</button>
+        </div>
+
+        <div class="actions">
+          <button class="back-btn" onclick="backToStep1()">ย้อนกลับ</button>
+          <button class="action-btn" onclick="goToStep3()">ขั้นตอนถัดไป</button>
+        </div>
+      </div>
+
+      <div class="panel" id="step3">
+        <div class="summary-box" id="summaryBox"></div>
+
+        <input type="text" id="fullName" class="text-input" placeholder="ชื่อ-นามสกุล">
+        <input type="tel" id="phoneNumber" class="text-input" placeholder="เบอร์โทรศัพท์">
+
+        <div class="actions">
+          <button class="back-btn" onclick="backToStep2()">ย้อนกลับ</button>
+          <button class="action-btn" onclick="goToStep4()">ขั้นตอนถัดไป</button>
+        </div>
+      </div>
+
+      <div class="panel" id="step4">
+        <div class="section-title">ยืนยันการจอง</div>
+        <div class="summary-box" id="finalSummary"></div>
+
+        <div class="actions">
+          <button class="back-btn" onclick="backToStep3()">ย้อนกลับ</button>
+          <button class="action-btn" onclick="goToPayment()">ยืนยันการจอง</button>
+        </div>
+      </div>
+
+      <div class="panel" id="paymentPanel">
+        <div class="payment-grid">
+          <div>
+            <div class="payment-title">การชำระเงิน</div>
+            <div class="qr-box">
+              <div class="qr-card">
+                <div class="qr-header">THAI QR<br>PAYMENT</div>
+                <div class="qr-sub">PromptPay</div>
+                <div class="fake-qr"></div>
+                <div class="qr-info">
+                  สแกน QR เพื่อโอนเข้าบัญชี<br>
+                  ชื่อ: ร้านตัดผม Barber Flow<br>
+                  (จำลองระบบ Payment)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="upload-wrap" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+            <p style="color:#cfcfcf; margin-bottom: 15px;">โอนเงินเรียบร้อยแล้วใช่ไหม?</p>
+            <button class="action-btn" style="max-width:300px; margin: 0 auto; display:block; width:100%;" onclick="openUploadPopup()">อัปโหลดสลิปโอนเงิน</button>
+            <button class="back-btn" style="max-width:300px; margin: 15px auto 0; display:block; width:100%;" onclick="backToStep4()">ย้อนกลับ</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="statusPanel">
+        <div class="status-container">
+          <div id="statusIcon">
+            <div class="spinner"></div>
+          </div>
+          <h2 class="status-title" id="statusTitle">กำลังรอการตรวจสอบ</h2>
+          <p class="status-message" id="statusMessage">ระบบกำลังตรวจสอบสลิปการโอนเงินของคุณ<br>โปรดรอสักครู่...</p>
+        </div>
+      </div>
+
+      <div class="panel" id="detailPanel">
+        <div class="details-card" id="bookingDetailsCard"></div>
+        <button class="action-btn" onclick="finishAll()">เสร็จสิ้น</button>
+      </div>
+    </div>
+
+    <a class="back-home" href="index.html">← กลับหน้าแรก</a>
+  </div>
+
+  <!-- UPLOAD SLIP MODAL -->
+  <div id="uploadModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeUploadPopup()">&times;</span>
+        <h2 style="font-size:22px; color:#ffa200; font-weight:800;">อัปโหลดสลิปหลักฐาน</h2>
+        <p style="color:#d3d3d3; font-size:14px; margin-top:5px;">อัปโหลดรูปภาพสลิปใบเสร็จเพื่อยืนยันบัญชี</p>
+        
+        <div class="upload-area" id="uploadArea" onclick="document.getElementById('slipInputModal').click()">
+            <input type="file" id="slipInputModal" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+            <div id="uploadPlaceholder" style="text-align:center;">
+                <div style="font-size: 40px; color:#888; margin-bottom:10px;">+</div>
+                <p style="color:#fff; font-weight:600;">แตะเพื่อเลือกรูปภาพ</p>
+            </div>
+            <img id="imagePreview" class="image-preview hidden">
+        </div>
+
+        <div class="modal-actions">
+            <button class="choice-btn btn-outline" style="height:45px;" onclick="closeUploadPopup()">ยกเลิก</button>
+            <button class="action-btn btn-primary" style="height:45px;" id="confirmUploadBtn" onclick="submitSlipPayment()" disabled>ยืนยันสลิป</button>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedService = "";
+    let selectedBarber = "";
+    let selectedTime = "";
+    let uploadedSlip = false;
+
+    const priceMap = {
+      "ตัดผมชาย": 200,
+      "โกนหนวด": 150,
+      "Full set": 350
+    };
+
+    const serviceButtons = document.querySelectorAll(".service-btn");
+    const barberButtons = document.querySelectorAll(".barber-btn");
+    const timeButtons = document.querySelectorAll(".time-btn");
+    const slipInput = document.getElementById("slipInput");
+    const slipImage = document.getElementById("slipImage");
+    const slipPlaceholder = document.getElementById("slipPlaceholder");
+
+    serviceButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        serviceButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        selectedService = button.textContent.trim();
+      });
+    });
+
+    barberButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        barberButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        selectedBarber = button.textContent.trim();
+      });
+    });
+
+    timeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        timeButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        selectedTime = button.textContent.trim();
+      });
+    });
+
+    let mySelectedFile = null;
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        mySelectedFile = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('imagePreview');
+          const placeholder = document.getElementById('uploadPlaceholder');
+          const confirmBtn = document.getElementById('confirmUploadBtn');
+
+          preview.src = e.target.result;
+          preview.classList.remove('hidden');
+          placeholder.style.display = 'none';
+          
+          confirmBtn.disabled = false;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function openUploadPopup() {
+      document.getElementById('uploadModal').classList.remove('hidden');
+    }
+
+    function closeUploadPopup() {
+      document.getElementById('uploadModal').classList.add('hidden');
+    }
+
+    function submitSlipPayment() {
+      if (!mySelectedFile) return;
+
+      closeUploadPopup();
+      
+      // Navigate to Status Page
+      showPanel('statusPanel');
+      document.getElementById('statusIcon').innerHTML = '<div class="spinner"></div>';
+      document.getElementById('statusTitle').innerText = 'กำลังรอการตรวจสอบ';
+      document.getElementById('statusTitle').classList.remove('success');
+      document.getElementById('statusMessage').innerHTML = 'ระบบกำลังตรวจสอบสลิปการโอนเงินของคุณ<br>โปรดรอสักครู่...';
+
+      // Submit to backend
+      const formData = new FormData();
+      formData.append('slip', mySelectedFile);
+
+      fetch('http://localhost:3000/api/upload-slip', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if(data.success) {
+            showSuccessAndReceipt();
+          } else {
+            alert('Upload failed: ' + (data.error || 'Unknown error'));
+            showPanel('paymentPanel');
+          }
+      })
+      .catch(error => {
+          console.error('Backend error, using mock fallback', error);
+          // Mock fallback if DB is not connected
+          setTimeout(() => {
+            showSuccessAndReceipt();
+          }, 2500);
+      });
+    }
+
+    function backToStep4() {
+      showPanel('step4');
+      setStepUI(4);
+    }
+
+    function showSuccessAndReceipt() {
+      // Show success briefly
+      document.getElementById('statusIcon').innerHTML = '<div style="font-size: 60px; color: #1aa332; margin-bottom: 20px;">✓</div>';
+      document.getElementById('statusTitle').innerText = 'จองสำเร็จแล้ว!';
+      document.getElementById('statusTitle').classList.add('success');
+      document.getElementById('statusMessage').innerText = 'เราได้รับยอดเงินของคุณเรียบร้อยแล้ว กำลังออกใบเสร็จ...';
+
+      // After 2 seconds, transition to detailPanel (final receipt)
+      setTimeout(() => {
+        const bookingDate = document.getElementById("bookingDate").value;
+        const fullName = document.getElementById("fullName").value.trim();
+        const phoneNumber = document.getElementById("phoneNumber").value.trim();
+
+        document.getElementById("bookingDetailsCard").innerHTML = `
+          <div class="head" style="color:#ffa200;font-weight:800;font-size:24px;">ใบเสร็จการชำระเงิน / ยืนยันการจอง</div>
+          <div class="line" style="width:100%;"></div>
+          <div><strong style="color:#fff;">บริการ :</strong> ${selectedService}</div>
+          <div><strong style="color:#fff;">ช่าง :</strong> ${selectedBarber}</div>
+          <div><strong style="color:#fff;">วันเวลา :</strong> ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
+          <div class="line" style="width:100%;"></div>
+          <div><strong style="color:#fff;">ชื่อ-นามสกุล :</strong> ${fullName}</div>
+          <div><strong style="color:#fff;">เบอร์โทรศัพท์ :</strong> ${phoneNumber}</div>
+          <div class="line" style="width:100%;"></div>
+          <div><strong style="color:#1aa332;">สถานะ :</strong> ชำระเงินสำเร็จ ✅</div>
+          <div><strong style="color:#1aa332;">สถานะคิว :</strong> ยืนยันแล้ว</div>
+        `;
+
+        saveBookingHistory(fullName, bookingDate);
+        showPanel("detailPanel");
+        setAllDone();
+      }, 1500);
+    }
+
+    function showPanel(id){
+      document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function resetStepsUI(){
+      const icons = [
+        document.getElementById("step1Icon"),
+        document.getElementById("step2Icon"),
+        document.getElementById("step3Icon"),
+        document.getElementById("step4Icon")
+      ];
+
+      icons.forEach((icon, index) => {
+        icon.classList.remove("active", "done");
+        icon.textContent = index + 1;
+      });
+    }
+
+    function setStepUI(currentStep){
+      resetStepsUI();
+
+      if(currentStep >= 2){
+        document.getElementById("step1Icon").classList.add("done");
+        document.getElementById("step1Icon").textContent = "✓";
+      } else {
+        document.getElementById("step1Icon").classList.add("active");
+      }
+
+      if(currentStep >= 3){
+        document.getElementById("step2Icon").classList.add("done");
+        document.getElementById("step2Icon").textContent = "✓";
+      } else if(currentStep === 2){
+        document.getElementById("step2Icon").classList.add("active");
+      }
+
+      if(currentStep >= 4){
+        document.getElementById("step3Icon").classList.add("done");
+        document.getElementById("step3Icon").textContent = "✓";
+      } else if(currentStep === 3){
+        document.getElementById("step3Icon").classList.add("active");
+      }
+
+      if(currentStep === 4){
+        document.getElementById("step4Icon").classList.add("active");
+      }
+    }
+
+    function setAllDone(){
+      resetStepsUI();
+      document.getElementById("step1Icon").classList.add("done");
+      document.getElementById("step1Icon").textContent = "✓";
+      document.getElementById("step2Icon").classList.add("done");
+      document.getElementById("step2Icon").textContent = "✓";
+      document.getElementById("step3Icon").classList.add("done");
+      document.getElementById("step3Icon").textContent = "✓";
+      document.getElementById("step4Icon").classList.add("done");
+      document.getElementById("step4Icon").textContent = "✓";
+    }
+
+    function goToStep2() {
+      if (!selectedService) {
+        alert("กรุณาเลือกบริการ");
+        return;
+      }
+      if (!selectedBarber) {
+        alert("กรุณาเลือกช่าง");
+        return;
+      }
+
+      showPanel("step2");
+      setStepUI(2);
+    }
+
+    function backToStep1() {
+      showPanel("step1");
+      setStepUI(1);
+    }
+
+    function goToStep3() {
+      const bookingDate = document.getElementById("bookingDate").value;
+
+      if (!bookingDate) {
+        alert("กรุณาเลือกวันที่");
+        return;
+      }
+      if (!selectedTime) {
+        alert("กรุณาเลือกเวลา");
+        return;
+      }
+
+      document.getElementById("summaryBox").innerHTML = `
+        <div>บริการ: ${selectedService}</div>
+        <div>ช่าง: ${selectedBarber}</div>
+        <div>วันเวลา: ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
+      `;
+
+      showPanel("step3");
+      setStepUI(3);
+    }
+
+    function backToStep2() {
+      showPanel("step2");
+      setStepUI(2);
+    }
+
+    function goToStep4() {
+      const fullName = document.getElementById("fullName").value.trim();
+      const phoneNumber = document.getElementById("phoneNumber").value.trim();
+      const bookingDate = document.getElementById("bookingDate").value;
+
+      if (!fullName) {
+        alert("กรุณากรอกชื่อ-นามสกุล");
+        return;
+      }
+      if (!phoneNumber) {
+        alert("กรุณากรอกเบอร์โทรศัพท์");
+        return;
+      }
+
+      document.getElementById("finalSummary").innerHTML = `
+        <div>บริการ: ${selectedService}</div>
+        <div>ช่าง: ${selectedBarber}</div>
+        <div>วันเวลา: ${formatThaiDate(bookingDate)} เวลา ${selectedTime} น.</div>
+        <div>ชื่อ-นามสกุล: ${fullName}</div>
+        <div>เบอร์โทรศัพท์: ${phoneNumber}</div>
+      `;
+
+      showPanel("step4");
+      setStepUI(4);
+    }
+
+    function backToStep3() {
+      showPanel("step3");
+      setStepUI(3);
+    }
+
+    function goToPayment() {
+      showPanel("paymentPanel");
+      setStepUI(4);
+    }
+
+    // Replaced confirmPayment with submitSlipPayment above
+
+    function finishAll() {
+      window.location.href = "index.html";
+    }
+
+    function saveBookingHistory(fullName, bookingDate){
+      const bookingHistory = JSON.parse(localStorage.getItem('bookingHistory') || '[]');
+
+      bookingHistory.unshift({
+        service: selectedService,
+        price: 'ราคา ' + (priceMap[selectedService] || 0) + ' บาท',
+        date: 'เมื่อวันที่ ' + formatThaiDate(bookingDate),
+        barber: selectedBarber,
+        customer: fullName,
+        time: selectedTime + ' น.'
+      });
+
+      localStorage.setItem('bookingHistory', JSON.stringify(bookingHistory));
+    }
+
+    function formatThaiDate(dateString){
+      const date = new Date(dateString);
+      if (isNaN(date)) return dateString;
+
+      const months = [
+        "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+        "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+      ];
+
+      const day = date.getDate();
+      const month = months[date.getMonth()];
+      const year = date.getFullYear() + 543;
+
+      return `${day} ${month} ${year}`;
+    }
+
+    setStepUI(1);
+  </script>
+</body>
+</html>
