@@ -48,22 +48,42 @@ app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
 
         console.log(`Received slip: ${req.file.filename}`);
 
+        // Extract booking data from form data
+        const {
+            userId,
+            customerName,
+            customerPhone,
+            serviceName,
+            barberName,
+            bookingDate,
+            bookingTime,
+            price
+        } = req.body;
+
         // Generate Receipt No
         const receiptNo = 'INV-' + Math.floor(Math.random() * 1000000);
 
         // Prepare data to save in Firestore
         const paymentRecord = {
             receiptNo: receiptNo,
+            userId: userId || 'anonymous',
+            customerName: customerName || '',
+            customerPhone: customerPhone || '',
+            serviceName: serviceName || '',
+            barberName: barberName || '',
+            date: bookingDate || '',
+            time: bookingTime || '',
+            price: Number(price) || 0,
             originalFilename: req.file.originalname,
             localFilePath: req.file.path, // หากมีการอัปโหลดขึ้น Firebase Storage ค่อยเปลี่ยน path ตรงนี้
             status: 'success', // คุณสามารถตั้งให้เป็น 'waiting' ถ้าต้องการให้แอดมินตรวจก่อน
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         };
 
-        // Save to Firebase Firestore collection named 'payments'
-        await db.collection('payments').doc(receiptNo).set(paymentRecord);
+        // Save to Firebase Firestore collection named 'bookings'
+        await db.collection('bookings').doc(receiptNo).set(paymentRecord);
 
-        console.log(`[Firebase] Successfully saved document with ID ${receiptNo} to 'payments' collection.`);
+        console.log(`[Firebase] Successfully saved document with ID ${receiptNo} to 'bookings' collection.`);
 
         // Respond back to frontend
         res.status(200).json({
