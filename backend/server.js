@@ -80,6 +80,8 @@ app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
             createdAt: admin.firestore.FieldValue.serverTimestamp()
         };
 
+        console.log('Saving booking record:', paymentRecord);
+
         // Save to Firebase Firestore collection named 'bookings'
         await db.collection('bookings').doc(receiptNo).set(paymentRecord);
 

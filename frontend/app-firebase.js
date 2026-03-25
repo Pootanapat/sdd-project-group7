@@ -74,11 +74,19 @@ async function loadBookingHistory(uid) {
   const historyBox = document.getElementById('history-box');
   if (!historyBox) return; // ถ้าไม่ได้อยู่หน้า profile ก็ข้ามไป
 
+  const localUser = localStorage.getItem('currentUser');
+  const searchUid = uid || localUser || 'anonymous';
+
+  console.log('Loading booking history for user:', searchUid);
+
   try {
     // ⚠️ ข้อควรระวัง: สมมติว่าใน Firestore ของคุณสร้าง Collection ชื่อ 'bookings'
     // และเก็บ uid ของลูกค้าไว้ในฟิลด์ชื่อ 'userId' (ถ้าคุณตั้งชื่อต่างไปจากนี้ ให้แก้ตรงนี้นะครับ)
-    const q = query(collection(db, 'bookings'), where('userId', '==', uid));
+    const q = query(collection(db, 'bookings'), where('userId', '==', searchUid));
     const querySnapshot = await getDocs(q);
+
+    console.log('Query snapshot size:', querySnapshot.size);
+    console.log('Query snapshot empty:', querySnapshot.empty);
 
     if (querySnapshot.empty) {
       historyBox.innerHTML = '<div class="history-empty">ยังไม่มีประวัติการจอง</div>';
@@ -89,6 +97,7 @@ async function loadBookingHistory(uid) {
 
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
+      console.log('Booking data:', data);
       
       // ดึงข้อมูลมาแสดง (ถ้าชื่อฟิลด์ในฐานข้อมูลคุณต่างไปจากนี้ แก้ตรงนี้ได้เลย)
       const serviceName = data.serviceName || 'บริการตัดผม';
@@ -124,7 +133,10 @@ async function loadBookingHistory(uid) {
    เช็คสถานะการล็อกอินอัตโนมัติ 
 ════════════════════════════════════════════ */
 onAuthStateChanged(auth, async (user) => {
+  updateNavbar(user);
+  
   if (user) {
+    console.log('User authenticated:', user.uid);
     currentUID = user.uid;
     if (window.location.pathname.includes('profile.html')) {
       await fillProfile(user);
@@ -136,12 +148,32 @@ onAuthStateChanged(auth, async (user) => {
       if(content) content.style.display = 'block'; 
     }
   } else {
+    console.log('User not authenticated');
     currentUID = null;
     if (window.location.pathname.includes('profile.html')) {
       window.location.replace('Signin.html'); 
     }
   }
 });
+
+function updateNavbar(user) {
+  const authButtons = document.getElementById('auth-buttons');
+  if (!authButtons) return;
+  
+  if (user) {
+    authButtons.innerHTML = `<button class="nav-btn" onclick="logout()">Logout</button>`;
+  } else {
+    authButtons.innerHTML = `
+      <button class="nav-btn" onclick="window.location.href='Signin.html'">Sign in</button>
+      <button class="nav-btn" onclick="window.location.href='Signup.html'">Signup</button>
+    `;
+  }
+}
+
+async function logout() {
+  await auth.signOut();
+  window.location.href = 'index.html';
+}
 
 /* ════════════════════════════════════════════
    EYE TOGGLE, SIGN IN, FORGOT PASSWORD, SIGN UP
