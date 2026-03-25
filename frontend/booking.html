@@ -1117,13 +1117,14 @@
       };
 
       formData.append('userId', bookPayload.userId);
-      formData.append('customerName', bookPayload.customerName);
+      formData.append('customer', bookPayload.customerName);
       formData.append('customerPhone', bookPayload.customerPhone);
-      formData.append('serviceName', bookPayload.serviceName);
-      formData.append('barberName', bookPayload.barberName);
-      formData.append('bookingDate', bookPayload.bookingDate);
-      formData.append('bookingTime', bookPayload.bookingTime);
+      formData.append('service', bookPayload.serviceName);
+      formData.append('barber', bookPayload.barberName);
+      formData.append('reservedDate', bookPayload.bookingDate);
+      formData.append('reservedTime', bookPayload.bookingTime);
       formData.append('price', bookPayload.price);
+      formData.append('amount', bookPayload.price); // Added amount property expected by server.js
 
       // Save local Firestore copy for profile history immediately
       if (typeof saveBookingToFirestore === 'function') {
