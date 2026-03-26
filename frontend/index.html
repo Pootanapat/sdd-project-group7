@@ -729,6 +729,20 @@
         } catch (e) {
           navProfileImage.src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
         }
+        
+        // Add Admin button for Admin@gmail.com
+        if (user.email.toLowerCase() === 'admin@gmail.com') {
+          if (!navActions.querySelector('.admin-btn-nav')) {
+            const aBtn = document.createElement('button');
+            aBtn.className = 'nav-btn admin-btn-nav';
+            aBtn.style.background = '#ff9d00';
+            aBtn.style.color = '#111';
+            aBtn.style.marginRight = '8px';
+            aBtn.textContent = 'Admin Panel';
+            aBtn.onclick = () => window.location.href = 'admin.html';
+            navActions.insertBefore(aBtn, navActions.querySelector('.logout-btn-nav') || profileLink);
+          }
+        }
       } else {
         // User is signed out
         if(signinBtn) signinBtn.style.display = 'inline-block';

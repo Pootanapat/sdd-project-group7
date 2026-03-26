@@ -226,10 +226,17 @@ if (loginBtn) {
     if (err) { showToast('⚠️ กรุณากรอกข้อมูลให้ครบถ้วน', 'error'); return; }
 
     try {
-      await signInWithEmailAndPassword(auth, uInp.value.trim(), pInp.value);
+      const userCredential = await signInWithEmailAndPassword(auth, uInp.value.trim(), pInp.value);
+      const user = userCredential.user;
       showToast('✅ เข้าสู่ระบบสำเร็จ!', 'success');
-      // 🛠️ แก้ไขตรงนี้: เด้งไป index.html หลังจาก Login สำเร็จ
-      setTimeout(() => window.location.href = 'index.html', 1000);
+      
+      setTimeout(() => {
+        if (user.email.toLowerCase() === 'admin@gmail.com') {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      }, 1000);
     } catch (e) {
       if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-email') {
         uInp.classList.add('error');
