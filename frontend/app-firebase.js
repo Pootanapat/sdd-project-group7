@@ -302,11 +302,14 @@ if (submitBtn) {
 
     if (!u) { uInp.classList.add('error'); hasErr = true; }
     if (!e || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { eInp.classList.add('error'); hasErr = true; }
-    if (p.length < 6) {
+    // ตรวจสอบรหัสผ่าน: ยาว 8 ตัวอักษรขึ้นไป, มีพิมพ์เล็ก, พิมพ์ใหญ่ และตัวเลขอย่างน้อย 1 ตัว
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    
+    if (!passwordRegex.test(p)) {
       pInp.classList.add('error');
       const h = document.getElementById('hint-pass');
       if (h) {
-        h.textContent = '❌ รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+        h.textContent = '❌ รหัสผ่านต้องมี 8 ตัวอักษรขึ้นไป มีตัวพิมพ์เล็ก พิมพ์ใหญ่ และตัวเลข';
         h.className = 'hint err';
       }
       hasErr = true;
