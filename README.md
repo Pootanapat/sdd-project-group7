@@ -8,11 +8,11 @@
 | ลำดับ | รายชื่อ-นามสกุล | หน้าที่และความรับผิดชอบ (Specific Tasks) |
 | :--- | :--- | :--- |
 | 1 | **นายเจ้านาย เอี่ยมสำอางค์** | Creative Director & Lead Frontend |
-| 2 | **นายธีธีช คัดคนัมพร** | System Analyst & System Designer |
+| 2 | **นายธีธีช คัดคนัมพร** | System Analyst |
 | 3 | **นายจักรกฤษณ์ บางต่าย** | User Management & Auth Dev |
 | 4 | **นายทีฆทัศน์ พินิจทรัพย์** | Feature Developer (Home/Booking) |
 | 5 | **นายธนกฤต พรรณเผือก** | Financial System & Payment Flow |
-| 6 | **นายณภัทร รัศมี** | Full-stack Engineer & Admin Dashboard |
+| 6 | **นายณภัทร รัศมี** |  Admin Dashboard |
 | 7 | **นายภูธนพัตน์ ตากิ่มนอก** | Editor & Quality Control (Testing) |
 
 ---
@@ -78,4 +78,3 @@
 (เอกสารแนบประกอบไปด้วย System Architecture, ER Diagram, และ Use Case Diagram ในรูปแบบ PDF)
 
 ---
-> **Note:** โปรเจกต์นี้พัฒนาขึ้นโดยนักศักษากลุ่ม 7 เพื่อวัตถุประสงค์ทางการศึกษาในรายวิชา SDD เท่านั้น
