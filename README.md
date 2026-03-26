@@ -164,21 +164,7 @@
 
 <br>
 
-#### 🔌 API Testing
 
-ได้ทำการทดสอบการเชื่อมต่อและการตอบสนองของ API (API Endpoints) ด้วยเครื่องมือ Postman เพื่อให้มั่นใจว่าระบบส่วนหน้า (Frontend) และระบบหลังบ้าน (Backend) สามารถสื่อสารกันได้อย่างถูกต้อง
-
-| API Endpoint | Method | รายละเอียด (Description) | HTTP Status (Expected) | ผลการทดสอบ |
-| --- | :---: | --- | :---: | :---: |
-| `/api/auth/login` | `POST` | ทดสอบส่งข้อมูลเข้าสู่ระบบ (Username, Password) | `200 OK` | Pass ✅ |
-| `/api/auth/login` | `POST` | ทดสอบเข้าสู่ระบบด้วยรหัสผ่านผิด | `401 Unauthorized` | Pass ✅ |
-| `/api/barbers` | `GET` | ดึงข้อมูลรายชื่อช่างตัดผมทั้งหมด | `200 OK` | Pass ✅ |
-| `/api/bookings` | `POST` | สร้างรายการจองคิวใหม่ | `201 Created` | Pass ✅ |
-| `/api/bookings/{id}` | `GET` | ดึงข้อมูลรายละเอียดการจองตาม ID | `200 OK` | Pass ✅ |
-| `/api/payments/upload` | `POST` | อัปโหลดไฟล์สลิปการโอนเงิน (Multipart/form-data) | `200 OK` | Pass ✅ |
-| `/api/admin/dashboard` | `GET` | ดึงข้อมูลสถิติยอดจองสำหรับแสดงกราฟ | `200 OK` | Pass ✅ |
-
-> **หมายเหตุ:** ผลการทดสอบทั้งหมดได้ผ่านการตรวจสอบความถูกต้องเรียบร้อยแล้ว (✅ Pass) ข้อผิดพลาดใดๆ ที่พบในระหว่างขั้นตอนการพัฒนาได้ถูกแก้ไข (Bug Fixed) เรียบร้อยแล้วก่อนการนำขึ้นใช้งานจริง
 ---
 
 
