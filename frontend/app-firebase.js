@@ -69,10 +69,10 @@ async function fillProfile(user) {
   }
 }
 
-// 🟢 2. ฟังก์ชันโหลดประวัติการจองจาก Firestore
+// 🟢 2. ฟังก์ชันโหลดประวัติการจองจาก Firestore (ดึงจากทั้ง bookings และ payments)
 async function loadBookingHistory(uid) {
   const historyBox = document.getElementById('history-box');
-  if (!historyBox) return; // ถ้าไม่ได้อยู่หน้า profile ก็ข้ามไป
+  if (!historyBox) return;
 
   const localUser = localStorage.getItem('currentUser');
   const searchUid = uid || localUser || 'anonymous';
@@ -80,25 +80,37 @@ async function loadBookingHistory(uid) {
   console.log('Loading booking history for user:', searchUid);
 
   try {
-    const q = query(collection(db, 'bookings'), where('userId', '==', searchUid));
-    const querySnapshot = await getDocs(q);
+    // ดึงข้อมูลจาก 2 Collection เพื่อความชัวร์ (บางส่วนบันทึกฝั่ง Client, บางส่วนบันทึกผ่าน Backend)
+    const q1 = query(collection(db, 'bookings'), where('userId', '==', searchUid));
+    const q2 = query(collection(db, 'payments'), where('userId', '==', searchUid));
+    
+    const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+    
+    const allBookings = [];
+    snap1.forEach(docSnap => allBookings.push({ id: docSnap.id, ...docSnap.data(), source: 'bookings' }));
+    snap2.forEach(docSnap => allBookings.push({ id: docSnap.id, ...docSnap.data(), source: 'payments' }));
 
-    console.log('Query snapshot size:', querySnapshot.size);
+    // จัดเรียงตามเวลา (ถ้ามี)
+    allBookings.sort((a, b) => {
+      const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt || 0);
+      const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
 
-    if (querySnapshot.empty) {
+    console.log('Total bookings found:', allBookings.length);
+
+    if (allBookings.length === 0) {
       historyBox.innerHTML = '<div class="history-empty">ยังไม่มีประวัติการจอง</div>';
       return;
     }
 
-    historyBox.innerHTML = ''; // ล้างข้อความเตรียมใส่ข้อมูลจริง
+    historyBox.innerHTML = ''; 
 
-    querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      console.log('Booking data:', data);
-
-      const serviceName = data.serviceName || 'บริการตัดผม';
-      const price = data.price || '-';
-      let dateStr = data.date || data.createdAt || '';
+    allBookings.forEach((data) => {
+      const serviceName = data.serviceName || data.service || 'บริการตัดผม';
+      const price = data.price || data.amount || '-';
+      const barber = data.barberName || data.barber || '-';
+      let dateStr = data.bookingDate || data.reservedDate || '';
 
       if (data.createdAt && typeof data.createdAt.toDate === 'function') {
         const d = data.createdAt.toDate();
@@ -106,18 +118,23 @@ async function loadBookingHistory(uid) {
       }
 
       const html = `
-        <div class="history-item">
-          <div class="h-name">${serviceName}</div>
-          <div class="h-price">ราคา ${price} บาท</div>
-          <div class="h-date">${dateStr ? 'เมื่อ ' + dateStr : ''}</div>
+        <div class="history-item" style="border-bottom: 1px solid #333; padding: 15px 0;">
+          <div class="h-name" style="font-weight: bold; color: #ffa200;">${serviceName} (ช่าง: ${barber})</div>
+          <div class="h-price" style="font-size: 0.9rem; color: #fff;">ราคา ${price} บาท</div>
+          <div class="h-date" style="font-size: 0.8rem; color: #888;">${dateStr ? 'เมื่อ ' + dateStr : ''} [${data.status || 'success'}]</div>
         </div>
       `;
       historyBox.innerHTML += html;
     });
 
   } catch (error) {
-    console.error("Error fetching history: ", error);
-    historyBox.innerHTML = '<div class="history-empty">เกิดข้อผิดพลาดในการโหลดประวัติ</div>';
+    console.error("Error fetching history details: ", error);
+    // แจ้งเตือนเรื่อง Permissions หากพบปัญหา Rule
+    if (error.code === 'permission-denied') {
+      historyBox.innerHTML = '<div class="history-empty" style="color: #ff6b6b;">กรุณาตั้งค่า Firestore Rules ให้เป็น Public หรืออนุญาต Read/Write ครับ</div>';
+    } else {
+      historyBox.innerHTML = '<div class="history-empty">เกิดข้อผิดพลาดในการโหลดประวัติ</div>';
+    }
   }
 }
 
