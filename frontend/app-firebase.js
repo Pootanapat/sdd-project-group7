@@ -209,8 +209,12 @@ if (loginBtn) {
 
     try {
       await signInWithEmailAndPassword(auth, uInp.value.trim(), pInp.value);
+      // ดึงข้อมูล user เพื่อเช็ค role
+      const userDoc = await getDoc(doc(db, 'users', auth.currentUser.uid));
+      const userData = userDoc.data();
+      const role = userData.role || 'user'; // default to user if not set
       showToast('✅ เข้าสู่ระบบสำเร็จ!', 'success');
-      setTimeout(() => window.location.href = 'profile.html', 1000);
+      setTimeout(() => window.location.href = role === 'admin' ? 'admin.html' : 'profile.html', 1000);
     } catch (e) {
       if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-email') {
         uInp.classList.add('error');
@@ -273,12 +277,14 @@ if (submitBtn) {
     const eInp = document.getElementById('su-email');
     const pInp = document.getElementById('su-pass');
     const cInp = document.getElementById('su-confirm');
-    [uInp, eInp, pInp, cInp].forEach(el => el.classList.remove('error'));
+    const rInp = document.getElementById('su-role');
+    [uInp, eInp, pInp, cInp, rInp].forEach(el => el.classList.remove('error'));
 
     const u = uInp.value.trim();
     const e = eInp.value.trim();
     const p = pInp.value;
     const c = cInp.value;
+    const r = rInp.value;
     let hasErr = false;
 
     if (!u) { uInp.classList.add('error'); hasErr = true; }
@@ -293,6 +299,7 @@ if (submitBtn) {
       hasErr = true;
     }
     if (!c || p !== c) { cInp.classList.add('error'); hasErr = true; }
+    if (!r) { rInp.classList.add('error'); hasErr = true; }
     if (hasErr) { showToast('⚠️ กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน', 'error'); return; }
 
     try {
@@ -304,6 +311,7 @@ if (submitBtn) {
         phone: '',
         displayName: u,
         avatarURL: '',
+        role: r,
         createdAt: new Date().toISOString()
       });
 
