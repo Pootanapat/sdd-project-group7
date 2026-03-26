@@ -174,6 +174,7 @@ onAuthStateChanged(auth, async (user) => {
     });
     if (navProfile) navProfile.style.display = 'none';
 
+    // ถ้าไม่ได้ล็อกอิน แล้วหลงเข้ามาหน้า profile ให้เด้งไปหน้า login
     if (window.location.pathname.includes('profile.html')) {
       window.location.replace('Signin.html');
     }
@@ -227,7 +228,8 @@ if (loginBtn) {
     try {
       await signInWithEmailAndPassword(auth, uInp.value.trim(), pInp.value);
       showToast('✅ เข้าสู่ระบบสำเร็จ!', 'success');
-      setTimeout(() => window.location.href = 'profile.html', 1000);
+      // 🛠️ แก้ไขตรงนี้: เด้งไป index.html หลังจาก Login สำเร็จ
+      setTimeout(() => window.location.href = 'index.html', 1000);
     } catch (e) {
       if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-email') {
         uInp.classList.add('error');
