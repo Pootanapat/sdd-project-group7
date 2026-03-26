@@ -254,6 +254,25 @@ app.get('/api/settings', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+app.get('/api/expenses', async (req, res) => {
+  try {
+    const snap = await db.collection('expenses').get();
+    res.json(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/expenses', async (req, res) => {
+  try {
+    const { adminName, description } = req.body;
+    const docRef = await db.collection('expenses').add({
+      ...req.body,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    await db.collection('logs').add({ admin: adminName || "Admin", action: `Added expense: ${description}`, time: new Date().toLocaleString() });
+    res.json({ id: docRef.id, message: "Expense added" });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 app.post('/api/settings', async (req, res) => {
   try {
     await db.collection('settings').doc('general').set({ ...req.body, updatedAt: admin.firestore.FieldValue.serverTimestamp() });
@@ -261,17 +280,27 @@ app.post('/api/settings', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-['services', 'staff', 'promotions', 'payments'].forEach(collectionName => {
+['services', 'staff', 'promotions', 'payments', 'expenses'].forEach(collectionName => {
   app.delete(`/api/${collectionName}/:id`, async (req, res) => {
     try {
-      await db.collection(collectionName).doc(req.params.id).delete();
+      const { adminName } = req.body;
+      const { id } = req.params;
+      await db.collection(collectionName).doc(id).delete();
+      if (adminName) {
+        await db.collection('logs').add({ admin: adminName, action: `Deleted from ${collectionName}: ${id}`, time: new Date().toLocaleString() });
+      }
       res.json({ message: "Item deleted successfully" });
     } catch (err) { res.status(500).json({ error: err.message }); }
   });
 
   app.put(`/api/${collectionName}/:id`, async (req, res) => {
     try {
-      await db.collection(collectionName).doc(req.params.id).update({ ...req.body, updatedAt: admin.firestore.FieldValue.serverTimestamp() });
+      const { adminName, ...data } = req.body;
+      const { id } = req.params;
+      await db.collection(collectionName).doc(id).update({ ...data, updatedAt: admin.firestore.FieldValue.serverTimestamp() });
+      if (adminName) {
+        await db.collection('logs').add({ admin: adminName, action: `Updated ${collectionName}: ${data.description || data.name || id}`, time: new Date().toLocaleString() });
+      }
       res.json({ message: "Item updated successfully" });
     } catch (err) { res.status(500).json({ error: err.message }); }
   });
