@@ -62,7 +62,7 @@
 
 ## 📁 2.3.2 แผนภาพกรณีการใช้งาน (Use case diagram)
 
-![Use case diagram](image/use_case_diagram.png)
+![Use case diagram](image/1.png)
 
 
 
@@ -72,16 +72,7 @@
 
 ## 🧪 2.3.3 แผนภาพกิจกรรม (Activity Diagram)
 
-![Activity Diagram Register](image/activity_login_register.png)
-
-![Activity Diagram Booking](image/activity_booking.png)
-
-![Activity Diagram Upload Slip](image/activity_upload_slip.png)
-
-![Activity Diagram Admin Verify Slip](image/activity_admin_verify_slip.png)
-
-
-
+![Activity Diagram Register](image/2.png)
 ---
 
 
@@ -90,7 +81,7 @@
 
 
 
-![ER Diagram](image/firestore_er_diagram.png)
+![ER Diagram](image/3.png)
 
 
 
@@ -108,7 +99,47 @@
 
 ![Service](image/Service.png)
 
+![Booking](image/image.png)
 
+![Booking](image/b2.png)
+
+![Booking](image/b3.png)
+
+![Booking](image/b4.png)
+
+![Booking](image/b5.png)
+
+![Payment](image/p1.png)
+
+![Profile](image/pro1.png)
+
+![EXPERTS](image/bra1.png)
+
+![alt text](image/k1.png)
+
+![admin](image/ad1.png)
+
+![admin](image/ad2.png)
+
+![admin](image/ad3.png)
+
+![admin](image/ad4.png)
+
+![admin](image/ad5.png)
+
+![admin](image/ad6.png)
+
+![admin](image/ad7.png)
+
+![admin](image/ad8.png)
+
+![admin](image/ad9.png)
+
+![admin](image/ad10.png)
+
+![admin](image/ad11.png)
+
+![admin](image/ad12.png)
 
 ---
 
