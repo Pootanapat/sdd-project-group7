@@ -52,7 +52,7 @@
 
 ## 🛠 2.3.1 สถาปัตยกรรมระบบ (System Architecture)
 
-![System Architecture](image\system_architecture.png)
+![System Architecture](image/system_architecture.png)
 
 
 
@@ -62,7 +62,7 @@
 
 ## 📁 2.3.2 แผนภาพกรณีการใช้งาน (Use case diagram)
 
-![Use case diagram](image\use_case_diagram.png)
+![Use case diagram](image/use_case_diagram.png)
 
 
 
@@ -72,13 +72,13 @@
 
 ## 🧪 2.3.3 แผนภาพกิจกรรม (Activity Diagram)
 
-![Activity Diagram Register](image\activity_login_register.png)
+![Activity Diagram Register](image/activity_login_register.png)
 
-![Activity Diagram Booking](image\activity_booking.png)
+![Activity Diagram Booking](image/activity_booking.png)
 
-![Activity Diagram Upload Slip](image\activity_upload_slip.png)
+![Activity Diagram Upload Slip](image/activity_upload_slip.png)
 
-![Activity Diagram Admin Verify Slip](image\activity_admin_verify_slip.png)
+![Activity Diagram Admin Verify Slip](image/activity_admin_verify_slip.png)
 
 
 
@@ -90,7 +90,7 @@
 
 
 
-![ER Diagram](image\firestore_er_diagram.png)
+![ER Diagram](image/firestore_er_diagram.png)
 
 
 
@@ -100,13 +100,13 @@
 
 ## 📑 2.3.6 UX/UI
 
-![Main Page](image\Main_Page.png)
+![Main Page](image/Main_Page.png)
 
-![Sigh Up](image\Sigh_Up.png)
+![Sigh Up](image/Sigh_Up.png)
 
-![Sigh In](image\Sigh_In.png)
+![Sigh In](image/Sigh_In.png)
 
-![Service](image\Service.png)
+![Service](image/Service.png)
 
 
 
