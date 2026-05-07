@@ -5,18 +5,46 @@ const path = require('path');
 const fs = require('fs');
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./serviceAccountKey.json");
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+// ─── Firebase Init: ใช้ env var หรือ fallback ไปที่ไฟล์ JSON (dev only) ───
+if (!admin.apps.length) {
+    let credential;
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        // Render/Production: ใช้ environment variable
+        const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        credential = admin.credential.cert(serviceAccount);
+    } else {
+        // Local dev: ใช้ไฟล์ serviceAccountKey.json
+        const serviceAccount = require("./serviceAccountKey.json");
+        credential = admin.credential.cert(serviceAccount);
+    }
+    admin.initializeApp({ credential });
+}
 
 const db = admin.firestore();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
 
-app.use(cors());
+// ─── CORS: อนุญาต Vercel frontend ───
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    process.env.FRONTEND_URL || ''
+].filter(Boolean);
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // อนุญาต requests ที่ไม่มี origin (เช่น mobile apps, curl)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.some(o => origin.startsWith(o)) || origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+        callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/image', express.static(path.join(__dirname, '../image')));
@@ -52,7 +80,7 @@ app.post('/api/upload-slip', upload.single('slip'), async (req, res) => {
             receiptNo: receiptNo,
             originalFilename: req.file.originalname,
             localFilePath: req.file.path,
-            slip: 'http://localhost:3000/uploads/' + req.file.filename,
+            slip: `${BACKEND_URL}/uploads/` + req.file.filename,
             status: 'pending',
             amount: Number(req.body.amount) ,
             customer: req.body.customer || "Unknown",
@@ -316,6 +344,7 @@ app.post('/api/members', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Payment Server running on http://localhost:${PORT}`);
+    console.log(`Payment Server running on port ${PORT}`);
+    console.log(`Backend URL: ${BACKEND_URL}`);
 });
 

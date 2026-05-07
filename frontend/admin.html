@@ -167,6 +167,8 @@
     
     @media (max-width: 1000px){ body{ overflow:auto; } .app{ min-width:1100px; } }
   </style>
+  <!-- Config: ตั้งค่า Backend URL (เปลี่ยนใน config.js ก่อน deploy) -->
+  <script src="config.js"></script>
 </head>
 <body>
   <div class="app">
@@ -713,7 +715,7 @@
 <script>
 
 
-    const API_URL = 'http://localhost:3000'; // server.js URL
+    const API_URL = window.API_BASE_URL || 'http://localhost:3000'; // Render backend URL (set in config.js)
 
     // State
     let payments = [];

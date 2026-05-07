@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sdd-group7-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: BACKEND_URL
+        sync: false   # ใส่ค่าจริงใน Render Dashboard
+      - key: FRONTEND_URL
+        sync: false   # ใส่ค่าจริงใน Render Dashboard (Vercel URL)
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false   # วาง JSON ทั้งก้อนของ serviceAccountKey.json ใน Render Dashboard

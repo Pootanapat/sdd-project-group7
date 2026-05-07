@@ -13,7 +13,9 @@ uploads/
 # Environment Variables
 .env
 .env.local
-.env.*
+.env.production
+# อนุญาต .env.example (ไม่มีความลับจริง)
+!.env.example
 
 # OS generated files
 .DS_Store
