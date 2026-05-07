@@ -1,16 +1,15 @@
 services:
   - type: web
     name: sdd-group7-backend
-    runtime: node
+    runtime: docker
     rootDir: backend
-    buildCommand: npm install
-    startCommand: npm start
+    dockerfilePath: ./backend/Dockerfile
     envVars:
       - key: PORT
         value: 10000
       - key: BACKEND_URL
-        sync: false   # ใส่ค่าจริงใน Render Dashboard
+        sync: false   # ใส่ค่าจริงใน Render Dashboard เช่น https://sdd-group7-backend.onrender.com
       - key: FRONTEND_URL
-        sync: false   # ใส่ค่าจริงใน Render Dashboard (Vercel URL)
+        sync: false   # ใส่ค่าจริงใน Render Dashboard เช่น https://xxx.vercel.app
       - key: FIREBASE_SERVICE_ACCOUNT
         sync: false   # วาง JSON ทั้งก้อนของ serviceAccountKey.json ใน Render Dashboard

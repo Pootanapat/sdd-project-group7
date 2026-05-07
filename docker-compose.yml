@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sdd-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - BACKEND_URL=http://localhost:3000
+      - FRONTEND_URL=http://localhost:5500
+      # ─── Firebase ───────────────────────────────────────────────────
+      # วิธีที่ 1 (แนะนำ): วาง JSON ของ serviceAccountKey ลง .env แล้ว set ที่นี่
+      # FIREBASE_SERVICE_ACCOUNT=${FIREBASE_SERVICE_ACCOUNT}
+      #
+      # วิธีที่ 2: mount ไฟล์ serviceAccountKey.json เข้า container
+      # (uncomment volumes ด้านล่าง)
+    env_file:
+      - ./backend/.env   # สร้างจาก .env.example (local dev เท่านั้น)
+    volumes:
+      - backend_uploads:/app/uploads
+      # Uncomment บรรทัดนี้ถ้าใช้ serviceAccountKey.json แทน env var:
+      # - ./backend/serviceAccountKey.json:/app/serviceAccountKey.json:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  backend_uploads:
