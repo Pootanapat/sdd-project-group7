@@ -5,20 +5,36 @@ const path = require('path');
 const fs = require('fs');
 const admin = require("firebase-admin");
 
+// โหลด .env ถ้ามี (local dev) — ใน production (Render) ใช้ env vars จาก Dashboard
+require('dotenv').config();
+
 // ─── Firebase Init: ใช้ env var หรือ fallback ไปที่ไฟล์ JSON (dev only) ───
 if (!admin.apps.length) {
     let credential;
     if (process.env.FIREBASE_SERVICE_ACCOUNT) {
         // Render/Production: ใช้ environment variable
-        const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-        credential = admin.credential.cert(serviceAccount);
+        try {
+            const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            credential = admin.credential.cert(serviceAccount);
+        } catch (e) {
+            console.error('❌ FIREBASE_SERVICE_ACCOUNT is not valid JSON:', e.message);
+            process.exit(1);
+        }
     } else {
         // Local dev: ใช้ไฟล์ serviceAccountKey.json
-        const serviceAccount = require("./serviceAccountKey.json");
+        const keyPath = path.join(__dirname, 'serviceAccountKey.json');
+        if (!fs.existsSync(keyPath)) {
+            console.error('❌ Missing Firebase credentials!');
+            console.error('   - Production: set FIREBASE_SERVICE_ACCOUNT env var in Render Dashboard');
+            console.error('   - Local dev: place serviceAccountKey.json in backend/');
+            process.exit(1);
+        }
+        const serviceAccount = require('./serviceAccountKey.json');
         credential = admin.credential.cert(serviceAccount);
     }
     admin.initializeApp({ credential });
 }
+
 
 const db = admin.firestore();
 

@@ -1,9 +1,10 @@
 services:
   - type: web
     name: sdd-group7-backend
-    runtime: docker
+    runtime: node
     rootDir: backend
-    dockerfilePath: ./backend/Dockerfile
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: PORT
         value: 10000
