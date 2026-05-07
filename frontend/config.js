@@ -9,7 +9,7 @@
 
 (function () {
   // ✏️ เปลี่ยนเป็น URL จริงจาก Render Dashboard หลัง Deploy
-  const RENDER_BACKEND_URL = 'https://YOUR-RENDER-APP.onrender.com';
+  const RENDER_BACKEND_URL = 'https://sdd-project-group7.onrender.com';
 
   // ตรวจสอบว่ากำลังรันใน localhost หรือไม่
   const isLocalhost =
