@@ -1,0 +1,65 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  # 1. Continuous Integration: Verify code quality and build
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run Backend Security Audit
+        working-directory: ./backend
+        run: npm audit --audit-level=high || echo "Audit found issues, please review"
+
+      - name: Validate Dockerfile
+        run: |
+          docker build -t backend-test ./backend --target builder
+          echo "Docker build check passed"
+
+  # 2. Continuous Deployment: Deploy to Vercel and Render
+  deploy:
+    name: Continuous Deployment
+    needs: ci
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # --- Deploy Frontend to Vercel ---
+      - name: Deploy Frontend to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./
+
+      # --- Deploy Backend to Render ---
+      # note: Render can auto-deploy on push, but triggering it here 
+      # ensures it only happens after CI passes.
+      - name: Deploy Backend to Render
+        if: success()
+        run: |
+          curl -f -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          echo "Render deployment triggered successfully"

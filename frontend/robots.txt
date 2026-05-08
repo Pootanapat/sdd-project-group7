@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sdd-project-group7.vercel.app/sitemap.xml
