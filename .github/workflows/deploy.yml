@@ -7,7 +7,7 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  # 1. Continuous Integration: Verify code quality and build
+  # 1. CI Stage: ตรวจสอบความถูกต้อง
   ci:
     name: Continuous Integration
     runs-on: ubuntu-latest
@@ -28,14 +28,14 @@ jobs:
 
       - name: Run Backend Security Audit
         working-directory: ./backend
-        run: npm audit --audit-level=high || echo "Audit found issues, please review"
+        run: npm audit --audit-level=high || echo "Audit found issues"
 
       - name: Validate Dockerfile
         run: |
           docker build -t backend-test ./backend --target builder
           echo "Docker build check passed"
 
-  # 2. Continuous Deployment: Deploy to Vercel and Render
+  # 2. CD Stage: Deploy เมื่อ CI ผ่าน
   deploy:
     name: Continuous Deployment
     needs: ci
@@ -43,29 +43,18 @@ jobs:
       github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     steps:
-      # แก้ไขไฟล์ .github/workflows/deploy.yml บรรทัดที่ 46-47
+      - name: Checkout Code
+        uses: actions/checkout@v4 # <<< บรรทัดนี้สำคัญมาก ห้ามลบครับ!
+
       - name: Deploy Frontend to Vercel
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod --yes" # เพิ่ม --yes ตรงนี้ครับ
+          vercel-args: "--prod --yes"
           working-directory: ./
 
-      # --- Deploy Frontend to Vercel ---
-      - name: Deploy Frontend to Vercel
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod"
-          working-directory: ./
-
-      # --- Deploy Backend to Render ---
-      # note: Render can auto-deploy on push, but triggering it here 
-      # ensures it only happens after CI passes.
       - name: Deploy Backend to Render
         if: success()
         run: |
