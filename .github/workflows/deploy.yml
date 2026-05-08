@@ -56,8 +56,13 @@ jobs:
           working-directory: ./
 
       - name: Deploy Backend to Render
-        # ขั้นตอนนี้จะทำงานเมื่อมี URL ใน GitHub Secret ชื่อ RENDER_DEPLOY_HOOK_URL เท่านั้น
-        if: success() && secrets.RENDER_DEPLOY_HOOK_URL != ''
+        if: success()
+        env:
+          RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          curl -f -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-          echo "Render deployment triggered successfully"
+          if [ -n "$RENDER_HOOK" ]; then
+            curl -f -X POST "$RENDER_HOOK"
+            echo "Render deployment triggered successfully"
+          else
+            echo "RENDER_DEPLOY_HOOK_URL is not set, skipping..."
+          fi
