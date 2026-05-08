@@ -16,7 +16,7 @@
 
 | :--- | :--- | :--- |
 
-| 1 | **นายเจ้านาย เอี่ยมสำอางค์** | Creative Director & Lead Frontend |
+| 1 | **นายเจ้านาย เอี่ยมสำอางค์** | Creative Director & Lead Frontendd|
 
 | 2 | **นายธีธีช คัดคนัมพร** | System Analyst |
 

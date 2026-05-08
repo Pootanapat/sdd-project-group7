@@ -7,7 +7,7 @@ on:
     branches: [ "main", "master" ]
 
 jobs:
-  # 1. CI Stage: ตรวจสอบความถูกต้อง
+  # 1. CI Stage: ตรวจสอบความถูกต้องของโค้ด
   ci:
     name: Continuous Integration
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
           docker build -t backend-test ./backend --target builder
           echo "Docker build check passed"
 
-  # 2. CD Stage: Deploy เมื่อ CI ผ่าน
+  # 2. CD Stage: Deploy เมื่อตรวจสอบผ่านแล้ว
   deploy:
     name: Continuous Deployment
     needs: ci
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4 # <<< บรรทัดนี้สำคัญมาก ห้ามลบครับ!
+        uses: actions/checkout@v4
 
       - name: Deploy Frontend to Vercel
         uses: amondnet/vercel-action@v20
@@ -56,7 +56,8 @@ jobs:
           working-directory: ./
 
       - name: Deploy Backend to Render
-        if: success()
+        # ขั้นตอนนี้จะทำงานเมื่อมี URL ใน GitHub Secret ชื่อ RENDER_DEPLOY_HOOK_URL เท่านั้น
+        if: success() && secrets.RENDER_DEPLOY_HOOK_URL != ''
         run: |
           curl -f -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
           echo "Render deployment triggered successfully"
