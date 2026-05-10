@@ -2,7 +2,7 @@
 
 **Software Design and Development Project** โปรเจกต์ระบบจองคิวร้านตัดผมออนไลน์ พัฒนาขึ้นเพื่อส่งงานในรายวิชา SDD โดยเน้นการออกแบบประสบการณ์ผู้ใช้ตามหลัก Material Design และระบบจัดการการจองที่ครบวงจร
 
-### 🌐 **Live Deployment:** [Barbershop Booking App](https://sdd-project-group7.onrender.com/index.html)
+### 🌐 **Live Deployment:** [Barbershop Booking App](https://sdd-project-group7-a7gjr7vas-kitkitkits-projects-ee68219a.vercel.app)
 
 ---
 
