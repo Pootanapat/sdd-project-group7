@@ -175,7 +175,7 @@ onAuthStateChanged(auth, async (user) => {
     if (navProfile) navProfile.style.display = 'none';
 
     if (window.location.pathname.includes('profile.html')) {
-      window.location.replace('Signin.html');
+      window.location.replace('signin.html');
     }
   }
 });
@@ -333,7 +333,7 @@ if (submitBtn) {
       });
 
       showToast('✅ สมัครสมาชิกสำเร็จ!', 'success');
-      setTimeout(() => window.location.href = 'Signin.html', 2000);
+      setTimeout(() => window.location.href = 'signin.html', 2000);
     } catch (e) {
       if (e.code === 'auth/email-already-in-use') {
         eInp.classList.add('error');
@@ -425,7 +425,7 @@ if (logoutBtn) {
     await signOut(auth);
     currentUID = null;
     showToast('👋 ออกจากระบบแล้ว', 'success');
-    setTimeout(() => window.location.href = 'Signin.html', 1200);
+    setTimeout(() => window.location.href = 'signin.html', 1200);
   });
 }
 

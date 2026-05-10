@@ -133,7 +133,7 @@ if (fpSendBtn) {
         showToast('📧 ส่งลิงก์รีเซ็ตไปที่ ' + e + ' แล้ว!', 'success');
         eInp.value = '';
         setTimeout(() => {
-            // ซ่อนหน้า forgot กลับมาหน้า signin (เพราะเราทำไว้ในไฟล์ Signin.html เดียวกัน)
+            // ซ่อนหน้า forgot กลับมาหน้า signin (เพราะเราทำไว้ในไฟล์ signin.html เดียวกัน)
             document.getElementById('page-forgot').classList.remove('active');
             document.getElementById('page-signin').classList.add('active');
         }, 2500);
@@ -182,7 +182,7 @@ if (suSubmitBtn) {
         localStorage.setItem('accounts', JSON.stringify(accounts));
 
         showToast('✅ สมัครสมาชิกสำเร็จ! กำลังพาไปหน้า Sign In...', 'success');
-        setTimeout(() => window.location.href = 'Signin.html', 2000);
+        setTimeout(() => window.location.href = 'signin.html', 2000);
     });
 }
 
@@ -195,7 +195,7 @@ if (window.location.pathname.includes('profile.html')) {
         if (acc) fillProfile(acc);
     } else {
         // ถ้ายังไม่ได้ล็อกอิน ให้เด้งกลับไปหน้า Signin
-        window.location.href = 'Signin.html';
+        window.location.href = 'signin.html';
     }
 }
 
@@ -266,7 +266,7 @@ if (logoutBtn) {
         currentUser = null;
         localStorage.removeItem('currentUser'); // ลบสถานะการล็อกอิน
         showToast('👋 ออกจากระบบแล้ว', 'success');
-        setTimeout(() => window.location.href = 'Signin.html', 1200);
+        setTimeout(() => window.location.href = 'signin.html', 1200);
     });
 }
 
