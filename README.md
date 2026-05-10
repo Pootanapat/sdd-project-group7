@@ -2,174 +2,86 @@
 
 **Software Design and Development Project** โปรเจกต์ระบบจองคิวร้านตัดผมออนไลน์ พัฒนาขึ้นเพื่อส่งงานในรายวิชา SDD โดยเน้นการออกแบบประสบการณ์ผู้ใช้ตามหลัก Material Design และระบบจัดการการจองที่ครบวงจร
 
-
+### 🌐 **Live Deployment:** [Barbershop Booking App](https://sdd-project-group7.onrender.com/index.html)
 
 ---
-
-
 
 ## 👥 2.1 ทีมงาน (Team Members)
 
-
-
 | ลำดับ | รายชื่อ-นามสกุล | หน้าที่และความรับผิดชอบ (Specific Tasks) |
-
 | :--- | :--- | :--- |
-
-| 1 | **นายเจ้านาย เอี่ยมสำอางค์** | Creative Director & Lead Frontendd|
-
+| 1 | **นายเจ้านาย เอี่ยมสำอางค์** | Creative Director & Lead Frontend |
 | 2 | **นายธีธีช คัดคนัมพร** | System Analyst |
-
 | 3 | **นายจักรกฤษณ์ บางต่าย** | User Management & Auth Dev |
-
 | 4 | **นายทีฆทัศน์ พินิจทรัพย์** | Feature Developer (Home/Booking) |
-
 | 5 | **นายธนกฤต พรรณเผือก** | Financial System & Payment Flow |
-
-| 6 | **นายณภัทร รัศมี** |  Admin Dashboard |
-
+| 6 | **นายณภัทร รัศมี** | Admin Dashboard |
 | 7 | **นายภูธนพัตน์ ตากิ่มนอก** | Editor & Quality Control (Testing) |
 
-
-
 ---
-
-
 
 ## 📑 2.2 SRS ของระบบทั้งหมด
 
 **Software Requirements Specification (Functional Requirements)**
 
 *   **User Side:** ระบบสมาชิก (Register/Login), การเลือกช่าง, ระบบจองวัน/เวลา/บริการ, ระบบชำระเงินพร้อมอัปโหลดสลิป, หน้าข้อมูลส่วนตัวและประวัติการจอง
-
 *   **Admin Side:** Dashboard สถิติรายได้, ระบบจัดการคิว (อนุมัติ/ปฏิเสธ), จัดการข้อมูลสมาชิก, และจัดการข้อมูลการบริการ/ช่าง
 
-
-
 ---
-
-
 
 ## 🛠 2.3.1 สถาปัตยกรรมระบบ (System Architecture)
 
 ![System Architecture](image/system_architecture.png)
 
-
-
 ---
-
-
 
 ## 📁 2.3.2 แผนภาพกรณีการใช้งาน (Use case diagram)
 
-![Use case diagram](image/1.png)
-
-
+![Use case diagram](image/use_case_diagram.png)
 
 ---
-
-
 
 ## 🧪 2.3.3 แผนภาพกิจกรรม (Activity Diagram)
 
-![Activity Diagram Register](image/2.png)
+![Activity Diagram - Login/Register](image/activity_login_register.png)
+![Activity Diagram - Booking](image/activity_booking.png)
+![Activity Diagram - Upload Slip](image/activity_upload_slip.png)
+![Activity Diagram - Admin Verify Slip](image/activity_admin_verify_slip.png)
+
 ---
-
-
 
 ## 🧪 2.3.4 แผนภาพ ER (ER Diagram)
 
-
-
-![ER Diagram](image/3.png)
-
-
+![ER Diagram](image/firestore_er_diagram.png)
 
 ---
 
-
-
-## 📑 2.3.6 UX/UI
+## 📑 2.3.5 UX/UI
 
 ![Main Page](image/Main_Page.png)
-
 ![Sigh Up](image/Sigh_Up.png)
-
 ![Sigh In](image/Sigh_In.png)
-
 ![Service](image/Service.png)
 
-![Booking](image/image.png)
-
-![Booking](image/b2.png)
-
-![Booking](image/b3.png)
-
-![Booking](image/b4.png)
-
-![Booking](image/b5.png)
-
-![Payment](image/p1.png)
-
-![Profile](image/pro1.png)
-
-![EXPERTS](image/bra1.png)
-
-![alt text](image/k1.png)
-
-![admin](image/ad1.png)
-
-![admin](image/ad2.png)
-
-![admin](image/ad3.png)
-
-![admin](image/ad4.png)
-
-![admin](image/ad5.png)
-
-![admin](image/ad6.png)
-
-![admin](image/ad7.png)
-
-![admin](image/ad8.png)
-
-![admin](image/ad9.png)
-
-![admin](image/ad10.png)
-
-![admin](image/ad11.png)
-
-![admin](image/ad12.png)
+*(หมายเหตุ: นำรูประบบอัปโหลดเข้าใช้งานระบบ UI แฟ้มอื่นๆ ออกเนื่องจากยังไม่มีไฟล์รูปในโฟลเดอร์ image)*
 
 ---
-
-
 
 ## 🛠 2.4 Tech Stack ที่ใช้พัฒนา
 
-
-
-*   Frontend:Static HTML/CSS/JS , Firebase Client SDK
-
-*   Backend:Node.js + Express, endpoints: /api/upload-slip
-
-*   Database:Firebase Firestore (bookings, users)
-
-*   File Storage:Local uploads/ + Firebase Storage (avatar)
-
-*   Auth:Firebase Auth (Email/Password)
-
-
+*   **Frontend:** Static HTML/CSS/JS, Firebase Client SDK
+*   **Backend:** Node.js + Express, endpoints: `/api/upload-slip`
+*   **Database:** Firebase Firestore (bookings, users)
+*   **File Storage:** Local uploads / Firebase Storage (avatar)
+*   **Auth:** Firebase Auth (Email/Password)
 
 ---
 
-
-
-### 2.5 Test Case ของระบบ และผลการทดสอบระบบ
+## 🧪 2.5 Test Case ของระบบ และผลการทดสอบระบบ
 
 การทดสอบระบบ (System Testing) แบ่งออกเป็นการทดสอบการทำงานของระบบ (Functional Testing) ตาม Requirement ที่ได้ออกแบบไว้ และการทดสอบ API (API Testing) โดยมีรายละเอียดและผลการทดสอบดังนี้
 
-#### 🧪 System Test Cases (Manual Testing)
+### 🧪 System Test Cases (Manual Testing)
 
 | Test Case ID | ระบบ / โมดูล | รายละเอียดการทดสอบ (Test Description) | ผลลัพธ์ที่คาดหวัง (Expected Result) | สถานะ (Status) |
 | --- | --- | --- | --- | :---: |
@@ -193,37 +105,19 @@
 | **TC_7.01** | UI/UX | ทดสอบการทำงานของปุ่ม "ย้อนกลับ" (Back) ในทุกหน้าจอ | ระบบพากลับไปหน้าจอก่อนหน้าได้ถูกต้องโดยไม่เกิดข้อผิดพลาด | Pass ✅ |
 | **TC_7.02** | UI/UX | ทดสอบการแสดงผลและกดปิดหน้าต่าง Pop-up ยืนยัน | Pop-up แสดงผลถูกต้อง และสามารถคลิกเพื่อปิดการแสดงผลได้ | Pass ✅ |
 
-<br>
-
-
 ---
 
-
-
-## 🚀การติดตั้งและเริ่มต้นใช้งาน (Installation & Setup)
-
-
+## 🚀 2.6 การติดตั้งและเริ่มต้นใช้งาน (Installation & Setup)
 
 ### 1. การเตรียมการ (Prerequisites)
 
 *   ติดตั้ง Node.js
-
 *   ตั้งค่า Firebase Project
-
-
 
 ### 2. การตั้งค่า Backend & Frontend
 
 1. เข้าไปที่โฟลเดอร์ `backend`
-
 2. รัน `npm install`
-
 3. วางไฟล์ `serviceAccountKey.json` ในโฟลเดอร์ `backend`
-
 4. รัน `npm start` เพื่อเริ่มต้นเซิร์ฟเวอร์ (รันที่ port 3000)
-
-5. เข้าใช้งานผ่าน `http://localhost:3000`
-
-
-
----
+5. เข้าใช้งานผ่านเว็บเบราว์เซอร์ที่ `http://localhost:3000`
